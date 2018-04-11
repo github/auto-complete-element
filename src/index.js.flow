@@ -1,0 +1,14 @@
+/* @flow */
+
+declare class AutocompleteElement extends HTMLElement {
+  get src(): string;
+  set src(url: string): void;
+  get value(): string;
+  set value(value: string): void;
+  get open(): boolean;
+  set open(value: boolean): void;
+}
+
+declare module 'auto-complete-element' {
+  declare export default typeof AutocompleteElement
+}

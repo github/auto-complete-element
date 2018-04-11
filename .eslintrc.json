@@ -1,0 +1,11 @@
+{
+  "extends": [
+    "plugin:github/es6",
+    "plugin:github/browser",
+    "plugin:github/flow"
+  ],
+  "rules": {
+    "github/no-then": "off",
+    "no-invalid-this": "off"
+  }
+}
