@@ -10,4 +10,37 @@ describe('auto-complete element', function() {
       assert.equal('AUTO-COMPLETE', el.nodeName)
     })
   })
+
+  describe('requesting server results', function() {
+    beforeEach(function() {
+      const container = document.createElement('div')
+      container.innerHTML = `
+        <auto-complete src="/search">
+          <input slot="field" type="text">
+          <div slot="popup">
+            <ul slot="results"></ul>
+          </div>
+        </auto-complete>`
+      document.body.append(container)
+    })
+
+    afterEach(function() {
+      document.body.innerHTML = ''
+    })
+
+    it('requests html fragment', async function() {
+      const input = document.querySelector('input')
+      const results = document.querySelector('[slot="results"]')
+      input.value = 'hub'
+      input.dispatchEvent(new InputEvent('input'))
+      await sleep(500)
+      assert.equal('hubot', results.textContent)
+    })
+  })
 })
+
+function sleep(millis) {
+  return new Promise(resolve => {
+    setTimeout(resolve, millis)
+  })
+}

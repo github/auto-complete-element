@@ -1,3 +1,12 @@
+function completer(request, response, next) {
+  if (request.method === 'GET' && request.url.startsWith('/search?q=hub')) {
+    response.writeHead(200)
+    response.end('hubot')
+    return
+  }
+  next()
+}
+
 module.exports = function(config) {
   config.set({
     frameworks: ['mocha', 'chai'],
@@ -9,6 +18,13 @@ module.exports = function(config) {
     browsers: ['ChromeHeadless'],
     autoWatch: false,
     singleRun: true,
-    concurrency: Infinity
+    concurrency: Infinity,
+    middleware: ['completer'],
+    plugins: [
+      'karma-*',
+      {
+        'middleware:completer': ['value', completer]
+      }
+    ]
   })
 }
