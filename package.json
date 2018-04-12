@@ -1,5 +1,5 @@
 {
-  "name": "auto-complete-element",
+  "name": "@github/auto-complete-element",
   "version": "0.1.0",
   "description": "Auto-complete input values from server results",
   "repository": "github/auto-complete-element",
