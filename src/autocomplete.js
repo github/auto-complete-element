@@ -76,7 +76,7 @@ export default class Autocomplete {
     this.fetchResults()
   }
 
-  async fetchResults() {
+  fetchResults() {
     const query = this.input.value.trim()
     if (!query) {
       this.container.open = false
@@ -91,18 +91,19 @@ export default class Autocomplete {
     params.append('q', query)
     url.search = params.toString()
 
-    try {
-      this.container.dispatchEvent(new CustomEvent('loadstart'))
-      const html = await fragment(this.input, url.toString())
-      this.list.innerHTML = html
-      const hasResults = !!this.results.querySelector('[data-autocomplete-value]')
-      this.container.open = hasResults
-      this.container.dispatchEvent(new CustomEvent('load'))
-    } catch (e) {
-      this.container.dispatchEvent(new CustomEvent('error'))
-    } finally {
-      this.container.dispatchEvent(new CustomEvent('loadend'))
-    }
+    this.container.dispatchEvent(new CustomEvent('loadstart'))
+    fragment(this.input, url.toString())
+      .then(html => {
+        this.list.innerHTML = html
+        const hasResults = !!this.results.querySelector('[data-autocomplete-value]')
+        this.container.open = hasResults
+        this.container.dispatchEvent(new CustomEvent('load'))
+        this.container.dispatchEvent(new CustomEvent('loadend'))
+      })
+      .catch(() => {
+        this.container.dispatchEvent(new CustomEvent('error'))
+        this.container.dispatchEvent(new CustomEvent('loadend'))
+      })
   }
 
   open() {
