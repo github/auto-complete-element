@@ -71,21 +71,36 @@ export default class Autocomplete {
     switch (event.key) {
       case 'Escape':
         this.container.open = false
+        event.preventDefault()
         break
       case 'ArrowDown':
         this.select(this.sibling(true))
+        event.preventDefault()
         break
       case 'ArrowUp':
         this.select(this.sibling(false))
+        event.preventDefault()
         break
       case 'n':
         if (event.ctrlKey) {
           this.select(this.sibling(true))
+          event.preventDefault()
         }
         break
       case 'p':
         if (event.ctrlKey) {
           this.select(this.sibling(false))
+          event.preventDefault()
+        }
+        break
+      case 'Enter':
+        {
+          const selected = this.list.querySelector('[aria-selected="true"]')
+          if (selected) {
+            this.container.value = selected.getAttribute('data-autocomplete-value') || ''
+            this.container.open = false
+            event.preventDefault()
+          }
         }
         break
     }
