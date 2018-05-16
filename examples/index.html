@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Auto-complete examples</title>
+    <script>
+      class FakeXMLHttpRequest {
+        open(method, url) {
+          // Do nothing.
+        }
+        setRequestHeader(name, value) {
+          // Do nothing.
+        }
+        send() {
+          this.status = 200
+          this.responseText = `
+            <li data-autocomplete-value="one">Hubot</li>
+            <li data-autocomplete-value="two">Bender</li>
+            <li data-autocomplete-value="three">BB-8</li>
+          `
+          setTimeout(this.onload.bind(this), 0)
+        }
+      }
+      window.XMLHttpRequest = FakeXMLHttpRequest
+    </script>
+    <script src="../dist/index.umd.js"></script>
+  </head>
+  <body>
+    <auto-complete src="/demo" aria-owns="items-popup">
+      <input type="text" slot="field" autofocus>
+      <div slot="popup" id="items-popup">
+        <ul slot="results">
+        </ul>
+      </div>
+    </auto-complete>
+  </body>
+</html>
