@@ -13,6 +13,9 @@
     </style>
     <script>
       class FakeXMLHttpRequest {
+        abort() {
+          // Do nothing.
+        }
         open(method, url) {
           // Do nothing.
         }
