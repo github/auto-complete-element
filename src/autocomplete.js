@@ -116,7 +116,7 @@ export default class Autocomplete {
   close() {
     if (this.results.hidden) return
     this.results.hidden = true
-    this.container.setAttribute('aria-expanded', 'true')
+    this.container.setAttribute('aria-expanded', 'false')
     this.container.dispatchEvent(new CustomEvent('toggle', {detail: {input: this.input, results: this.results}}))
   }
 }
