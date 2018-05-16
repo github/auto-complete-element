@@ -7,6 +7,9 @@
       auto-complete [role="option"]:hover {
         background-color: lavender;
       }
+      auto-complete [aria-disabled="true"] {
+        color: grey;
+      }
     </style>
     <script>
       class FakeXMLHttpRequest {
@@ -22,6 +25,7 @@
             <li role="option" data-autocomplete-value="one">Hubot</li>
             <li role="option" data-autocomplete-value="two">Bender</li>
             <li role="option" data-autocomplete-value="three">BB-8</li>
+            <li role="option" data-autocomplete-value="four" aria-disabled="true">R2-D2 (powered down)</li>
           `
           setTimeout(this.onload.bind(this), 0)
         }
