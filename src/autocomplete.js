@@ -11,6 +11,7 @@ export default class Autocomplete {
   list: HTMLElement
 
   onInputChange: Function
+  onResultsClick: Function
   onResultsMouseDown: Function
   onInputBlur: Function
   onInputFocus: Function
@@ -31,6 +32,7 @@ export default class Autocomplete {
     this.mouseDown = false
 
     this.onInputChange = debounce(this.onInputChange.bind(this), 300)
+    this.onResultsClick = this.onResultsClick.bind(this)
     this.onResultsMouseDown = this.onResultsMouseDown.bind(this)
     this.onInputBlur = this.onInputBlur.bind(this)
     this.onInputFocus = this.onInputFocus.bind(this)
@@ -41,6 +43,7 @@ export default class Autocomplete {
     this.input.addEventListener('blur', this.onInputBlur)
     this.input.addEventListener('input', this.onInputChange)
     this.results.addEventListener('mousedown', this.onResultsMouseDown)
+    this.results.addEventListener('click', this.onResultsClick)
   }
 
   destroy() {
@@ -49,6 +52,7 @@ export default class Autocomplete {
     this.input.removeEventListener('blur', this.onInputBlur)
     this.input.removeEventListener('input', this.onInputChange)
     this.results.removeEventListener('mousedown', this.onResultsMouseDown)
+    this.results.removeEventListener('click', this.onResultsClick)
   }
 
   sibling(next: boolean): Element {
@@ -97,8 +101,7 @@ export default class Autocomplete {
         {
           const selected = this.list.querySelector('[aria-selected="true"]')
           if (selected) {
-            this.container.value = selected.getAttribute('data-autocomplete-value') || ''
-            this.container.open = false
+            this.commit(selected)
             event.preventDefault()
           }
         }
@@ -113,6 +116,18 @@ export default class Autocomplete {
   onInputBlur() {
     if (this.mouseDown) return
     this.container.open = false
+  }
+
+  commit(selected: Element) {
+    const value = selected.getAttribute('data-autocomplete-value') || selected.textContent
+    this.container.value = value
+    this.container.open = false
+  }
+
+  onResultsClick(event: MouseEvent) {
+    if (!(event.target instanceof Element)) return
+    const selected = event.target.closest('[role="option"]')
+    if (selected) this.commit(selected)
   }
 
   onResultsMouseDown() {
