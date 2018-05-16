@@ -51,9 +51,43 @@ export default class Autocomplete {
     this.results.removeEventListener('mousedown', this.onResultsMouseDown)
   }
 
+  sibling(next: boolean): Element {
+    const options = Array.from(this.list.querySelectorAll('[role="option"]'))
+    const selected = this.list.querySelector('[aria-selected="true"]')
+    const index = options.indexOf(selected)
+    const sibling = next ? options[index + 1] : options[index - 1]
+    const def = next ? options[0] : options[options.length - 1]
+    return sibling || def
+  }
+
+  select(target: Element) {
+    for (const el of this.list.querySelectorAll('[aria-selected="true"]')) {
+      el.removeAttribute('aria-selected')
+    }
+    target.setAttribute('aria-selected', 'true')
+  }
+
   onKeydown(event: KeyboardEvent) {
-    if (event.key === 'Escape') {
-      this.container.open = false
+    switch (event.key) {
+      case 'Escape':
+        this.container.open = false
+        break
+      case 'ArrowDown':
+        this.select(this.sibling(true))
+        break
+      case 'ArrowUp':
+        this.select(this.sibling(false))
+        break
+      case 'n':
+        if (event.ctrlKey) {
+          this.select(this.sibling(true))
+        }
+        break
+      case 'p':
+        if (event.ctrlKey) {
+          this.select(this.sibling(false))
+        }
+        break
     }
   }
 
