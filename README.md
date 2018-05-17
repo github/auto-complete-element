@@ -5,13 +5,13 @@ Auto-complete input values from server search results.
 ## Installation
 
 ```
-$ npm install --save auto-complete-element
+$ npm install --save @github/auto-complete-element
 ```
 
 ## Usage
 
 ```js
-import 'auto-complete-element'
+import '@github/auto-complete-element'
 ```
 
 ```html
