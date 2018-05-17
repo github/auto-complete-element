@@ -67,6 +67,7 @@ export default class Autocomplete {
       el.removeAttribute('aria-selected')
     }
     target.setAttribute('aria-selected', 'true')
+    this.input.setAttribute('aria-activedescendant', target.id)
   }
 
   onKeydown(event: KeyboardEvent) {
@@ -139,6 +140,13 @@ export default class Autocomplete {
     this.fetchResults()
   }
 
+  identifyOptions() {
+    let id = 0
+    for (const el of this.results.querySelectorAll('[role="option"]:not([id])')) {
+      el.id = `${this.results.id}-option-${id++}`
+    }
+  }
+
   fetchResults() {
     const query = this.input.value.trim()
     if (!query) {
@@ -158,6 +166,7 @@ export default class Autocomplete {
     fragment(this.input, url.toString())
       .then(html => {
         this.results.innerHTML = html
+        this.identifyOptions()
         const hasResults = !!this.results.querySelector('[data-autocomplete-value]')
         this.container.open = hasResults
         this.container.dispatchEvent(new CustomEvent('load'))
@@ -179,6 +188,7 @@ export default class Autocomplete {
   close() {
     if (this.results.hidden) return
     this.results.hidden = true
+    this.input.removeAttribute('aria-activedescendant')
     this.container.setAttribute('aria-expanded', 'false')
     this.container.dispatchEvent(new CustomEvent('toggle', {detail: {input: this.input, results: this.results}}))
   }
