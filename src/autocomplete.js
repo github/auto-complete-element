@@ -3,14 +3,17 @@
 import type AutocompleteElement from './auto-complete-element'
 import debounce from './debounce'
 import {fragment} from './send'
+import {scrollTo} from './scroll'
+
+const ctrlBindings = navigator.userAgent.match(/Macintosh/)
 
 export default class Autocomplete {
   container: AutocompleteElement
   input: HTMLInputElement
   results: HTMLElement
-  list: HTMLElement
 
   onInputChange: Function
+  onResultsClick: Function
   onResultsMouseDown: Function
   onInputBlur: Function
   onInputFocus: Function
@@ -18,11 +21,10 @@ export default class Autocomplete {
 
   mouseDown: boolean
 
-  constructor(container: AutocompleteElement, input: HTMLInputElement, results: HTMLElement, list: HTMLElement) {
+  constructor(container: AutocompleteElement, input: HTMLInputElement, results: HTMLElement) {
     this.container = container
     this.input = input
     this.results = results
-    this.list = list
 
     this.results.hidden = true
     this.input.setAttribute('autocomplete', 'off')
@@ -31,6 +33,7 @@ export default class Autocomplete {
     this.mouseDown = false
 
     this.onInputChange = debounce(this.onInputChange.bind(this), 300)
+    this.onResultsClick = this.onResultsClick.bind(this)
     this.onResultsMouseDown = this.onResultsMouseDown.bind(this)
     this.onInputBlur = this.onInputBlur.bind(this)
     this.onInputFocus = this.onInputFocus.bind(this)
@@ -41,6 +44,7 @@ export default class Autocomplete {
     this.input.addEventListener('blur', this.onInputBlur)
     this.input.addEventListener('input', this.onInputChange)
     this.results.addEventListener('mousedown', this.onResultsMouseDown)
+    this.results.addEventListener('click', this.onResultsClick)
   }
 
   destroy() {
@@ -49,11 +53,62 @@ export default class Autocomplete {
     this.input.removeEventListener('blur', this.onInputBlur)
     this.input.removeEventListener('input', this.onInputChange)
     this.results.removeEventListener('mousedown', this.onResultsMouseDown)
+    this.results.removeEventListener('click', this.onResultsClick)
+  }
+
+  sibling(next: boolean): HTMLElement {
+    const options = Array.from(this.results.querySelectorAll('[role="option"]'))
+    const selected = this.results.querySelector('[aria-selected="true"]')
+    const index = options.indexOf(selected)
+    const sibling = next ? options[index + 1] : options[index - 1]
+    const def = next ? options[0] : options[options.length - 1]
+    return sibling || def
+  }
+
+  select(target: HTMLElement) {
+    for (const el of this.results.querySelectorAll('[aria-selected="true"]')) {
+      el.removeAttribute('aria-selected')
+    }
+    target.setAttribute('aria-selected', 'true')
+    this.input.setAttribute('aria-activedescendant', target.id)
+    scrollTo(this.results, target)
   }
 
   onKeydown(event: KeyboardEvent) {
-    if (event.key === 'Escape') {
-      this.container.open = false
+    switch (event.key) {
+      case 'Escape':
+        this.container.open = false
+        event.preventDefault()
+        break
+      case 'ArrowDown':
+        this.select(this.sibling(true))
+        event.preventDefault()
+        break
+      case 'ArrowUp':
+        this.select(this.sibling(false))
+        event.preventDefault()
+        break
+      case 'n':
+        if (ctrlBindings && event.ctrlKey) {
+          this.select(this.sibling(true))
+          event.preventDefault()
+        }
+        break
+      case 'p':
+        if (ctrlBindings && event.ctrlKey) {
+          this.select(this.sibling(false))
+          event.preventDefault()
+        }
+        break
+      case 'Enter':
+        {
+          const selected = this.results.querySelector('[aria-selected="true"]')
+          if (selected) {
+            this.commit(selected)
+            event.preventDefault()
+          }
+        }
+        break
     }
   }
 
@@ -66,6 +121,19 @@ export default class Autocomplete {
     this.container.open = false
   }
 
+  commit(selected: Element) {
+    if (selected.getAttribute('aria-disabled') === 'true') return
+    const value = selected.getAttribute('data-autocomplete-value') || selected.textContent
+    this.container.value = value
+    this.container.open = false
+  }
+
+  onResultsClick(event: MouseEvent) {
+    if (!(event.target instanceof Element)) return
+    const selected = event.target.closest('[role="option"]')
+    if (selected) this.commit(selected)
+  }
+
   onResultsMouseDown() {
     this.mouseDown = true
     this.results.addEventListener('mouseup', () => (this.mouseDown = false), {once: true})
@@ -74,6 +142,13 @@ export default class Autocomplete {
   onInputChange() {
     this.container.removeAttribute('value')
     this.fetchResults()
+  }
+
+  identifyOptions() {
+    let id = 0
+    for (const el of this.results.querySelectorAll('[role="option"]:not([id])')) {
+      el.id = `${this.results.id}-option-${id++}`
+    }
   }
 
   fetchResults() {
@@ -94,7 +169,8 @@ export default class Autocomplete {
     this.container.dispatchEvent(new CustomEvent('loadstart'))
     fragment(this.input, url.toString())
       .then(html => {
-        this.list.innerHTML = html
+        this.results.innerHTML = html
+        this.identifyOptions()
         const hasResults = !!this.results.querySelector('[data-autocomplete-value]')
         this.container.open = hasResults
         this.container.dispatchEvent(new CustomEvent('load'))
@@ -109,12 +185,15 @@ export default class Autocomplete {
   open() {
     if (!this.results.hidden) return
     positionBelow(this.input, this.results)
+    this.container.setAttribute('aria-expanded', 'true')
     this.container.dispatchEvent(new CustomEvent('toggle', {detail: {input: this.input, results: this.results}}))
   }
 
   close() {
     if (this.results.hidden) return
     this.results.hidden = true
+    this.input.removeAttribute('aria-activedescendant')
+    this.container.setAttribute('aria-expanded', 'false')
     this.container.dispatchEvent(new CustomEvent('toggle', {detail: {input: this.input, results: this.results}}))
   }
 }

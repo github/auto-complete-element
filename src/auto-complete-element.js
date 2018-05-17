@@ -10,11 +10,22 @@ export default class AutocompleteElement extends HTMLElement {
   }
 
   connectedCallback() {
-    const input = this.querySelector('input[slot="field"]')
-    const results = this.querySelector('[slot="popup"]')
-    const list = this.querySelector('[slot="results"]')
-    if (!(input instanceof HTMLInputElement) || !results || !list) return
-    state.set(this, new Autocomplete(this, input, results, list))
+    const owns = this.getAttribute('aria-owns')
+    if (!owns) return
+
+    const input = this.querySelector('input')
+    const results = document.getElementById(owns)
+    if (!(input instanceof HTMLInputElement) || !results) return
+    state.set(this, new Autocomplete(this, input, results))
+
+    this.setAttribute('role', 'combobox')
+    this.setAttribute('aria-haspopup', 'listbox')
+    this.setAttribute('aria-expanded', 'false')
+
+    input.setAttribute('aria-autocomplete', 'list')
+    input.setAttribute('aria-controls', owns)
+
+    results.setAttribute('role', 'listbox')
   }
 
   disconnectedCallback() {

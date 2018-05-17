@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Auto-complete examples</title>
+    <style>
+      auto-complete [aria-selected="true"],
+      auto-complete [role="option"]:hover {
+        background-color: lavender;
+      }
+      auto-complete [aria-disabled="true"] {
+        color: grey;
+      }
+    </style>
+    <script>
+      class FakeXMLHttpRequest {
+        abort() {
+          // Do nothing.
+        }
+        open(method, url) {
+          // Do nothing.
+        }
+        setRequestHeader(name, value) {
+          // Do nothing.
+        }
+        send() {
+          this.status = 200
+          this.responseText = `
+            <li role="option" data-autocomplete-value="@hubot">Hubot</li>
+            <li role="option" data-autocomplete-value="@bender">Bender</li>
+            <li role="option" data-autocomplete-value="@bb-8">BB-8</li>
+            <li role="option" data-autocomplete-value="@r2d2" aria-disabled="true">R2-D2 (powered down)</li>
+          `
+          setTimeout(this.onload.bind(this), 0)
+        }
+      }
+      window.XMLHttpRequest = FakeXMLHttpRequest
+    </script>
+    <script src="../dist/index.umd.js"></script>
+  </head>
+  <body>
+    <label id="robots-label">Robots</label>
+    <auto-complete src="/demo" aria-owns="items-popup" aria-labelledby="robots-label">
+      <input type="text" aria-labelledby="robots-label" autofocus>
+      <ul id="items-popup" aria-labelledby="robots-label"></ul>
+    </auto-complete>
+  </body>
+</html>

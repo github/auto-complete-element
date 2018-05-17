@@ -15,11 +15,9 @@ describe('auto-complete element', function() {
     beforeEach(function() {
       const container = document.createElement('div')
       container.innerHTML = `
-        <auto-complete src="/search">
-          <input slot="field" type="text">
-          <div slot="popup">
-            <ul slot="results"></ul>
-          </div>
+        <auto-complete src="/search" aria-owns="popup">
+          <input type="text">
+          <ul id="popup"></ul>
         </auto-complete>`
       document.body.append(container)
     })
@@ -30,11 +28,11 @@ describe('auto-complete element', function() {
 
     it('requests html fragment', async function() {
       const input = document.querySelector('input')
-      const results = document.querySelector('[slot="results"]')
+      const popup = document.querySelector('#popup')
       input.value = 'hub'
       input.dispatchEvent(new InputEvent('input'))
       await sleep(500)
-      assert.equal('hubot', results.textContent)
+      assert.equal('hubot', popup.textContent)
     })
   })
 })
