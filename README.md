@@ -16,7 +16,7 @@ import 'auto-complete-element'
 
 ```html
 <auto-complete src="/users/search" aria-owns="users-popup">
-  <input slot="field" type="text" data-autocomplete-autofocus>
+  <input type="text" data-autocomplete-autofocus>
   <ul slot="popup" id="users-popup"></ul>
 </auto-complete>
 ```

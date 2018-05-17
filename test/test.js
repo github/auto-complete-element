@@ -16,7 +16,7 @@ describe('auto-complete element', function() {
       const container = document.createElement('div')
       container.innerHTML = `
         <auto-complete src="/search">
-          <input slot="field" type="text">
+          <input type="text">
           <ul slot="popup"></ul>
         </auto-complete>`
       document.body.append(container)

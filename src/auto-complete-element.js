@@ -10,7 +10,7 @@ export default class AutocompleteElement extends HTMLElement {
   }
 
   connectedCallback() {
-    const input = this.querySelector('input[slot="field"]')
+    const input = this.querySelector('input')
     const results = this.querySelector('[slot="popup"]')
     if (!(input instanceof HTMLInputElement) || !results) return
     state.set(this, new Autocomplete(this, input, results))
