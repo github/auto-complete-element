@@ -12,9 +12,8 @@ export default class AutocompleteElement extends HTMLElement {
   connectedCallback() {
     const input = this.querySelector('input[slot="field"]')
     const results = this.querySelector('[slot="popup"]')
-    const list = this.querySelector('[slot="results"]')
-    if (!(input instanceof HTMLInputElement) || !results || !list) return
-    state.set(this, new Autocomplete(this, input, results, list))
+    if (!(input instanceof HTMLInputElement) || !results) return
+    state.set(this, new Autocomplete(this, input, results))
 
     this.setAttribute('role', 'combobox')
     this.setAttribute('aria-haspopup', 'listbox')

@@ -8,7 +8,6 @@ export default class Autocomplete {
   container: AutocompleteElement
   input: HTMLInputElement
   results: HTMLElement
-  list: HTMLElement
 
   onInputChange: Function
   onResultsClick: Function
@@ -19,11 +18,10 @@ export default class Autocomplete {
 
   mouseDown: boolean
 
-  constructor(container: AutocompleteElement, input: HTMLInputElement, results: HTMLElement, list: HTMLElement) {
+  constructor(container: AutocompleteElement, input: HTMLInputElement, results: HTMLElement) {
     this.container = container
     this.input = input
     this.results = results
-    this.list = list
 
     this.results.hidden = true
     this.input.setAttribute('autocomplete', 'off')
@@ -56,8 +54,8 @@ export default class Autocomplete {
   }
 
   sibling(next: boolean): Element {
-    const options = Array.from(this.list.querySelectorAll('[role="option"]'))
-    const selected = this.list.querySelector('[aria-selected="true"]')
+    const options = Array.from(this.results.querySelectorAll('[role="option"]'))
+    const selected = this.results.querySelector('[aria-selected="true"]')
     const index = options.indexOf(selected)
     const sibling = next ? options[index + 1] : options[index - 1]
     const def = next ? options[0] : options[options.length - 1]
@@ -65,7 +63,7 @@ export default class Autocomplete {
   }
 
   select(target: Element) {
-    for (const el of this.list.querySelectorAll('[aria-selected="true"]')) {
+    for (const el of this.results.querySelectorAll('[aria-selected="true"]')) {
       el.removeAttribute('aria-selected')
     }
     target.setAttribute('aria-selected', 'true')
@@ -99,7 +97,7 @@ export default class Autocomplete {
         break
       case 'Enter':
         {
-          const selected = this.list.querySelector('[aria-selected="true"]')
+          const selected = this.results.querySelector('[aria-selected="true"]')
           if (selected) {
             this.commit(selected)
             event.preventDefault()
@@ -159,7 +157,7 @@ export default class Autocomplete {
     this.container.dispatchEvent(new CustomEvent('loadstart'))
     fragment(this.input, url.toString())
       .then(html => {
-        this.list.innerHTML = html
+        this.results.innerHTML = html
         const hasResults = !!this.results.querySelector('[data-autocomplete-value]')
         this.container.open = hasResults
         this.container.dispatchEvent(new CustomEvent('load'))

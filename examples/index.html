@@ -25,10 +25,10 @@
         send() {
           this.status = 200
           this.responseText = `
-            <li role="option" data-autocomplete-value="one">Hubot</li>
-            <li role="option" data-autocomplete-value="two">Bender</li>
-            <li role="option" data-autocomplete-value="three">BB-8</li>
-            <li role="option" data-autocomplete-value="four" aria-disabled="true">R2-D2 (powered down)</li>
+            <li role="option" data-autocomplete-value="@hubot">Hubot</li>
+            <li role="option" data-autocomplete-value="@bender">Bender</li>
+            <li role="option" data-autocomplete-value="@bb-8">BB-8</li>
+            <li role="option" data-autocomplete-value="@r2d2" aria-disabled="true">R2-D2 (powered down)</li>
           `
           setTimeout(this.onload.bind(this), 0)
         }
@@ -41,10 +41,7 @@
     <label id="robots-label">Robots</label>
     <auto-complete src="/demo" aria-owns="items-popup" aria-labelledby="robots-label">
       <input type="text" slot="field" aria-labelledby="robots-label" autofocus>
-      <div slot="popup" id="items-popup" aria-labelledby="robots-label">
-        <ul slot="results">
-        </ul>
-      </div>
+      <ul slot="popup" id="items-popup" aria-labelledby="robots-label"></ul>
     </auto-complete>
   </body>
 </html>
