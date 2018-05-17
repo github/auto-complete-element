@@ -3,6 +3,7 @@
 import type AutocompleteElement from './auto-complete-element'
 import debounce from './debounce'
 import {fragment} from './send'
+import {scrollTo} from './scroll'
 
 const ctrlBindings = navigator.userAgent.match(/Macintosh/)
 
@@ -55,7 +56,7 @@ export default class Autocomplete {
     this.results.removeEventListener('click', this.onResultsClick)
   }
 
-  sibling(next: boolean): Element {
+  sibling(next: boolean): HTMLElement {
     const options = Array.from(this.results.querySelectorAll('[role="option"]'))
     const selected = this.results.querySelector('[aria-selected="true"]')
     const index = options.indexOf(selected)
@@ -64,12 +65,13 @@ export default class Autocomplete {
     return sibling || def
   }
 
-  select(target: Element) {
+  select(target: HTMLElement) {
     for (const el of this.results.querySelectorAll('[aria-selected="true"]')) {
       el.removeAttribute('aria-selected')
     }
     target.setAttribute('aria-selected', 'true')
     this.input.setAttribute('aria-activedescendant', target.id)
+    scrollTo(this.results, target)
   }
 
   onKeydown(event: KeyboardEvent) {
