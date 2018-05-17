@@ -4,6 +4,8 @@ import type AutocompleteElement from './auto-complete-element'
 import debounce from './debounce'
 import {fragment} from './send'
 
+const ctrlBindings = navigator.userAgent.match(/Macintosh/)
+
 export default class Autocomplete {
   container: AutocompleteElement
   input: HTMLInputElement
@@ -85,13 +87,13 @@ export default class Autocomplete {
         event.preventDefault()
         break
       case 'n':
-        if (event.ctrlKey) {
+        if (ctrlBindings && event.ctrlKey) {
           this.select(this.sibling(true))
           event.preventDefault()
         }
         break
       case 'p':
-        if (event.ctrlKey) {
+        if (ctrlBindings && event.ctrlKey) {
           this.select(this.sibling(false))
           event.preventDefault()
         }
