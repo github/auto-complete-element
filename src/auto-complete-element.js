@@ -10,8 +10,11 @@ export default class AutocompleteElement extends HTMLElement {
   }
 
   connectedCallback() {
+    const owns = this.getAttribute('aria-owns')
+    if (!owns) return
+
     const input = this.querySelector('input')
-    const results = this.querySelector('[slot="popup"]')
+    const results = document.getElementById(owns)
     if (!(input instanceof HTMLInputElement) || !results) return
     state.set(this, new Autocomplete(this, input, results))
 
@@ -19,9 +22,8 @@ export default class AutocompleteElement extends HTMLElement {
     this.setAttribute('aria-haspopup', 'listbox')
     this.setAttribute('aria-expanded', 'false')
 
-    const popup = this.getAttribute('aria-owns') || ''
     input.setAttribute('aria-autocomplete', 'list')
-    input.setAttribute('aria-controls', popup)
+    input.setAttribute('aria-controls', owns)
 
     results.setAttribute('role', 'listbox')
   }
