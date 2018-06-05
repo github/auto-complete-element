@@ -1,7 +1,7 @@
 function completer(request, response, next) {
   if (request.method === 'GET' && request.url.startsWith('/search?q=hub')) {
     response.writeHead(200)
-    response.end('hubot')
+    response.end('<li role="option">hubot</li>')
     return
   }
   next()

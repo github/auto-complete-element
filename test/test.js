@@ -34,6 +34,22 @@ describe('auto-complete element', function() {
       await sleep(500)
       assert.equal('hubot', popup.textContent)
     })
+
+    it('dispatches a `commit` event with value', function(done) {
+      document.querySelector('auto-complete').addEventListener('commit', event => {
+        if (event.detail.value === 'hubot') {
+          done()
+        } else {
+          done(new Error('Commit event called with wrong value'))
+        }
+      })
+
+      const input = document.querySelector('input')
+      const popup = document.querySelector('#popup')
+      input.value = 'hub'
+      input.dispatchEvent(new InputEvent('input'))
+      sleep(500).then(() => popup.querySelector('li').click())
+    })
   })
 })
 
