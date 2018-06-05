@@ -126,6 +126,7 @@ export default class Autocomplete {
     const value = selected.getAttribute('data-autocomplete-value') || selected.textContent
     this.container.value = value
     this.container.open = false
+    this.container.dispatchEvent(new CustomEvent('commit', {detail: {value}}))
   }
 
   onResultsClick(event: MouseEvent) {
