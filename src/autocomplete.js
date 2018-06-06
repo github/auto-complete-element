@@ -100,6 +100,7 @@ export default class Autocomplete {
           event.preventDefault()
         }
         break
+      case 'Tab':
       case 'Enter':
         {
           const selected = this.results.querySelector('[aria-selected="true"]')
