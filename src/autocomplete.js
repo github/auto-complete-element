@@ -101,6 +101,13 @@ export default class Autocomplete {
         }
         break
       case 'Tab':
+        {
+          const selected = this.results.querySelector('[aria-selected="true"]')
+          if (selected) {
+            this.commit(selected)
+          }
+        }
+        break
       case 'Enter':
         {
           const selected = this.results.querySelector('[aria-selected="true"]')
