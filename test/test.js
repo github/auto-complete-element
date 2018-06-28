@@ -13,17 +13,14 @@ describe('auto-complete element', function() {
 
   describe('requesting server results', function() {
     beforeEach(function() {
-      const container = document.createElement('div')
-      container.innerHTML = `
-        <auto-complete src="/search" aria-owns="popup">
-          <input type="text">
-          <ul id="popup"></ul>
-        </auto-complete>`
-      document.body.append(container)
-    })
-
-    afterEach(function() {
-      document.body.innerHTML = ''
+      document.body.innerHTML = `
+        <div id="mocha-fixture">
+          <auto-complete src="/search" aria-owns="popup">
+            <input type="text">
+            <ul id="popup"></ul>
+          </auto-complete>
+        </div>
+      `
     })
 
     it('requests html fragment', async function() {
