@@ -28,14 +28,14 @@ describe('auto-complete element', function() {
       const popup = document.querySelector('#popup')
       input.value = 'hub'
       input.dispatchEvent(new InputEvent('input'))
-      await sleep(500)
+      await once(document, 'loadend')
       assert.equal('hubot', popup.textContent)
     })
   })
 })
 
-function sleep(millis) {
+function once(element, eventName) {
   return new Promise(resolve => {
-    setTimeout(resolve, millis)
+    element.addEventListener(eventName, resolve, {once: true})
   })
 }
