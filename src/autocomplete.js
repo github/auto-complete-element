@@ -81,22 +81,30 @@ export default class Autocomplete {
         event.preventDefault()
         break
       case 'ArrowDown':
-        this.select(this.sibling(true))
-        event.preventDefault()
+        {
+          const item = this.sibling(true)
+          if (item) this.select(item)
+          event.preventDefault()
+        }
         break
       case 'ArrowUp':
-        this.select(this.sibling(false))
-        event.preventDefault()
+        {
+          const item = this.sibling(false)
+          if (item) this.select(item)
+          event.preventDefault()
+        }
         break
       case 'n':
         if (ctrlBindings && event.ctrlKey) {
-          this.select(this.sibling(true))
+          const item = this.sibling(true)
+          if (item) this.select(item)
           event.preventDefault()
         }
         break
       case 'p':
         if (ctrlBindings && event.ctrlKey) {
-          this.select(this.sibling(false))
+          const item = this.sibling(false)
+          if (item) this.select(item)
           event.preventDefault()
         }
         break
