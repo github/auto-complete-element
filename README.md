@@ -16,7 +16,7 @@ import '@github/auto-complete-element'
 
 ```html
 <auto-complete src="/users/search" aria-owns="users-popup">
-  <input type="text" data-autocomplete-autofocus>
+  <input type="text">
   <ul id="users-popup"></ul>
 </auto-complete>
 ```
