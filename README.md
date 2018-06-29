@@ -30,11 +30,11 @@ The server response should include the items that matched the search query.
 <li role="option" aria-disabled="true">R2-D2 (powered down)</li>
 ```
 
-The `data-autocomplete-value` attribute can be used to define the value for a
-result item whose display text needs to be different:
+The `data-autocomplete-value` attribute can be used to define the value for an
+item whose display text needs to be different:
 
 ```html
-<li role="option" data-autocomplete-value="r2d2">R2-D2 (powered down)</li>
+<li role="option" data-autocomplete-value="bb8">BB-8 (astromech)</li>
 ```
 
 ## Browser support
