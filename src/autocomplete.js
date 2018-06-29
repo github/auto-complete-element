@@ -177,7 +177,7 @@ export default class Autocomplete {
     const src = this.container.src
     if (!src) return
 
-    const url = new URL(src, window.location.origin)
+    const url = new URL(src, window.location.href)
     const params = new URLSearchParams(url.search.slice(1))
     params.append('q', query)
     url.search = params.toString()
