@@ -187,7 +187,7 @@ export default class Autocomplete {
       .then(html => {
         this.results.innerHTML = html
         this.identifyOptions()
-        const hasResults = !!this.results.querySelector('[data-autocomplete-value]')
+        const hasResults = !!this.results.querySelector('[role="option"]')
         this.container.open = hasResults
         this.container.dispatchEvent(new CustomEvent('load'))
         this.container.dispatchEvent(new CustomEvent('loadend'))
