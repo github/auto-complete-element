@@ -119,7 +119,7 @@ export default class Autocomplete {
       case 'Enter':
         {
           const selected = this.results.querySelector('[aria-selected="true"]')
-          if (selected) {
+          if (selected && this.container.open) {
             this.commit(selected)
             event.preventDefault()
           }
