@@ -12,12 +12,12 @@ export default class Autocomplete {
   input: HTMLInputElement
   results: HTMLElement
 
-  onInputChange: Function
-  onResultsClick: Function
-  onResultsMouseDown: Function
-  onInputBlur: Function
-  onInputFocus: Function
-  onKeydown: Function
+  onInputChange: () => void
+  onResultsClick: MouseEvent => void
+  onResultsMouseDown: () => void
+  onInputBlur: () => void
+  onInputFocus: () => void
+  onKeydown: KeyboardEvent => void
 
   mouseDown: boolean
 
