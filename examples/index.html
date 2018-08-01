@@ -38,11 +38,14 @@
     </script>
   </head>
   <body>
-    <label id="robots-label">Robots</label>
-    <auto-complete src="/demo" aria-owns="items-popup" aria-labelledby="robots-label">
-      <input type="text" aria-labelledby="robots-label" autofocus>
-      <ul id="items-popup" aria-labelledby="robots-label"></ul>
-    </auto-complete>
+    <form>
+      <label id="robots-label">Robots</label>
+      <auto-complete src="/demo" aria-owns="items-popup" aria-labelledby="robots-label">
+        <input name="robot" type="text" aria-labelledby="robots-label" autofocus>
+        <ul id="items-popup" aria-labelledby="robots-label"></ul>
+      </auto-complete>
+      <button type="submit">Save</button>
+    </form>
     <script src="../dist/index.umd.js"></script>
   </body>
 </html>
