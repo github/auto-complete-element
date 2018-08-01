@@ -12,12 +12,12 @@ export default class Autocomplete {
   input: HTMLInputElement
   results: HTMLElement
 
-  onInputChange: Function
-  onResultsClick: Function
-  onResultsMouseDown: Function
-  onInputBlur: Function
-  onInputFocus: Function
-  onKeydown: Function
+  onInputChange: () => void
+  onResultsClick: MouseEvent => void
+  onResultsMouseDown: () => void
+  onInputBlur: () => void
+  onInputFocus: () => void
+  onKeydown: KeyboardEvent => void
 
   mouseDown: boolean
 
@@ -77,8 +77,11 @@ export default class Autocomplete {
   onKeydown(event: KeyboardEvent) {
     switch (event.key) {
       case 'Escape':
-        this.container.open = false
-        event.preventDefault()
+        if (this.container.open) {
+          this.container.open = false
+          event.stopPropagation()
+          event.preventDefault()
+        }
         break
       case 'ArrowDown':
         {
