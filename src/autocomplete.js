@@ -77,8 +77,11 @@ export default class Autocomplete {
   onKeydown(event: KeyboardEvent) {
     switch (event.key) {
       case 'Escape':
-        this.container.open = false
-        event.preventDefault()
+        if (this.container.open) {
+          this.container.open = false
+          event.stopPropagation()
+          event.preventDefault()
+        }
         break
       case 'ArrowDown':
         {
