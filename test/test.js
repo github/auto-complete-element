@@ -31,7 +31,7 @@ describe('auto-complete element', function() {
       triggerInput(input, 'hub')
       await once(container, 'loadend')
 
-      assert.equal(3, popup.children.length)
+      assert.equal(4, popup.children.length)
     })
 
     it('respects arrow keys', async function() {
@@ -64,6 +64,21 @@ describe('auto-complete element', function() {
       assert.isFalse(keydown(input, 'ArrowDown'))
       assert.isFalse(keydown(input, 'Enter'))
       assert.equal('first', container.value)
+      assert.isFalse(container.open)
+    })
+
+    it('does not commit text value on link item navigation', async function() {
+      const container = document.querySelector('auto-complete')
+      const input = container.querySelector('input')
+
+      triggerInput(input, 'hub')
+      await once(container, 'loadend')
+
+      const link = container.querySelector('a[role=option]')
+
+      assert.equal('', container.value)
+      link.click()
+      assert.equal('', container.value)
       assert.isFalse(container.open)
     })
 

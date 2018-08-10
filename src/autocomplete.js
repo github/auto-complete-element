@@ -142,6 +142,13 @@ export default class Autocomplete {
 
   commit(selected: Element) {
     if (selected.getAttribute('aria-disabled') === 'true') return
+
+    if (selected instanceof HTMLAnchorElement) {
+      selected.click()
+      this.container.open = false
+      return
+    }
+
     const value = selected.getAttribute('data-autocomplete-value') || selected.textContent
     this.container.value = value
     this.container.open = false
