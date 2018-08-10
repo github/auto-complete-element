@@ -1,9 +1,12 @@
 function completer(request, response, next) {
   if (request.method === 'GET' && request.url.startsWith('/search?q=hub')) {
     response.writeHead(200)
-    response.end(`<li role="option" data-autocomplete-value="first"><span>first</span></li>
-                  <li role="option"><span>second</span></li>
-                  <li role="option"><span>third</span></li>`)
+    response.end(`
+      <li role="option" data-autocomplete-value="first"><span>first</span></li>
+      <li role="option"><span>second</span></li>
+      <li role="option"><span>third</span></li>
+      <a role="option" href="#">link</>
+    `)
     return
   }
   next()
