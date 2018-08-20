@@ -37,6 +37,39 @@ item whose display text needs to be different:
 <li role="option" data-autocomplete-value="bb8">BB-8 (astromech)</li>
 ```
 
+## Attributes
+
+- `open` is true when the auto-complete result list is visible
+- `value` is the selected value from the list or the empty string when cleared
+
+## Events
+
+```js
+const completer = document.querySelector('auto-complete')
+
+// Network request lifecycle events.
+completer.addEventListener('loadstart', function(event) {
+  console.log('Network request started', event)
+})
+completer.addEventListener('loadend', function(event) {
+  console.log('Network request complete', event)
+})
+completer.addEventListener('load', function(event) {
+  console.log('Network succces succeeded', event)
+})
+completer.addEventListener('error', function(event) {
+  console.log('Network request failed', event)
+})
+
+// Auto-complete result events.
+completer.addEventListener('change', function(event) {
+  console.log('Auto-completed value chosen or cleared', completer.value)
+})
+completer.addEventListener('toggle', function(event) {
+  console.log('Auto-completion list is now open or closed', completer.open)
+})
+```
+
 ## Browser support
 
 - Chrome
