@@ -55,7 +55,7 @@ completer.addEventListener('loadend', function(event) {
   console.log('Network request complete', event)
 })
 completer.addEventListener('load', function(event) {
-  console.log('Network succces succeeded', event)
+  console.log('Network request succeeded', event)
 })
 completer.addEventListener('error', function(event) {
   console.log('Network request failed', event)
