@@ -85,13 +85,16 @@ describe('auto-complete element', function() {
     it('closes on Escape', async function() {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
+      const popup = container.querySelector('#popup')
 
       triggerInput(input, 'hub')
       await once(container, 'loadend')
 
       assert.isTrue(container.open)
+      assert.isFalse(popup.hidden)
       assert.isFalse(keydown(input, 'Escape'))
       assert.isFalse(container.open)
+      assert.isTrue(popup.hidden)
     })
   })
 })

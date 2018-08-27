@@ -210,7 +210,7 @@ export default class Autocomplete {
 
   open() {
     if (!this.results.hidden) return
-    positionBelow(this.input, this.results)
+    this.results.hidden = false
     this.container.setAttribute('aria-expanded', 'true')
     this.container.dispatchEvent(new CustomEvent('toggle', {detail: {input: this.input, results: this.results}}))
   }
@@ -222,26 +222,4 @@ export default class Autocomplete {
     this.container.setAttribute('aria-expanded', 'false')
     this.container.dispatchEvent(new CustomEvent('toggle', {detail: {input: this.input, results: this.results}}))
   }
-}
-
-function positionBelow(input: HTMLInputElement, results: HTMLElement) {
-  const {height, width} = input.getBoundingClientRect()
-
-  results.hidden = false
-  results.style.position = 'absolute'
-  results.style.width = `${width}px`
-
-  const bottom = offsetTop(input) + height
-  setOffset(results, bottom + 5)
-}
-
-function setOffset(element: HTMLElement, top: number) {
-  const curOffset = offsetTop(element)
-  const curTop = parseInt(getComputedStyle(element).top, 10)
-  element.style.top = `${top - curOffset + curTop}px`
-}
-
-function offsetTop(element: HTMLElement): number {
-  const rect = element.getBoundingClientRect()
-  return rect.top + window.pageYOffset
 }
