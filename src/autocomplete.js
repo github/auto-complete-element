@@ -179,7 +179,8 @@ export default class Autocomplete {
 
   fetchResults() {
     const query = this.input.value.trim()
-    if (!query) {
+
+    if (!query && !this.container.fetchWhenBlank) {
       this.container.open = false
       return
     }
