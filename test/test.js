@@ -11,6 +11,51 @@ describe('auto-complete element', function() {
     })
   })
 
+  describe('fetch-when-blank', function() {
+    it('makes a request on focus if fetch-when-blank is set', async function() {
+      document.body.innerHTML = `
+        <div id="mocha-fixture">
+          <auto-complete src="/search" aria-owns="popup" fetch-when-blank>
+            <input type="text">
+            <ul id="popup"></ul>
+          </auto-complete>
+        </div>
+      `
+      const container = document.querySelector('auto-complete')
+      const input = container.querySelector('input')
+      const popup = container.querySelector('#popup')
+
+      input.dispatchEvent(new FocusEvent('focus'))
+      await once(container, 'loadend')
+
+      assert.equal(2, popup.children.length)
+    })
+
+    it('does not fetch on focus if empty and fetch-when-blank is not set', function(done) {
+      document.body.innerHTML = `
+        <div id="mocha-fixture">
+          <auto-complete src="/search" aria-owns="popup">
+            <input type="text">
+            <ul id="popup"></ul>
+          </auto-complete>
+        </div>
+      `
+      const container = document.querySelector('auto-complete')
+      const input = container.querySelector('input')
+
+      let loadStartCounter = 0
+      container.addEventListener('loadstart', () => {
+        loadStartCounter++
+      })
+
+      input.dispatchEvent(new FocusEvent('focus'))
+      setTimeout(() => {
+        assert.equal(loadStartCounter, 0, 'loadstart is not fired')
+        done()
+      }, 0)
+    })
+  })
+
   describe('requesting server results', function() {
     beforeEach(function() {
       document.body.innerHTML = `

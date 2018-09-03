@@ -9,6 +9,15 @@ function completer(request, response, next) {
     `)
     return
   }
+
+  if (request.method === 'GET' && request.url.startsWith('/search?q=')) {
+    response.writeHead(200)
+    response.end(`
+      <li role="option"><span>first</span></li>
+      <li role="option"><span>second</span></li>
+    `)
+    return
+  }
   next()
 }
 
