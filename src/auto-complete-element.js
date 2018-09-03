@@ -64,18 +64,6 @@ export default class AutocompleteElement extends HTMLElement {
     }
   }
 
-  get fetchWhenBlank(): boolean {
-    return this.hasAttribute('fetch-when-blank')
-  }
-
-  set fetchWhenBlank(value: boolean) {
-    if (value) {
-      this.setAttribute('fetch-when-blank', '')
-    } else {
-      this.removeAttribute('fetch-when-blank')
-    }
-  }
-
   static get observedAttributes(): Array<string> {
     return ['open', 'value']
   }
