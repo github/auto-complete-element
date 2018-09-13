@@ -11,6 +11,7 @@ export default class Autocomplete {
   container: AutocompleteElement
   input: HTMLInputElement
   results: HTMLElement
+  defaultOpen: boolean
 
   onInputChange: () => void
   onResultsClick: MouseEvent => void
@@ -21,12 +22,17 @@ export default class Autocomplete {
 
   mouseDown: boolean
 
-  constructor(container: AutocompleteElement, input: HTMLInputElement, results: HTMLElement) {
+  constructor(container: AutocompleteElement, input: HTMLInputElement, results: HTMLElement, defaultOpen: boolean) {
     this.container = container
     this.input = input
     this.results = results
+    this.defaultOpen = defaultOpen
 
-    this.results.hidden = true
+    if (this.defaultOpen) {
+      this.fetchResults()
+    } else {
+      this.results.hidden = true
+    }
     this.input.setAttribute('autocomplete', 'off')
     this.input.setAttribute('spellcheck', 'false')
 
@@ -77,7 +83,7 @@ export default class Autocomplete {
   onKeydown(event: KeyboardEvent) {
     switch (event.key) {
       case 'Escape':
-        if (this.container.open) {
+        if (!this.defaultOpen && this.container.open) {
           this.container.open = false
           event.stopPropagation()
           event.preventDefault()
@@ -124,7 +130,7 @@ export default class Autocomplete {
           const selected = this.results.querySelector('[aria-selected="true"]')
           if (selected && this.container.open) {
             this.commit(selected)
-            event.preventDefault()
+            if (!this.defaultOpen) event.preventDefault()
           }
         }
         break
@@ -137,7 +143,7 @@ export default class Autocomplete {
 
   onInputBlur() {
     if (this.mouseDown) return
-    this.container.open = false
+    if (!this.defaultOpen) this.container.open = false
   }
 
   commit(selected: Element) {
@@ -145,13 +151,13 @@ export default class Autocomplete {
 
     if (selected instanceof HTMLAnchorElement) {
       selected.click()
-      this.container.open = false
+      if (!this.defaultOpen) this.container.open = false
       return
     }
 
     const value = selected.getAttribute('data-autocomplete-value') || selected.textContent
     this.container.value = value
-    this.container.open = false
+    if (!this.defaultOpen) this.container.open = false
   }
 
   onResultsClick(event: MouseEvent) {
@@ -179,7 +185,7 @@ export default class Autocomplete {
 
   fetchResults() {
     const query = this.input.value.trim()
-    if (!query) {
+    if (!query && !this.defaultOpen) {
       this.container.open = false
       return
     }
@@ -198,7 +204,7 @@ export default class Autocomplete {
         this.results.innerHTML = html
         this.identifyOptions()
         const hasResults = !!this.results.querySelector('[role="option"]')
-        this.container.open = hasResults
+        if (!this.defaultOpen) this.container.open = hasResults
         this.container.dispatchEvent(new CustomEvent('load'))
         this.container.dispatchEvent(new CustomEvent('loadend'))
       })

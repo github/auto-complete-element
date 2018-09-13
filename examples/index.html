@@ -39,9 +39,18 @@
   </head>
   <body>
     <form>
+      <label id="robots-label-open">Robots (default open)</label>
+      <auto-complete src="/demo" aria-owns="items-popup-open" aria-labelledby="robots-label-open" open>
+        <input name="robot" type="text" aria-labelledby="robots-label-open">
+        <ul id="items-popup-open" aria-labelledby="robots-label-open"></ul>
+      </auto-complete>
+      <button type="submit">Save</button>
+    </form>
+    <br>
+    <form>
       <label id="robots-label">Robots</label>
       <auto-complete src="/demo" aria-owns="items-popup" aria-labelledby="robots-label">
-        <input name="robot" type="text" aria-labelledby="robots-label" autofocus>
+        <input name="robot" type="text" aria-labelledby="robots-label">
         <ul id="items-popup" aria-labelledby="robots-label"></ul>
       </auto-complete>
       <button type="submit">Save</button>

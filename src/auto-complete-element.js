@@ -16,7 +16,12 @@ export default class AutocompleteElement extends HTMLElement {
     const input = this.querySelector('input')
     const results = document.getElementById(owns)
     if (!(input instanceof HTMLInputElement) || !results) return
-    state.set(this, new Autocomplete(this, input, results))
+    const autocomplete = new Autocomplete(this, input, results, this.open)
+    state.set(this, autocomplete)
+
+    if (this.open) {
+      autocomplete.open()
+    }
 
     this.setAttribute('role', 'combobox')
     this.setAttribute('aria-haspopup', 'listbox')
