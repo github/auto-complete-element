@@ -2,6 +2,8 @@
 
 Auto-complete input values from server search results.
 
+[Live demo][support]
+
 ## Installation
 
 ```
@@ -80,6 +82,7 @@ Browsers without native [custom element support][support] require a [polyfill][]
 - Internet Explorer 11
 - Microsoft Edge
 
+[demo]: https://github.github.com/auto-complete-element/examples/
 [support]: https://caniuse.com/#feat=custom-elementsv1
 [polyfill]: https://github.com/webcomponents/custom-elements
 
