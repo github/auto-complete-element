@@ -16,6 +16,7 @@ export default class AutocompleteElement extends HTMLElement {
     const input = this.querySelector('input')
     const results = document.getElementById(owns)
     if (!(input instanceof HTMLInputElement) || !results) return
+    input.setAttribute('aria-owns', owns)
     state.set(this, new Autocomplete(this, input, results))
 
     this.setAttribute('role', 'combobox')

@@ -16,7 +16,7 @@ describe('auto-complete element', function() {
       document.body.innerHTML = `
         <div id="mocha-fixture">
           <auto-complete src="/search" aria-owns="popup">
-            <input type="text" aria-owns="popup">
+            <input type="text">
             <ul id="popup"></ul>
           </auto-complete>
         </div>
