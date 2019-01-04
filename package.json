@@ -37,6 +37,10 @@
     "karma-mocha-reporter": "^2.2.5",
     "mocha": "^5.2.0",
     "rollup": "^0.64.1",
-    "rollup-plugin-babel": "^3.0.7"
+    "rollup-plugin-babel": "^3.0.7",
+    "rollup-plugin-node-resolve": "^4.0.0"
+  },
+  "dependencies": {
+    "@github/combobox-nav": "^0.2.0"
   }
 }

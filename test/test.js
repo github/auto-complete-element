@@ -16,7 +16,7 @@ describe('auto-complete element', function() {
       document.body.innerHTML = `
         <div id="mocha-fixture">
           <auto-complete src="/search" aria-owns="popup">
-            <input type="text">
+            <input type="text" aria-owns="popup">
             <ul id="popup"></ul>
           </auto-complete>
         </div>
@@ -131,7 +131,7 @@ function keydown(element, key) {
     return ''
   })
   e.key = key
-  if (key !== key.toLowerCase()) e.shiftKey = true
+  if (key.length === 1 && key !== key.toLowerCase()) e.shiftKey = true
   e.keyCode = keyCodes[key] || key.toUpperCase().charCodeAt(0)
   e.which = e.keyCode
 
