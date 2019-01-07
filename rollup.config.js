@@ -20,7 +20,7 @@ export default {
   plugins: [
     babel({
       plugins: ['transform-custom-element-classes'],
-      presets: ['es2015-rollup', 'flow']
+      presets: ['@babel/env', '@babel/flow']
     })
   ]
 }
