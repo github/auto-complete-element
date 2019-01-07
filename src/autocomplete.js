@@ -97,7 +97,6 @@ export default class Autocomplete {
   onCommit({target}: Event) {
     const selected = target
     if (!(selected instanceof HTMLElement)) return
-    if (selected.getAttribute('aria-disabled') === 'true') return
 
     if (selected instanceof HTMLAnchorElement) {
       selected.click()
