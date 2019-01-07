@@ -80,7 +80,7 @@ describe('auto-complete element', function() {
       assert.isFalse(keydown(input, 'ArrowDown'))
       assert.isFalse(keydown(input, 'ArrowDown'))
       assert.equal('fourth', popup.querySelector('[aria-selected="true"]').textContent)
-      assert.isFalse(keydown(input, 'Enter'))
+      assert.isTrue(keydown(input, 'Enter'))
       assert.equal('', container.value)
       assert.isTrue(container.open)
     })
