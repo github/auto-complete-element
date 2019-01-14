@@ -41,6 +41,6 @@
     "rollup-plugin-node-resolve": "^4.0.0"
   },
   "dependencies": {
-    "@github/combobox-nav": "^0.2.1"
+    "@github/combobox-nav": "^0.2.2"
   }
 }
