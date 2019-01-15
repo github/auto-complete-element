@@ -1,6 +1,7 @@
 /* @flow */
 
 import babel from 'rollup-plugin-babel'
+import resolve from 'rollup-plugin-node-resolve'
 
 const pkg = require('./package.json')
 
@@ -18,6 +19,9 @@ export default {
     }
   ],
   plugins: [
+    resolve({
+      main: true
+    }),
     babel({
       plugins: ['transform-custom-element-classes'],
       presets: ['@babel/env', '@babel/flow']

@@ -4,8 +4,7 @@ import type AutocompleteElement from './auto-complete-element'
 import debounce from './debounce'
 import {fragment} from './send'
 import {scrollTo} from './scroll'
-
-const ctrlBindings = navigator.userAgent.match(/Macintosh/)
+import {install as installCombobox, uninstall as uninstallCombobox} from '@github/combobox-nav'
 
 export default class Autocomplete {
   container: AutocompleteElement
@@ -13,11 +12,11 @@ export default class Autocomplete {
   results: HTMLElement
 
   onInputChange: () => void
-  onResultsClick: MouseEvent => void
   onResultsMouseDown: () => void
   onInputBlur: () => void
   onInputFocus: () => void
   onKeydown: KeyboardEvent => void
+  onCommit: Event => void
 
   mouseDown: boolean
 
@@ -33,18 +32,20 @@ export default class Autocomplete {
     this.mouseDown = false
 
     this.onInputChange = debounce(this.onInputChange.bind(this), 300)
-    this.onResultsClick = this.onResultsClick.bind(this)
     this.onResultsMouseDown = this.onResultsMouseDown.bind(this)
     this.onInputBlur = this.onInputBlur.bind(this)
     this.onInputFocus = this.onInputFocus.bind(this)
     this.onKeydown = this.onKeydown.bind(this)
+    this.onCommit = this.onCommit.bind(this)
 
     this.input.addEventListener('keydown', this.onKeydown)
     this.input.addEventListener('focus', this.onInputFocus)
     this.input.addEventListener('blur', this.onInputBlur)
     this.input.addEventListener('input', this.onInputChange)
     this.results.addEventListener('mousedown', this.onResultsMouseDown)
-    this.results.addEventListener('click', this.onResultsClick)
+    this.results.addEventListener('combobox-commit', this.onCommit)
+
+    installCombobox(this.input, this.results)
   }
 
   destroy() {
@@ -53,7 +54,9 @@ export default class Autocomplete {
     this.input.removeEventListener('blur', this.onInputBlur)
     this.input.removeEventListener('input', this.onInputChange)
     this.results.removeEventListener('mousedown', this.onResultsMouseDown)
-    this.results.removeEventListener('click', this.onResultsClick)
+    this.results.removeEventListener('combobox-commit', this.onCommit)
+
+    uninstallCombobox(this.input, this.results)
   }
 
   sibling(next: boolean): HTMLElement {
@@ -75,59 +78,10 @@ export default class Autocomplete {
   }
 
   onKeydown(event: KeyboardEvent) {
-    switch (event.key) {
-      case 'Escape':
-        if (this.container.open) {
-          this.container.open = false
-          event.stopPropagation()
-          event.preventDefault()
-        }
-        break
-      case 'ArrowDown':
-        {
-          const item = this.sibling(true)
-          if (item) this.select(item)
-          event.preventDefault()
-        }
-        break
-      case 'ArrowUp':
-        {
-          const item = this.sibling(false)
-          if (item) this.select(item)
-          event.preventDefault()
-        }
-        break
-      case 'n':
-        if (ctrlBindings && event.ctrlKey) {
-          const item = this.sibling(true)
-          if (item) this.select(item)
-          event.preventDefault()
-        }
-        break
-      case 'p':
-        if (ctrlBindings && event.ctrlKey) {
-          const item = this.sibling(false)
-          if (item) this.select(item)
-          event.preventDefault()
-        }
-        break
-      case 'Tab':
-        {
-          const selected = this.results.querySelector('[aria-selected="true"]')
-          if (selected) {
-            this.commit(selected)
-          }
-        }
-        break
-      case 'Enter':
-        {
-          const selected = this.results.querySelector('[aria-selected="true"]')
-          if (selected && this.container.open) {
-            this.commit(selected)
-            event.preventDefault()
-          }
-        }
-        break
+    if (event.key === 'Escape' && this.container.open) {
+      this.container.open = false
+      event.stopPropagation()
+      event.preventDefault()
     }
   }
 
@@ -140,8 +94,9 @@ export default class Autocomplete {
     this.container.open = false
   }
 
-  commit(selected: Element) {
-    if (selected.getAttribute('aria-disabled') === 'true') return
+  onCommit({target}: Event) {
+    const selected = target
+    if (!(selected instanceof HTMLElement)) return
 
     if (selected instanceof HTMLAnchorElement) {
       selected.click()
@@ -152,12 +107,6 @@ export default class Autocomplete {
     const value = selected.getAttribute('data-autocomplete-value') || selected.textContent
     this.container.value = value
     this.container.open = false
-  }
-
-  onResultsClick(event: MouseEvent) {
-    if (!(event.target instanceof Element)) return
-    const selected = event.target.closest('[role="option"]')
-    if (selected) this.commit(selected)
   }
 
   onResultsMouseDown() {
