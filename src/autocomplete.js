@@ -1,4 +1,4 @@
-/* @flow */
+/* @flow strict */
 
 import type AutocompleteElement from './auto-complete-element'
 import debounce from './debounce'

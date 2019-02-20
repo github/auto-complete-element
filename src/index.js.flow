@@ -1,4 +1,4 @@
-/* @flow */
+/* @flow strict */
 
 declare class AutocompleteElement extends HTMLElement {
   get src(): string;

@@ -1,14 +1,15 @@
-/* @flow */
+/* @flow strict */
 
-export default function debounce(callback: () => mixed, wait: number): () => void {
+export default function debounce<Rest: $ReadOnlyArray<mixed>>(
+  callback: (...Rest) => mixed,
+  wait: number
+): (...Rest) => void {
   let timeout
-  return function debounced(...args) {
-    const self = this
-    function later() {
-      clearTimeout(timeout)
-      callback.apply(self, args)
-    }
+  return function(...args) {
     clearTimeout(timeout)
-    timeout = setTimeout(later, wait)
+    timeout = setTimeout(() => {
+      clearTimeout(timeout)
+      callback(...args)
+    }, wait)
   }
 }
