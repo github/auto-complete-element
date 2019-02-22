@@ -1,4 +1,4 @@
-/* @flow */
+/* @flow strict */
 
 import AutocompleteElement from './auto-complete-element'
 export {AutocompleteElement as default}

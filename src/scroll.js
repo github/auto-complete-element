@@ -1,4 +1,4 @@
-/* @flow */
+/* @flow strict */
 
 export function scrollTo(container: HTMLElement, target: HTMLElement) {
   if (!inViewport(container, target)) {

@@ -1,4 +1,4 @@
-/* @flow */
+/* @flow strict */
 
 import babel from 'rollup-plugin-babel'
 import resolve from 'rollup-plugin-node-resolve'
@@ -23,8 +23,7 @@ export default {
       main: true
     }),
     babel({
-      plugins: ['transform-custom-element-classes'],
-      presets: ['@babel/env', '@babel/flow']
+      presets: ['github']
     })
   ]
 }

@@ -1,4 +1,4 @@
-/* @flow */
+/* @flow strict */
 
 const requests = new WeakMap()
 
