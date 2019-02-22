@@ -7,7 +7,7 @@
   "module": "dist/index.esm.js",
   "scripts": {
     "clean": "rm -rf dist",
-    "lint": "eslint . && flow check",
+    "lint": "github-lint",
     "prebuild": "npm run clean && npm run lint",
     "build": "rollup -c && cp src/index.js.flow dist/index.esm.js.flow && cp src/index.js.flow dist/index.umd.js.flow",
     "pretest": "npm run build",
