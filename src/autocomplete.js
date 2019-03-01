@@ -97,16 +97,10 @@ export default class Autocomplete {
   onCommit({target}: Event) {
     const selected = target
     if (!(selected instanceof HTMLElement)) return
-
-    if (selected instanceof HTMLAnchorElement) {
-      selected.click()
-      this.container.open = false
-      return
-    }
-
+    this.container.open = false
+    if (selected instanceof HTMLAnchorElement) return
     const value = selected.getAttribute('data-autocomplete-value') || selected.textContent
     this.container.value = value
-    this.container.open = false
   }
 
   onResultsMouseDown() {
