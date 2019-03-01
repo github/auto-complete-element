@@ -97,6 +97,7 @@ describe('auto-complete element', function() {
       assert.equal('', container.value)
       link.click()
       assert.equal('', container.value)
+      assert.equal('#hash', window.location.hash)
       assert.isFalse(container.open)
     })
 
