@@ -64,6 +64,7 @@ completer.addEventListener('error', function(event) {
 // Auto-complete result events.
 completer.addEventListener('auto-complete-change', function(event) {
   console.log('Auto-completed value chosen or cleared', completer.value)
+  console.log('Related input element', event.detail.relatedTarget)
 })
 ```
 
