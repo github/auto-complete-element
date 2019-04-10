@@ -155,7 +155,15 @@ export default class Autocomplete {
     if (!this.results.hidden) return
     this.results.hidden = false
     this.container.setAttribute('aria-expanded', 'true')
-    this.container.dispatchEvent(new CustomEvent('toggle', {detail: {input: this.input, results: this.results}}))
+    this.container.dispatchEvent(
+      new CustomEvent('auto-complete-toggle', {
+        bubbles: true,
+        detail: {
+          input: this.input,
+          results: this.results
+        }
+      })
+    )
   }
 
   close() {
@@ -163,6 +171,14 @@ export default class Autocomplete {
     this.results.hidden = true
     this.input.removeAttribute('aria-activedescendant')
     this.container.setAttribute('aria-expanded', 'false')
-    this.container.dispatchEvent(new CustomEvent('toggle', {detail: {input: this.input, results: this.results}}))
+    this.container.dispatchEvent(
+      new CustomEvent('auto-complete-toggle', {
+        bubbles: true,
+        detail: {
+          input: this.input,
+          results: this.results
+        }
+      })
+    )
   }
 }

@@ -65,7 +65,7 @@ completer.addEventListener('error', function(event) {
 completer.addEventListener('auto-complete-change', function(event) {
   console.log('Auto-completed value chosen or cleared', completer.value)
 })
-completer.addEventListener('toggle', function(event) {
+completer.addEventListener('auto-complete-toggle', function(event) {
   console.log('Auto-completion list is now open or closed', completer.open)
 })
 ```
