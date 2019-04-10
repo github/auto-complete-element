@@ -83,7 +83,7 @@ export default class AutocompleteElement extends HTMLElement {
         if (newValue !== null) {
           autocomplete.input.value = newValue
         }
-        this.dispatchEvent(new CustomEvent('change', {bubbles: true}))
+        this.dispatchEvent(new CustomEvent('auto-complete-change', {bubbles: true}))
         break
     }
   }
