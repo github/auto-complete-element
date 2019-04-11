@@ -52,6 +52,32 @@ describe('auto-complete element', function() {
       assert.equal('first', popup.querySelector('[aria-selected="true"]').textContent)
     })
 
+    it('dispatches change event on commit', async function() {
+      const container = document.querySelector('auto-complete')
+      const input = container.querySelector('input')
+
+      triggerInput(input, 'hub')
+      await once(container, 'loadend')
+
+      let value
+      let relatedTarget
+      container.addEventListener(
+        'auto-complete-change',
+        function(event) {
+          value = event.target.value
+          relatedTarget = event.detail.relatedTarget
+        },
+        {once: true}
+      )
+
+      assert.isTrue(keydown(input, 'Enter'))
+      assert.equal('', container.value)
+      assert.isFalse(keydown(input, 'ArrowDown'))
+      assert.isFalse(keydown(input, 'Enter'))
+      assert.equal('first', value)
+      assert.equal(input, relatedTarget)
+    })
+
     it('commits on Enter', async function() {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
