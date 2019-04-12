@@ -65,7 +65,7 @@ describe('auto-complete element', function() {
         'auto-complete-change',
         function(event) {
           value = event.target.value
-          relatedTarget = event.detail.relatedTarget
+          relatedTarget = event.relatedTarget
         },
         {once: true}
       )
