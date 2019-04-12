@@ -15,13 +15,12 @@ export default {
     {
       file: pkg['main'],
       format: 'umd',
-      name: 'AutocompleteElement'
+      name: 'AutocompleteElement',
+      exports: 'named'
     }
   ],
   plugins: [
-    resolve({
-      main: true
-    }),
+    resolve(),
     babel({
       presets: ['github']
     })

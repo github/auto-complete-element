@@ -1,5 +1,6 @@
 /* @flow strict */
 
+import AutocompleteEvent from './auto-complete-event'
 import Autocomplete from './autocomplete'
 
 const state = new WeakMap()
@@ -84,11 +85,9 @@ export default class AutocompleteElement extends HTMLElement {
           autocomplete.input.value = newValue
         }
         this.dispatchEvent(
-          new CustomEvent('auto-complete-change', {
+          new AutocompleteEvent('auto-complete-change', {
             bubbles: true,
-            detail: {
-              relatedTarget: autocomplete.input
-            }
+            relatedTarget: autocomplete.input
           })
         )
         break
