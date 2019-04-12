@@ -20,9 +20,7 @@ export default {
     }
   ],
   plugins: [
-    resolve({
-      main: true
-    }),
+    resolve(),
     babel({
       presets: ['github']
     })
