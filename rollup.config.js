@@ -15,7 +15,8 @@ export default {
     {
       file: pkg['main'],
       format: 'umd',
-      name: 'AutocompleteElement'
+      name: 'AutocompleteElement',
+      exports: 'named'
     }
   ],
   plugins: [
