@@ -12,7 +12,7 @@ declare module '@github/auto-complete-element' {
 
   declare type AutocompleteEventType = 'auto-complete-change'
 
-  declare type AutocompleteEvent$Init = Event$Init & {
+  declare type AutocompleteEvent$Init = CustomEvent$Init & {
     relatedTarget: HTMLInputElement;
   }
 
