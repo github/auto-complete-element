@@ -39,7 +39,7 @@ describe('auto-complete element', function() {
       const input = container.querySelector('input')
       const popup = container.querySelector('#popup')
 
-      assert.isFalse(keydown(input, 'ArrowDown'))
+      assert.isTrue(keydown(input, 'ArrowDown'))
       triggerInput(input, 'hub')
       await once(container, 'loadend')
 
