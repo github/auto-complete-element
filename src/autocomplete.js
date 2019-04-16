@@ -44,8 +44,6 @@ export default class Autocomplete {
     this.input.addEventListener('input', this.onInputChange)
     this.results.addEventListener('mousedown', this.onResultsMouseDown)
     this.results.addEventListener('combobox-commit', this.onCommit)
-
-    installCombobox(this.input, this.results)
   }
 
   destroy() {
@@ -55,8 +53,6 @@ export default class Autocomplete {
     this.input.removeEventListener('input', this.onInputChange)
     this.results.removeEventListener('mousedown', this.onResultsMouseDown)
     this.results.removeEventListener('combobox-commit', this.onCommit)
-
-    uninstallCombobox(this.input, this.results)
   }
 
   sibling(next: boolean): HTMLElement {
@@ -153,12 +149,14 @@ export default class Autocomplete {
 
   open() {
     if (!this.results.hidden) return
+    installCombobox(this.input, this.results)
     this.results.hidden = false
     this.container.setAttribute('aria-expanded', 'true')
   }
 
   close() {
     if (this.results.hidden) return
+    uninstallCombobox(this.input, this.results)
     this.results.hidden = true
     this.input.removeAttribute('aria-activedescendant')
     this.container.setAttribute('aria-expanded', 'false')
