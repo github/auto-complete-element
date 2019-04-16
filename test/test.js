@@ -76,6 +76,7 @@ describe('auto-complete element', function() {
       assert.isFalse(keydown(input, 'Enter'))
       assert.equal('first', value)
       assert.equal(input, relatedTarget)
+      assert.isTrue(keydown(input, 'Tab'))
     })
 
     it('commits on Enter', async function() {
