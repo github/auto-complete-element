@@ -101,7 +101,7 @@ export default class Autocomplete {
 
   onResultsMouseDown() {
     this.mouseDown = true
-    this.results.addEventListener('mouseup', () => (this.mouseDown = false), {once: true})
+    setTimeout(() => (this.mouseDown = false), 100)
   }
 
   onInputChange() {
