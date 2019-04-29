@@ -128,6 +128,25 @@ describe('auto-complete element', function() {
       assert.isFalse(container.open)
     })
 
+    it('does not close on blur after mousedown', async function() {
+      const container = document.querySelector('auto-complete')
+      const input = container.querySelector('input')
+
+      triggerInput(input, 'hub')
+      await once(container, 'loadend')
+
+      const link = container.querySelector('a[role=option]')
+
+      assert.equal('', container.value)
+      link.dispatchEvent(new MouseEvent('mousedown', {bubbles: true}))
+      input.dispatchEvent(new Event('blur'))
+      assert(container.open)
+
+      link.dispatchEvent(new MouseEvent('mouseup', {bubbles: true}))
+      input.dispatchEvent(new Event('blur'))
+      assert.isFalse(container.open)
+    })
+
     it('closes on Escape', async function() {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
