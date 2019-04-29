@@ -142,7 +142,7 @@ describe('auto-complete element', function() {
       input.dispatchEvent(new Event('blur'))
       assert(container.open)
 
-      link.dispatchEvent(new MouseEvent('mouseup', {bubbles: true}))
+      await new Promise(resolve => setTimeout(resolve, 100))
       input.dispatchEvent(new Event('blur'))
       assert.isFalse(container.open)
     })
