@@ -86,7 +86,10 @@ export default class Autocomplete {
   }
 
   onInputBlur() {
-    if (this.mouseDown) return
+    if (this.mouseDown) {
+      this.mouseDown = false
+      return
+    }
     this.container.open = false
   }
 
@@ -101,7 +104,6 @@ export default class Autocomplete {
 
   onResultsMouseDown() {
     this.mouseDown = true
-    setTimeout(() => (this.mouseDown = false), 100)
   }
 
   onInputChange() {
