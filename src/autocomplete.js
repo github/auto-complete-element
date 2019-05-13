@@ -18,7 +18,7 @@ export default class Autocomplete {
   onKeydown: KeyboardEvent => void
   onCommit: Event => void
 
-  mouseDown: boolean
+  interactingWithList: boolean
 
   constructor(container: AutocompleteElement, input: HTMLInputElement, results: HTMLElement) {
     this.container = container
@@ -29,7 +29,7 @@ export default class Autocomplete {
     this.input.setAttribute('autocomplete', 'off')
     this.input.setAttribute('spellcheck', 'false')
 
-    this.mouseDown = false
+    this.interactingWithList = false
 
     this.onInputChange = debounce(this.onInputChange.bind(this), 300)
     this.onResultsMouseDown = this.onResultsMouseDown.bind(this)
@@ -86,7 +86,10 @@ export default class Autocomplete {
   }
 
   onInputBlur() {
-    if (this.mouseDown) return
+    if (this.interactingWithList) {
+      this.interactingWithList = false
+      return
+    }
     this.container.open = false
   }
 
@@ -100,8 +103,7 @@ export default class Autocomplete {
   }
 
   onResultsMouseDown() {
-    this.mouseDown = true
-    this.results.addEventListener('mouseup', () => (this.mouseDown = false), {once: true})
+    this.interactingWithList = true
   }
 
   onInputChange() {
