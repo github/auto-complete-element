@@ -22,24 +22,24 @@
     "dist"
   ],
   "dependencies": {
-    "@github/combobox-nav": "^0.2.3"
+    "@github/combobox-nav": "^0.3.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.3",
+    "@babel/core": "^7.4.5",
     "babel-preset-github": "^3.2.0",
     "chai": "^4.2.0",
     "eslint": "^5.16.0",
     "eslint-plugin-github": "^2.0.0",
-    "flow-bin": "^0.97.0",
+    "flow-bin": "^0.98.1",
     "karma": "^4.1.0",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^2.2.0",
     "karma-mocha": "^1.3.0",
     "karma-mocha-reporter": "^2.2.5",
-    "mocha": "^6.1.3",
-    "rollup": "^1.10.0",
+    "mocha": "^6.1.4",
+    "rollup": "^1.12.3",
     "rollup-plugin-babel": "^4.3.2",
-    "rollup-plugin-node-resolve": "^4.2.3"
+    "rollup-plugin-node-resolve": "^5.0.0"
   },
   "eslintIgnore": [
     "dist/"
