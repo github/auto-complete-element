@@ -3,7 +3,6 @@
 import type AutocompleteElement from './auto-complete-element'
 import debounce from './debounce'
 import {fragment} from './send'
-import {scrollTo} from './scroll'
 import {install as installCombobox, uninstall as uninstallCombobox} from '@github/combobox-nav'
 
 export default class Autocomplete {
@@ -62,15 +61,6 @@ export default class Autocomplete {
     const sibling = next ? options[index + 1] : options[index - 1]
     const def = next ? options[0] : options[options.length - 1]
     return sibling || def
-  }
-
-  select(target: HTMLElement) {
-    for (const el of this.results.querySelectorAll('[aria-selected="true"]')) {
-      el.removeAttribute('aria-selected')
-    }
-    target.setAttribute('aria-selected', 'true')
-    this.input.setAttribute('aria-activedescendant', target.id)
-    scrollTo(this.results, target)
   }
 
   onKeydown(event: KeyboardEvent) {
