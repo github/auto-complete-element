@@ -10,7 +10,7 @@ declare type AutocompleteEvent$Init = CustomEvent & {
   relatedTarget: HTMLInputElement;
 }
 
-export class AutocompleteEvent extends CustomEvent<any> {
+export class AutocompleteEvent extends CustomEvent<null> {
   constructor(type: AutocompleteEventType, init: AutocompleteEvent$Init)
   relatedTarget: HTMLInputElement;
 }
