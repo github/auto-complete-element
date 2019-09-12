@@ -17,6 +17,6 @@ export class AutocompleteEvent extends CustomEvent<null> {
 
 declare global {
   interface Window {
-    AutocompleteElement: AutocompleteElement
+    AutocompleteElement: typeof AutocompleteElement
   }
 }
