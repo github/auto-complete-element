@@ -14,3 +14,9 @@ export class AutocompleteEvent extends CustomEvent<null> {
   constructor(type: AutocompleteEventType, init: AutocompleteEvent$Init)
   relatedTarget: HTMLInputElement;
 }
+
+declare global {
+  interface Window {
+    AutocompleteElement: typeof AutocompleteElement
+  }
+}
