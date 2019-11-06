@@ -44,24 +44,33 @@ item whose display text needs to be different:
 
 ## Events
 
+### Network request lifecycle events
+
+Request lifecycle events are dispatched on the `<auto-complete>` element. These events do not bubble.
+
+- `loadstart` - The server fetch has started.
+- `load` - The network request completed successfully.
+- `error` - The network request failed.
+- `loadend` - The network request has completed.
+
+Network events are useful for displaying progress states while the request is in-flight.
+
 ```js
 const completer = document.querySelector('auto-complete')
+const container = completer.parentElement
+completer.addEventListener('loadstart', () => container.classList.add('is-loading'))
+completer.addEventListener('loadend', () => container.classList.remove('is-loading'))
+completer.addEventListener('load', () => container.classList.add('is-success'))
+completer.addEventListener('error', () => container.classList.add('is-error'))
+```
 
-// Network request lifecycle events.
-completer.addEventListener('loadstart', function(event) {
-  console.log('Network request started', event)
-})
-completer.addEventListener('loadend', function(event) {
-  console.log('Network request complete', event)
-})
-completer.addEventListener('load', function(event) {
-  console.log('Network request succeeded', event)
-})
-completer.addEventListener('error', function(event) {
-  console.log('Network request failed', event)
-})
+### Auto-complete events
 
-// Auto-complete result events.
+**`auto-complete-change`** is dispatched after a value is selected. In `event.detail` you can find:
+
+- `relatedTarget`: The HTMLInputElement controlling the auto-complete result list.
+
+```js
 completer.addEventListener('auto-complete-change', function(event) {
   console.log('Auto-completed value chosen or cleared', completer.value)
   console.log('Related input element', event.relatedTarget)
