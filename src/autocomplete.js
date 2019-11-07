@@ -54,15 +54,6 @@ export default class Autocomplete {
     this.results.removeEventListener('combobox-commit', this.onCommit)
   }
 
-  sibling(next: boolean): HTMLElement {
-    const options = Array.from(this.results.querySelectorAll('[role="option"]'))
-    const selected = this.results.querySelector('[aria-selected="true"]')
-    const index = options.indexOf(selected)
-    const sibling = next ? options[index + 1] : options[index - 1]
-    const def = next ? options[0] : options[options.length - 1]
-    return sibling || def
-  }
-
   onKeydown(event: KeyboardEvent) {
     if (event.key === 'Escape' && this.container.open) {
       this.container.open = false
