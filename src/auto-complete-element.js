@@ -126,6 +126,10 @@ export default class AutocompleteElement extends HTMLElement {
 
     setValidity(this)
   }
+
+  formResetCallback() {
+    this.value = ''
+  }
 }
 
 function setValidity(el) {
