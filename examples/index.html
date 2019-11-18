@@ -40,13 +40,23 @@
   <body>
     <form>
       <label id="robots-label">Robots</label>
-      <auto-complete src="/demo" aria-owns="items-popup" aria-labelledby="robots-label">
-        <input name="robot" type="text" aria-labelledby="robots-label" autofocus>
+      <auto-complete src="/demo" aria-owns="items-popup" aria-labelledby="robots-label" name="robot_name" required>
+        <input type="text" aria-labelledby="robots-label" autofocus>
         <ul id="items-popup" aria-labelledby="robots-label"></ul>
       </auto-complete>
       <button type="submit">Save</button>
     </form>
     <!-- <script src="../dist/index.umd.js"></script> -->
     <script src="https://unpkg.com/@github/auto-complete-element@latest/dist/index.umd.js"></script>
+    <script>
+      const form = document.querySelector('form')
+      const button = document.querySelector('button')
+      form.addEventListener('reset', disableButton)
+      form.addEventListener('change', disableButton)
+      function disableButton() {
+        button.disabled = !form.checkValidity()
+      }
+      disableButton()
+    </script>
   </body>
 </html>
