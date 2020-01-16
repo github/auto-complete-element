@@ -19,4 +19,7 @@ declare global {
   interface Window {
     AutocompleteElement: typeof AutocompleteElement
   }
+  interface HTMLElementTagNameMap {
+    'auto-complete': AutoCompleteElement
+  }
 }
