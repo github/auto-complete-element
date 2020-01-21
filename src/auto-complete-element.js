@@ -6,10 +6,6 @@ import Autocomplete from './autocomplete'
 const state = new WeakMap()
 
 export default class AutocompleteElement extends HTMLElement {
-  constructor() {
-    super()
-  }
-
   connectedCallback() {
     const owns = this.getAttribute('aria-owns')
     if (!owns) return
