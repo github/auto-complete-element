@@ -1,34 +1,28 @@
 /* @flow strict */
 
-const requests = new WeakMap()
+const signals = new WeakMap()
+
+function makeAbortController() {
+  if ('AbortController' in window) {
+    return new AbortController()
+  }
+  return {signal: null, abort() {}}
+}
 
 export function fragment(el: Element, url: string): Promise<string> {
-  const xhr = new XMLHttpRequest()
-  xhr.open('GET', url, true)
-  return request(el, xhr)
-}
+  const signal = signals.get(el)
+  if (signal) {
+    signal.abort()
+  }
 
-function request(el: Element, xhr: XMLHttpRequest): Promise<string> {
-  const pending = requests.get(el)
-  if (pending) pending.abort()
-  requests.set(el, xhr)
+  const controller = makeAbortController()
+  signals.set(el, controller)
 
-  const clear = () => requests.delete(el)
-  const result = send(xhr)
-  result.then(clear, clear)
-  return result
-}
-
-function send(xhr: XMLHttpRequest): Promise<string> {
-  return new Promise((resolve, reject) => {
-    xhr.onload = function() {
-      if (xhr.status >= 200 && xhr.status < 300) {
-        resolve(xhr.responseText)
-      } else {
-        reject(new Error(xhr.responseText))
-      }
+  return fetch(url, {signal: controller.signal}).then(response => {
+    if (response.status >= 200 && response.status < 300) {
+      return response.text()
+    } else {
+      throw new Error(response)
     }
-    xhr.onerror = reject
-    xhr.send()
   })
 }
