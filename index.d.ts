@@ -20,6 +20,6 @@ declare global {
     AutocompleteElement: typeof AutocompleteElement
   }
   interface HTMLElementTagNameMap {
-    'auto-complete': AutoCompleteElement
+    'auto-complete': AutocompleteElement
   }
 }
