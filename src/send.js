@@ -5,7 +5,7 @@ const requests = new WeakMap()
 export function fragment(el: Element, url: string): Promise<string> {
   const xhr = new XMLHttpRequest()
   xhr.open('GET', url, true)
-  xhr.setRequestHeader('Accept', 'text/html; fragment, text/fragment+html')
+  xhr.setRequestHeader('Accept', 'text/fragment+html')
   return request(el, xhr)
 }
 
