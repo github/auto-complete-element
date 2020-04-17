@@ -134,7 +134,7 @@ export default class Autocomplete {
     if (!this.results.hidden) return
     installCombobox(this.input, this.results)
     this.results.hidden = false
-    this.container.setAttribute('aria-expanded', 'true')
+    this.input.setAttribute('aria-expanded', 'true')
   }
 
   close() {
@@ -142,6 +142,6 @@ export default class Autocomplete {
     uninstallCombobox(this.input, this.results)
     this.results.hidden = true
     this.input.removeAttribute('aria-activedescendant')
-    this.container.setAttribute('aria-expanded', 'false')
+    this.input.setAttribute('aria-expanded', 'false')
   }
 }

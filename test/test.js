@@ -23,6 +23,18 @@ describe('auto-complete element', function() {
       `
     })
 
+    it('attributes are set', async function() {
+      const container = document.querySelector('auto-complete')
+      const input = container.querySelector('input')
+      const popup = container.querySelector('#popup')
+
+      assert.equal(input.getAttribute('role'), 'combobox')
+      assert.equal(input.getAttribute('aria-autocomplete'), 'list')
+      assert.equal(input.getAttribute('aria-expanded'), 'false')
+      assert.equal(input.getAttribute('aria-controls'), popup.id)
+      assert.equal(input.getAttribute('aria-owns'), popup.id)
+    })
+
     it('requests html fragment', async function() {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
