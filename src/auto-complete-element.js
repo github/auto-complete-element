@@ -11,22 +11,13 @@ export default class AutocompleteElement extends HTMLElement {
   }
 
   connectedCallback() {
-    const owns = this.getAttribute('aria-owns')
-    if (!owns) return
+    const listId = this.getAttribute('for')
+    if (!listId) return
 
     const input = this.querySelector('input')
-    const results = document.getElementById(owns)
+    const results = document.getElementById(listId)
     if (!(input instanceof HTMLInputElement) || !results) return
-    input.setAttribute('aria-owns', owns)
     state.set(this, new Autocomplete(this, input, results))
-
-    this.setAttribute('role', 'combobox')
-    this.setAttribute('aria-haspopup', 'listbox')
-    this.setAttribute('aria-expanded', 'false')
-
-    input.setAttribute('aria-autocomplete', 'list')
-    input.setAttribute('aria-controls', owns)
-
     results.setAttribute('role', 'listbox')
   }
 
