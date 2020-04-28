@@ -15,7 +15,7 @@ import '@github/auto-complete-element'
 ```
 
 ```html
-<auto-complete src="/users/search" aria-owns="users-popup">
+<auto-complete src="/users/search" for="users-popup">
   <input type="text">
   <ul id="users-popup"></ul>
 </auto-complete>
