@@ -64,12 +64,10 @@ export default class Autocomplete {
     } else if (event.altKey && event.key === 'ArrowUp' && this.container.open) {
       this.container.open = false
       event.stopPropagation()
-      event.preventDefault()
     } else if (event.altKey && event.key === 'ArrowDown' && !this.container.open) {
       if (!this.input.value.trim()) return
       this.container.open = true
       event.stopPropagation()
-      event.preventDefault()
     }
   }
 
