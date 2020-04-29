@@ -173,11 +173,11 @@ describe('auto-complete element', function() {
       assert.isTrue(container.open)
       assert.isFalse(popup.hidden)
 
-      assert.isTrue(keydown(input, 'ArrowUp', true))
+      assert.isFalse(keydown(input, 'ArrowUp', true))
       assert.isFalse(container.open)
       assert.isTrue(popup.hidden)
 
-      assert.isTrue(keydown(input, 'ArrowDown', true))
+      assert.isFalse(keydown(input, 'ArrowDown', true))
       assert.isTrue(container.open)
       assert.isFalse(popup.hidden)
     })

@@ -68,6 +68,7 @@ export default class Autocomplete {
       if (!this.input.value.trim()) return
       this.container.open = true
       event.stopPropagation()
+      event.preventDefault()
     }
   }
 
