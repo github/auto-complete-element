@@ -16,6 +16,7 @@
     "prepublishOnly": "npm run build",
     "postpublish": "npm publish --ignore-scripts --@github:registry='https://npm.pkg.github.com'"
   },
+  "prettier": "@github/prettier-config",
   "keywords": [
     "auto-complete"
   ],
@@ -29,6 +30,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.7.0",
+    "@github/prettier-config": "0.0.4",
     "babel-preset-github": "^3.2.1",
     "chai": "^4.2.0",
     "eslint": "^6.6.0",
