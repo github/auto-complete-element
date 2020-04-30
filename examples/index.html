@@ -40,13 +40,13 @@
   <body>
     <form>
       <label id="robots-label">Robots</label>
-      <auto-complete src="/demo" aria-owns="items-popup" aria-labelledby="robots-label">
+      <auto-complete src="/demo" for="items-popup" aria-labelledby="robots-label">
         <input name="robot" type="text" aria-labelledby="robots-label" autofocus>
         <ul id="items-popup" aria-labelledby="robots-label"></ul>
       </auto-complete>
       <button type="submit">Save</button>
     </form>
-    <!-- <script src="../dist/index.umd.js"></script> -->
-    <script src="https://unpkg.com/@github/auto-complete-element@latest/dist/index.umd.js"></script>
+    <!-- <script type="module" src="../dist/bundle.js"></script> -->
+    <script type="module" src="https://unpkg.com/@github/auto-complete-element@latest/dist/bundle.js"></script>
   </body>
 </html>

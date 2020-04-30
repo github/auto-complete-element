@@ -10,12 +10,24 @@ $ npm install --save @github/auto-complete-element
 
 ## Usage
 
+### Script
+
+Import as ES modules:
+
 ```js
 import '@github/auto-complete-element'
 ```
 
+With a script tag:
+
 ```html
-<auto-complete src="/users/search" aria-owns="users-popup">
+<script type="module" src="./node_modules/@github/auto-complete-element/dist/bundle.js">
+```
+
+### Markup
+
+```html
+<auto-complete src="/users/search" for="users-popup">
   <input type="text">
   <ul id="users-popup"></ul>
 </auto-complete>

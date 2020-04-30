@@ -3,12 +3,13 @@
 import type AutocompleteElement from './auto-complete-element'
 import debounce from './debounce'
 import {fragment} from './send'
-import {install as installCombobox, uninstall as uninstallCombobox} from '@github/combobox-nav'
+import Combobox from '@github/combobox-nav'
 
 export default class Autocomplete {
   container: AutocompleteElement
   input: HTMLInputElement
   results: HTMLElement
+  combobox: Combobox
 
   onInputChange: () => void
   onResultsMouseDown: () => void
@@ -23,6 +24,7 @@ export default class Autocomplete {
     this.container = container
     this.input = input
     this.results = results
+    this.combobox = new Combobox(input, results)
 
     this.results.hidden = true
     this.input.setAttribute('autocomplete', 'off')
@@ -57,6 +59,15 @@ export default class Autocomplete {
   onKeydown(event: KeyboardEvent) {
     if (event.key === 'Escape' && this.container.open) {
       this.container.open = false
+      event.stopPropagation()
+      event.preventDefault()
+    } else if (event.altKey && event.key === 'ArrowUp' && this.container.open) {
+      this.container.open = false
+      event.stopPropagation()
+      event.preventDefault()
+    } else if (event.altKey && event.key === 'ArrowDown' && !this.container.open) {
+      if (!this.input.value.trim()) return
+      this.container.open = true
       event.stopPropagation()
       event.preventDefault()
     }
@@ -132,16 +143,13 @@ export default class Autocomplete {
 
   open() {
     if (!this.results.hidden) return
-    installCombobox(this.input, this.results)
+    this.combobox.start()
     this.results.hidden = false
-    this.container.setAttribute('aria-expanded', 'true')
   }
 
   close() {
     if (this.results.hidden) return
-    uninstallCombobox(this.input, this.results)
+    this.combobox.stop()
     this.results.hidden = true
-    this.input.removeAttribute('aria-activedescendant')
-    this.container.setAttribute('aria-expanded', 'false')
   }
 }

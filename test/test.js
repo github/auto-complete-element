@@ -15,7 +15,7 @@ describe('auto-complete element', function() {
     beforeEach(function() {
       document.body.innerHTML = `
         <div id="mocha-fixture">
-          <auto-complete src="/search" aria-owns="popup">
+          <auto-complete src="/search" for="popup">
             <input type="text">
             <ul id="popup"></ul>
           </auto-complete>
@@ -161,6 +161,26 @@ describe('auto-complete element', function() {
       assert.isFalse(container.open)
       assert.isTrue(popup.hidden)
     })
+
+    it('opens and closes on alt + ArrowDown and alt + ArrowUp', async function() {
+      const container = document.querySelector('auto-complete')
+      const input = container.querySelector('input')
+      const popup = container.querySelector('#popup')
+
+      triggerInput(input, 'hub')
+      await once(container, 'loadend')
+
+      assert.isTrue(container.open)
+      assert.isFalse(popup.hidden)
+
+      assert.isFalse(keydown(input, 'ArrowUp', true))
+      assert.isFalse(container.open)
+      assert.isTrue(popup.hidden)
+
+      assert.isFalse(keydown(input, 'ArrowDown', true))
+      assert.isTrue(container.open)
+      assert.isFalse(popup.hidden)
+    })
   })
 })
 
@@ -183,10 +203,10 @@ const keyCodes = {
   Tab: 9
 }
 
-function keydown(element, key) {
+function keydown(element, key, alt = false) {
   const e = {
     shiftKey: false,
-    altKey: false,
+    altKey: alt,
     ctrlKey: false,
     metaKey: false
   }
