@@ -23,7 +23,7 @@ export default [
   {
     input: 'src/index.js',
     output: {
-      file: 'dist/browser.js',
+      file: 'dist/bundle.js',
       format: 'es'
     },
     plugins: [

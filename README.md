@@ -21,7 +21,7 @@ import '@github/auto-complete-element'
 With a script tag:
 
 ```html
-<script type="module" src="./node_modules/@github/auto-complete-element/dist/browser.js">
+<script type="module" src="./node_modules/@github/auto-complete-element/dist/bundle.js">
 ```
 
 ### Markup
