@@ -23,7 +23,7 @@ export default [
   {
     input: 'src/index.js',
     output: {
-      file: pkg['browser'],
+      file: 'dist/browser.js',
       format: 'es'
     },
     plugins: [
