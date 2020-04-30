@@ -10,9 +10,21 @@ $ npm install --save @github/auto-complete-element
 
 ## Usage
 
+### Script
+
+Import as ES modules:
+
 ```js
 import '@github/auto-complete-element'
 ```
+
+With a script tag:
+
+```html
+<script type="module" src="./node_modules/@github/auto-complete-element/dist/browser.js">
+```
+
+### Markup
 
 ```html
 <auto-complete src="/users/search" for="users-popup">
