@@ -1,6 +1,6 @@
 {
   "name": "@github/auto-complete-element",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Auto-complete input values from server results",
   "repository": "github/auto-complete-element",
   "type": "module",
