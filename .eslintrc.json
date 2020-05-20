@@ -2,17 +2,23 @@
   "extends": [
     "plugin:github/browser",
     "plugin:github/es6",
-    "plugin:github/flow"
+    "plugin:github/typescript"
   ],
   "rules": {
     "github/no-then": "off",
     "no-invalid-this": "off"
   },
+  "globals": {
+    "AutocompleteElement": "readable"
+  },
   "overrides": [
     {
-      "files": "test/**/*.js",
+      "files": ["test/*.js", "rollup.config.js"],
+      "parser": "espree",
+      "parserOptions": {
+        "ecmaVersion": 8
+      },
       "rules": {
-        "flowtype/require-valid-file-annotation": "off",
         "github/unescaped-html-literal": "off"
       }
     },

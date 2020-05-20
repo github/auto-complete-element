@@ -6,12 +6,12 @@
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",
-  "types": "index.d.ts",
+  "types": "dist/index.d.ts",
   "scripts": {
     "clean": "rm -rf dist",
     "lint": "github-lint",
-    "prebuild": "npm run clean && npm run lint",
-    "build": "rollup -c && cp src/index.js.flow dist/index.esm.js.flow && cp src/index.js.flow dist/index.umd.js.flow",
+    "prebuild": "npm run clean && npm run lint && tsc",
+    "build": "rollup -c",
     "pretest": "npm run build",
     "test": "karma start test/karma.config.cjs",
     "prepublishOnly": "npm run build",
@@ -23,29 +23,25 @@
   ],
   "license": "MIT",
   "files": [
-    "dist",
-    "index.d.ts"
+    "dist"
   ],
   "dependencies": {
     "@github/combobox-nav": "^2.0.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.7.0",
     "@github/prettier-config": "0.0.4",
-    "babel-preset-github": "^3.2.1",
     "chai": "^4.2.0",
     "eslint": "^6.6.0",
-    "eslint-plugin-github": "^3.2.1",
-    "flow-bin": "^0.111.1",
+    "eslint-plugin-github": "^3.4.0",
     "karma": "^5.0.4",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^3.1.0",
     "karma-mocha": "^2.0.1",
     "karma-mocha-reporter": "^2.2.5",
     "mocha": "^7.1.2",
-    "rollup": "^1.26.3",
-    "rollup-plugin-babel": "^4.3.3",
-    "rollup-plugin-node-resolve": "^5.2.0"
+    "rollup": "^1.32.1",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "typescript": "^3.9.3"
   },
   "eslintIgnore": [
     "dist/"
