@@ -1,5 +1,3 @@
-/* @flow strict */
-
 const requests = new WeakMap()
 
 export function fragment(el: Element, url: string): Promise<string> {
@@ -22,7 +20,7 @@ function request(el: Element, xhr: XMLHttpRequest): Promise<string> {
 
 function send(xhr: XMLHttpRequest): Promise<string> {
   return new Promise((resolve, reject) => {
-    xhr.onload = function() {
+    xhr.onload = function () {
       if (xhr.status >= 200 && xhr.status < 300) {
         resolve(xhr.responseText)
       } else {

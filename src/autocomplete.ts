@@ -1,5 +1,3 @@
-/* @flow strict */
-
 import type AutocompleteElement from './auto-complete-element'
 import debounce from './debounce'
 import {fragment} from './send'
@@ -10,13 +8,6 @@ export default class Autocomplete {
   input: HTMLInputElement
   results: HTMLElement
   combobox: Combobox
-
-  onInputChange: () => void
-  onResultsMouseDown: () => void
-  onInputBlur: () => void
-  onInputFocus: () => void
-  onKeydown: KeyboardEvent => void
-  onCommit: Event => void
 
   interactingWithList: boolean
 
@@ -90,7 +81,7 @@ export default class Autocomplete {
     if (!(selected instanceof HTMLElement)) return
     this.container.open = false
     if (selected instanceof HTMLAnchorElement) return
-    const value = selected.getAttribute('data-autocomplete-value') || selected.textContent
+    const value = selected.getAttribute('data-autocomplete-value') || selected.textContent!
     this.container.value = value
   }
 

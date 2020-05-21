@@ -1,5 +1,3 @@
-/* @flow strict */
-
 import AutocompleteEvent from './auto-complete-event'
 import Autocomplete from './autocomplete'
 
@@ -57,7 +55,7 @@ export default class AutocompleteElement extends HTMLElement {
     }
   }
 
-  static get observedAttributes(): Array<string> {
+  static get observedAttributes(): string[] {
     return ['open', 'value']
   }
 

@@ -1,36 +1,21 @@
-/* @flow strict */
-
-import babel from 'rollup-plugin-babel'
 import resolve from 'rollup-plugin-node-resolve'
-
-const pkg = require('./package.json')
 
 export default [
   {
-    input: 'src/index.js',
+    input: 'dist/index.js',
     output: {
-      file: pkg['module'],
+      file: 'dist/index.js',
       format: 'es'
     },
     external: '@github/combobox-nav',
-    plugins: [
-      resolve(),
-      babel({
-        presets: ['github']
-      })
-    ]
+    plugins: [resolve()]
   },
   {
-    input: 'src/index.js',
+    input: 'dist/index.js',
     output: {
       file: 'dist/bundle.js',
       format: 'es'
     },
-    plugins: [
-      resolve(),
-      babel({
-        presets: ['github']
-      })
-    ]
+    plugins: [resolve()]
   }
 ]

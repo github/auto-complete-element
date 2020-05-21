@@ -1,18 +1,18 @@
-describe('auto-complete element', function() {
-  describe('element creation', function() {
-    it('creates from document.createElement', function() {
+describe('auto-complete element', function () {
+  describe('element creation', function () {
+    it('creates from document.createElement', function () {
       const el = document.createElement('auto-complete')
       assert.equal('AUTO-COMPLETE', el.nodeName)
     })
 
-    it('creates from constructor', function() {
+    it('creates from constructor', function () {
       const el = new window.AutocompleteElement()
       assert.equal('AUTO-COMPLETE', el.nodeName)
     })
   })
 
-  describe('requesting server results', function() {
-    beforeEach(function() {
+  describe('requesting server results', function () {
+    beforeEach(function () {
       document.body.innerHTML = `
         <div id="mocha-fixture">
           <auto-complete src="/search" for="popup">
@@ -23,7 +23,7 @@ describe('auto-complete element', function() {
       `
     })
 
-    it('requests html fragment', async function() {
+    it('requests html fragment', async function () {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
       const popup = container.querySelector('#popup')
@@ -34,7 +34,7 @@ describe('auto-complete element', function() {
       assert.equal(5, popup.children.length)
     })
 
-    it('respects arrow keys', async function() {
+    it('respects arrow keys', async function () {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
       const popup = container.querySelector('#popup')
@@ -52,7 +52,7 @@ describe('auto-complete element', function() {
       assert.equal('first', popup.querySelector('[aria-selected="true"]').textContent)
     })
 
-    it('dispatches change event on commit', async function() {
+    it('dispatches change event on commit', async function () {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
 
@@ -63,7 +63,7 @@ describe('auto-complete element', function() {
       let relatedTarget
       container.addEventListener(
         'auto-complete-change',
-        function(event) {
+        function (event) {
           value = event.target.value
           relatedTarget = event.relatedTarget
         },
@@ -79,7 +79,7 @@ describe('auto-complete element', function() {
       assert.isTrue(keydown(input, 'Tab'))
     })
 
-    it('commits on Enter', async function() {
+    it('commits on Enter', async function () {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
 
@@ -94,7 +94,7 @@ describe('auto-complete element', function() {
       assert.isFalse(container.open)
     })
 
-    it('does not commit on disabled option', async function() {
+    it('does not commit on disabled option', async function () {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
       const popup = container.querySelector('#popup')
@@ -112,7 +112,7 @@ describe('auto-complete element', function() {
       assert.isTrue(container.open)
     })
 
-    it('does not commit text value on link item navigation', async function() {
+    it('does not commit text value on link item navigation', async function () {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
 
@@ -128,7 +128,7 @@ describe('auto-complete element', function() {
       assert.isFalse(container.open)
     })
 
-    it('does not close on blur after mousedown', async function() {
+    it('does not close on blur after mousedown', async function () {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
 
@@ -147,7 +147,7 @@ describe('auto-complete element', function() {
       assert.isFalse(container.open)
     })
 
-    it('closes on Escape', async function() {
+    it('closes on Escape', async function () {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
       const popup = container.querySelector('#popup')
@@ -162,7 +162,7 @@ describe('auto-complete element', function() {
       assert.isTrue(popup.hidden)
     })
 
-    it('opens and closes on alt + ArrowDown and alt + ArrowUp', async function() {
+    it('opens and closes on alt + ArrowDown and alt + ArrowUp', async function () {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
       const popup = container.querySelector('#popup')
@@ -211,7 +211,7 @@ function keydown(element, key, alt = false) {
     metaKey: false
   }
 
-  key = key.replace(/\b(Ctrl|Alt|Meta)\+/g, function(_, type) {
+  key = key.replace(/\b(Ctrl|Alt|Meta)\+/g, function (_, type) {
     e[`${type}Key`] = true
     return ''
   })
