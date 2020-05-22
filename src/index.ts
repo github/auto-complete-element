@@ -6,6 +6,9 @@ declare global {
   interface Window {
     AutocompleteElement: typeof AutocompleteElement
   }
+  interface HTMLElementTagNameMap {
+    'auto-complete': AutocompleteElement
+  }
 }
 
 if (!window.customElements.get('auto-complete')) {
