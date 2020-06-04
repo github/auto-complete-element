@@ -38,7 +38,7 @@ export default class Autocomplete {
     this.results.addEventListener('combobox-commit', this.onCommit)
   }
 
-  destroy() {
+  destroy(): void {
     this.input.removeEventListener('keydown', this.onKeydown)
     this.input.removeEventListener('focus', this.onInputFocus)
     this.input.removeEventListener('blur', this.onInputBlur)
@@ -47,7 +47,7 @@ export default class Autocomplete {
     this.results.removeEventListener('combobox-commit', this.onCommit)
   }
 
-  onKeydown(event: KeyboardEvent) {
+  onKeydown(event: KeyboardEvent): void {
     if (event.key === 'Escape' && this.container.open) {
       this.container.open = false
       event.stopPropagation()
@@ -64,11 +64,11 @@ export default class Autocomplete {
     }
   }
 
-  onInputFocus() {
+  onInputFocus(): void {
     this.fetchResults()
   }
 
-  onInputBlur() {
+  onInputBlur(): void {
     if (this.interactingWithList) {
       this.interactingWithList = false
       return
@@ -76,7 +76,7 @@ export default class Autocomplete {
     this.container.open = false
   }
 
-  onCommit({target}: Event) {
+  onCommit({target}: Event): void {
     const selected = target
     if (!(selected instanceof HTMLElement)) return
     this.container.open = false
@@ -85,23 +85,23 @@ export default class Autocomplete {
     this.container.value = value
   }
 
-  onResultsMouseDown() {
+  onResultsMouseDown(): void {
     this.interactingWithList = true
   }
 
-  onInputChange() {
+  onInputChange(): void {
     this.container.removeAttribute('value')
     this.fetchResults()
   }
 
-  identifyOptions() {
+  identifyOptions(): void {
     let id = 0
     for (const el of this.results.querySelectorAll('[role="option"]:not([id])')) {
       el.id = `${this.results.id}-option-${id++}`
     }
   }
 
-  fetchResults() {
+  fetchResults(): void {
     const query = this.input.value.trim()
     if (!query) {
       this.container.open = false
@@ -132,13 +132,13 @@ export default class Autocomplete {
       })
   }
 
-  open() {
+  open(): void {
     if (!this.results.hidden) return
     this.combobox.start()
     this.results.hidden = false
   }
 
-  close() {
+  close(): void {
     if (this.results.hidden) return
     this.combobox.stop()
     this.results.hidden = true

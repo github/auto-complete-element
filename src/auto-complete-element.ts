@@ -8,7 +8,7 @@ export default class AutocompleteElement extends HTMLElement {
     super()
   }
 
-  connectedCallback() {
+  connectedCallback(): void {
     const listId = this.getAttribute('for')
     if (!listId) return
 
@@ -19,7 +19,7 @@ export default class AutocompleteElement extends HTMLElement {
     results.setAttribute('role', 'listbox')
   }
 
-  disconnectedCallback() {
+  disconnectedCallback(): void {
     const autocomplete = state.get(this)
     if (autocomplete) {
       autocomplete.destroy()
@@ -59,7 +59,7 @@ export default class AutocompleteElement extends HTMLElement {
     return ['open', 'value']
   }
 
-  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+  attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     if (oldValue === newValue) return
 
     const autocomplete = state.get(this)
