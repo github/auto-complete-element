@@ -18,7 +18,9 @@ export default class Autocomplete {
     this.combobox = new Combobox(input, results)
 
     this.results.hidden = true
-    this.input.setAttribute('autocomplete', 'off')
+    if (!this.input.hasAttribute('autocomplete')) {
+      this.input.setAttribute('autocomplete', 'off')
+    }
     this.input.setAttribute('spellcheck', 'false')
 
     this.interactingWithList = false

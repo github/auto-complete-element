@@ -11,6 +11,39 @@ describe('auto-complete element', function () {
     })
   })
 
+  describe('element attributes', function () {
+    it('disables input autocomplete and spellcheck', function () {
+      document.body.innerHTML = `
+        <div id="mocha-fixture">
+          <auto-complete src="/search" for="popup">
+            <input type="text">
+            <ul id="popup"></ul>
+          </auto-complete>
+        </div>
+      `
+      const container = document.querySelector('auto-complete')
+      const input = container.querySelector('input')
+
+      assert.equal('off', input.getAttribute('autocomplete'))
+      assert.equal('false', input.getAttribute('spellcheck'))
+    })
+
+    it('preserves existing autocomplete', function () {
+      document.body.innerHTML = `
+        <div id="mocha-fixture">
+          <auto-complete src="/search" for="popup">
+            <input type="text" autocomplete="none">
+            <ul id="popup"></ul>
+          </auto-complete>
+        </div>
+      `
+      const container = document.querySelector('auto-complete')
+      const input = container.querySelector('input')
+
+      assert.equal('none', input.getAttribute('autocomplete'))
+    })
+  })
+
   describe('requesting server results', function () {
     beforeEach(function () {
       document.body.innerHTML = `
