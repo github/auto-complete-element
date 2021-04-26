@@ -3,15 +3,13 @@ import Autocomplete from './autocomplete'
 
 const state = new WeakMap()
 
+// eslint-disable-next-line custom-elements/file-name-matches-element
 export default class AutocompleteElement extends HTMLElement {
-  constructor() {
-    super()
-  }
-
   connectedCallback(): void {
     const listId = this.getAttribute('for')
     if (!listId) return
 
+    // eslint-disable-next-line custom-elements/no-dom-traversal-in-connectedcallback
     const input = this.querySelector('input')
     const results = document.getElementById(listId)
     if (!(input instanceof HTMLInputElement) || !results) return
@@ -82,4 +80,19 @@ export default class AutocompleteElement extends HTMLElement {
         break
     }
   }
+}
+
+declare global {
+  interface Window {
+    AutocompleteElement: typeof AutocompleteElement
+  }
+  interface HTMLElementTagNameMap {
+    'auto-complete': AutocompleteElement
+  }
+}
+
+if (!window.customElements.get('auto-complete')) {
+  window.AutocompleteElement = AutocompleteElement
+  // eslint-disable-next-line custom-elements/tag-name-matches-class
+  window.customElements.define('auto-complete', AutocompleteElement)
 }

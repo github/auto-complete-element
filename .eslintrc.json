@@ -1,13 +1,16 @@
 {
   "root": true,
+  "plugins": ["custom-elements"],
   "extends": [
     "plugin:github/browser",
     "plugin:github/recommended",
-    "plugin:github/typescript"
+    "plugin:github/typescript",
+    "plugin:custom-elements/recommended"
   ],
   "rules": {
     "github/no-then": "off",
-    "no-invalid-this": "off"
+    "no-invalid-this": "off",
+    "custom-elements/tag-name-matches-class": ["error", {"suffix": "Element"}]
   },
   "globals": {
     "AutocompleteElement": "readonly"
