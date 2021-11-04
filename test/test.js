@@ -1,3 +1,5 @@
+const listboxId = 'popup'
+
 describe('auto-complete element', function () {
   describe('element creation', function () {
     it('creates from document.createElement', function () {
@@ -27,7 +29,7 @@ describe('auto-complete element', function () {
     it('requests html fragment', async function () {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
-      const popup = container.querySelector('#popup')
+      const popup = container.querySelector(`#${listboxId}`)
 
       triggerInput(input, 'hub')
       await once(container, 'loadend')
@@ -38,7 +40,7 @@ describe('auto-complete element', function () {
     it('respects arrow keys', async function () {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
-      const popup = container.querySelector('#popup')
+      const popup = container.querySelector(`#${listboxId}`)
 
       assert.isTrue(keydown(input, 'ArrowDown'))
       triggerInput(input, 'hub')
@@ -110,7 +112,7 @@ describe('auto-complete element', function () {
     it('does not commit on disabled option', async function () {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
-      const popup = container.querySelector('#popup')
+      const popup = container.querySelector(`#${listboxId}`)
 
       triggerInput(input, 'hub')
       await once(container, 'loadend')
@@ -163,7 +165,7 @@ describe('auto-complete element', function () {
     it('closes on Escape', async function () {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
-      const popup = container.querySelector('#popup')
+      const popup = container.querySelector(`#${listboxId}`)
 
       triggerInput(input, 'hub')
       await once(container, 'loadend')
@@ -178,7 +180,7 @@ describe('auto-complete element', function () {
     it('opens and closes on alt + ArrowDown and alt + ArrowUp', async function () {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
-      const popup = container.querySelector('#popup')
+      const popup = container.querySelector(`#${listboxId}`)
 
       triggerInput(input, 'hub')
       await once(container, 'loadend')
