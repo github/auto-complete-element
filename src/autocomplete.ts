@@ -8,6 +8,7 @@ export default class Autocomplete {
   input: HTMLInputElement
   results: HTMLElement
   combobox: Combobox
+  feedback: HTMLElement | null
 
   interactingWithList: boolean
 
@@ -16,6 +17,7 @@ export default class Autocomplete {
     this.input = input
     this.results = results
     this.combobox = new Combobox(input, results)
+    this.feedback = document.getElementById(`${this.results.id}-feedback`)
 
     this.results.hidden = true
     this.input.setAttribute('autocomplete', 'off')
@@ -90,6 +92,9 @@ export default class Autocomplete {
   }
 
   onInputChange(): void {
+    if (this.feedback && this.feedback.innerHTML) {
+      this.feedback.innerHTML = ''
+    }
     this.container.removeAttribute('value')
     this.fetchResults()
   }
@@ -98,6 +103,17 @@ export default class Autocomplete {
     let id = 0
     for (const el of this.results.querySelectorAll('[role="option"]:not([id])')) {
       el.id = `${this.results.id}-option-${id++}`
+    }
+  }
+
+  updateFeedbackForScreenReaders(numOptions: number, numSelected?: number): void {
+    if (this.feedback) {
+      const baseString = `${numOptions} suggested options.`
+      const endString = numSelected ? `${baseString}. ${numSelected} selected.` : baseString
+      this.feedback.innerHTML = endString
+    } else {
+      // eslint-disable-next-line no-console
+      console.warn('Could not find feedback div')
     }
   }
 
@@ -122,6 +138,13 @@ export default class Autocomplete {
         this.results.innerHTML = html
         this.identifyOptions()
         const hasResults = !!this.results.querySelector('[role="option"]')
+        const numResults = this.results.querySelectorAll('[role="option"]').length
+        const numSelected = this.results.querySelectorAll('[aria-selected="true"]').length
+
+        // eslint-disable-next-line no-console
+        console.log('selected', this.results.querySelectorAll('[role="option"'))
+
+        this.updateFeedbackForScreenReaders(numResults, numSelected)
         this.container.open = hasResults
         this.container.dispatchEvent(new CustomEvent('load'))
         this.container.dispatchEvent(new CustomEvent('loadend'))
