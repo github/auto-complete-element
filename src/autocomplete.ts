@@ -111,9 +111,6 @@ export default class Autocomplete {
       const baseString = `${numOptions} suggested options.`
       const endString = numSelected ? `${baseString}. ${numSelected} selected.` : baseString
       this.feedback.innerHTML = endString
-    } else {
-      // eslint-disable-next-line no-console
-      console.warn('Could not find feedback div')
     }
   }
 
@@ -140,9 +137,6 @@ export default class Autocomplete {
         const hasResults = !!this.results.querySelector('[role="option"]')
         const numResults = this.results.querySelectorAll('[role="option"]').length
         const numSelected = this.results.querySelectorAll('[aria-selected="true"]').length
-
-        // eslint-disable-next-line no-console
-        console.log('selected', this.results.querySelectorAll('[role="option"'))
 
         this.updateFeedbackForScreenReaders(numResults, numSelected)
         this.container.open = hasResults
