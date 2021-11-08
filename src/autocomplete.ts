@@ -174,7 +174,6 @@ export default class Autocomplete {
         this.identifyOptions()
         const hasResults = !!this.results.querySelector('[role="option"]')
         const numOptions = this.results.querySelectorAll('[role="option"]').length
-        // const numSelected = this.results.querySelectorAll('[aria-selected="true"]').length
 
         this.updateFeedbackForScreenReaders({ event: 'new-options', numOptions })
         this.container.open = hasResults
