@@ -1,7 +1,7 @@
 import type AutocompleteElement from './auto-complete-element'
 import debounce from './debounce'
 import {fragment} from './send'
-import getAnnouncementStringByEvent, { ScreenReaderAccouncementConfig } from './screen-reader-announcements'
+import getAnnouncementStringByEvent, {ScreenReaderAccouncementConfig} from './screen-reader-announcements'
 import Combobox from '@github/combobox-nav'
 
 // @jscholes notes:
@@ -15,15 +15,6 @@ import Combobox from '@github/combobox-nav'
 // no default options: (you must type something)
 // don't announce anything about options until typing has given you some
 // If the input is emptied AND the listbox has no options, "Suggestions hidden"; aria-expanded = false
-
-// has default options:
-// there are use cases for default options (most-used queries, last 3 queries, etc.)
-// - Case: input value is empty, but there are 5 matching options by default
-//        - we want to hear that there are 5 options available
-//        - aria-live won't cut it because it'll probably get lost on focus (avoid aria-live announcements on focus anyways)
-//        - use an accessible description attached to the input: `aria-describedby`
-//        - When the combobox receives focus, add aria-describedby; but once the user starts typing (including arrows), remove the aria-describedby and rely on the live region
-//        - Add back the aria-describedby on blur
 
 export default class Autocomplete {
   container: AutocompleteElement
@@ -41,13 +32,13 @@ export default class Autocomplete {
     this.results = results
     this.combobox = new Combobox(input, results)
     this.feedback = document.getElementById(`${this.results.id}-feedback`)
-    
+
     // check to see if there are any default options provided
     this.clientOptions = results.querySelectorAll('[role=option]')
 
     // make sure feedback has all required aria attributes
     if (!this.feedback?.getAttribute('aria-live')) {
-      this.feedback?.setAttribute('aria-live', 'polite');
+      this.feedback?.setAttribute('aria-live', 'polite')
     }
     if (!this.feedback?.getAttribute('aria-atomic')) {
       this.feedback?.setAttribute('aria-atomic', 'true')
@@ -118,7 +109,7 @@ export default class Autocomplete {
     this.container.open = false
     if (selected instanceof HTMLAnchorElement) return
     const value = selected.getAttribute('data-autocomplete-value') || selected.textContent!
-    this.updateFeedbackForScreenReaders({ event: 'selection', selectionText: value })
+    this.updateFeedbackForScreenReaders({event: 'selection', selectionText: value})
     this.container.value = value
   }
 
@@ -165,17 +156,15 @@ export default class Autocomplete {
     this.container.dispatchEvent(new CustomEvent('loadstart'))
     fragment(this.input, url.toString())
       .then(html => {
-        let endHtml = html;
-        // check for persistent client options
-        if (this.clientOptions?.length) {
-          endHtml = this.clientOptions + html
-        }
-        this.results.innerHTML = endHtml
+        this.results.innerHTML = html
         this.identifyOptions()
         const hasResults = !!this.results.querySelector('[role="option"]')
         const numOptions = this.results.querySelectorAll('[role="option"]').length
+        const activeDescendant = this.results
+          .querySelector('[active-descendant="true"]')
+          ?.getAttribute('data-autocomplete-value')
 
-        this.updateFeedbackForScreenReaders({ event: 'new-options', numOptions })
+        this.updateFeedbackForScreenReaders({event: 'new-options', activeDescendant, numOptions})
         this.container.open = hasResults
         this.container.dispatchEvent(new CustomEvent('load'))
         this.container.dispatchEvent(new CustomEvent('loadend'))
