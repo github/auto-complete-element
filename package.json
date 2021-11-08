@@ -9,9 +9,14 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "clean": "rm -rf dist",
+<<<<<<< HEAD
     "example": "http-server -c-1 ./examples",
     "preexample": "mkdir -p ./examples/dist && npm run build && cp ./dist/bundle.js ./examples/dist/bundle.js",
     "lint": "eslint . --ext .ts,.js && tsc --noEmit",
+=======
+    "example": "npm run build && cp ./dist/bundle.js ./examples/dist/bundle.js && http-server -c-1 ./examples",
+    "lint": "eslint . --fix --ext .ts,.js && tsc --noEmit",
+>>>>>>> c047005 (updating example, adding way to run it locally even in codespaces, and adding autoselect support)
     "prebuild": "npm run clean && npm run lint",
     "build": "tsc && rollup -c",
     "pretest": "npm run build",
