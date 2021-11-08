@@ -1,7 +1,29 @@
 import type AutocompleteElement from './auto-complete-element'
 import debounce from './debounce'
 import {fragment} from './send'
+import getAnnouncementStringByEvent, { ScreenReaderAccouncementConfig } from './screen-reader-announcements'
 import Combobox from '@github/combobox-nav'
+
+// @jscholes notes:
+// add aria-atomic = true to the feedback container
+// best to put it at the very bottom of the page or:
+// only show it in the reading order when aria-expanded=true (display: none)
+// aria-describedby can be aria-hidden with no problem
+
+// tell the user ahead of time what option will be selected when pressing Enter
+
+// no default options: (you must type something)
+// don't announce anything about options until typing has given you some
+// If the input is emptied AND the listbox has no options, "Suggestions hidden"; aria-expanded = false
+
+// has default options:
+// there are use cases for default options (most-used queries, last 3 queries, etc.)
+// - Case: input value is empty, but there are 5 matching options by default
+//        - we want to hear that there are 5 options available
+//        - aria-live won't cut it because it'll probably get lost on focus (avoid aria-live announcements on focus anyways)
+//        - use an accessible description attached to the input: `aria-describedby`
+//        - When the combobox receives focus, add aria-describedby; but once the user starts typing (including arrows), remove the aria-describedby and rely on the live region
+//        - Add back the aria-describedby on blur
 
 export default class Autocomplete {
   container: AutocompleteElement
@@ -9,6 +31,7 @@ export default class Autocomplete {
   results: HTMLElement
   combobox: Combobox
   feedback: HTMLElement | null
+  clientOptions: NodeListOf<HTMLElement> | null
 
   interactingWithList: boolean
 
@@ -18,6 +41,17 @@ export default class Autocomplete {
     this.results = results
     this.combobox = new Combobox(input, results)
     this.feedback = document.getElementById(`${this.results.id}-feedback`)
+    
+    // check to see if there are any default options provided
+    this.clientOptions = results.querySelectorAll('[role=option]')
+
+    // make sure feedback has all required aria attributes
+    if (!this.feedback?.getAttribute('aria-live')) {
+      this.feedback?.setAttribute('aria-live', 'polite');
+    }
+    if (!this.feedback?.getAttribute('aria-atomic')) {
+      this.feedback?.setAttribute('aria-atomic', 'true')
+    }
 
     this.results.hidden = true
     this.input.setAttribute('autocomplete', 'off')
@@ -84,6 +118,7 @@ export default class Autocomplete {
     this.container.open = false
     if (selected instanceof HTMLAnchorElement) return
     const value = selected.getAttribute('data-autocomplete-value') || selected.textContent!
+    this.updateFeedbackForScreenReaders({ event: 'selection', selectionText: value })
     this.container.value = value
   }
 
@@ -106,11 +141,9 @@ export default class Autocomplete {
     }
   }
 
-  updateFeedbackForScreenReaders(numOptions: number, numSelected?: number): void {
+  updateFeedbackForScreenReaders(input: ScreenReaderAccouncementConfig): void {
     if (this.feedback) {
-      const baseString = `${numOptions} suggested options.`
-      const endString = numSelected ? `${baseString}. ${numSelected} selected.` : baseString
-      this.feedback.innerHTML = endString
+      this.feedback.innerHTML = getAnnouncementStringByEvent(input)
     }
   }
 
@@ -132,13 +165,18 @@ export default class Autocomplete {
     this.container.dispatchEvent(new CustomEvent('loadstart'))
     fragment(this.input, url.toString())
       .then(html => {
-        this.results.innerHTML = html
+        let endHtml = html;
+        // check for persistent client options
+        if (this.clientOptions?.length) {
+          endHtml = this.clientOptions + html
+        }
+        this.results.innerHTML = endHtml
         this.identifyOptions()
         const hasResults = !!this.results.querySelector('[role="option"]')
-        const numResults = this.results.querySelectorAll('[role="option"]').length
-        const numSelected = this.results.querySelectorAll('[aria-selected="true"]').length
+        const numOptions = this.results.querySelectorAll('[role="option"]').length
+        // const numSelected = this.results.querySelectorAll('[aria-selected="true"]').length
 
-        this.updateFeedbackForScreenReaders(numResults, numSelected)
+        this.updateFeedbackForScreenReaders({ event: 'new-options', numOptions })
         this.container.open = hasResults
         this.container.dispatchEvent(new CustomEvent('load'))
         this.container.dispatchEvent(new CustomEvent('loadend'))

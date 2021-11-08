@@ -43,7 +43,10 @@
       <auto-complete src="/demo" for="items-popup" aria-labelledby="robots-label">
         <input name="robot" type="text" aria-labelledby="robots-label" autofocus>
         <ul id="items-popup" aria-labelledby="robots-label"></ul>
-        <!-- For built-in screen-reader announcements: (Note the ID is the same as the <ul> with "feedback" appended)-->
+        <!-- For built-in screen-reader announcements:
+          - Note the ID is the same as the <ul> with "feedback" appended
+          - Also note that aria attributes will be added programmatically if they aren't set correctly  
+        -->
         <div id="items-popup-feedback" class="sr-only" aria-live="polite"></div>
       </auto-complete>
       <button type="submit">Save</button>
