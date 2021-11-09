@@ -45,7 +45,7 @@ export default class Autocomplete {
 
     // make sure feedback has all required aria attributes
     if (this.feedback) {
-      this.feedback?.setAttribute('aria-live', 'polite')
+      this.feedback?.setAttribute('aria-live', 'assertive')
       this.feedback?.setAttribute('aria-atomic', 'true')
     }
 
