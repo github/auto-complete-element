@@ -22,25 +22,30 @@ export default class Autocomplete {
   results: HTMLElement
   combobox: Combobox
   feedback: HTMLElement | null
+  autoselectEnabled: boolean
   clientOptions: NodeListOf<HTMLElement> | null
 
   interactingWithList: boolean
 
-  constructor(container: AutocompleteElement, input: HTMLInputElement, results: HTMLElement) {
+  constructor(
+    container: AutocompleteElement,
+    input: HTMLInputElement,
+    results: HTMLElement,
+    autoselectEnabled?: boolean
+  ) {
     this.container = container
     this.input = input
     this.results = results
     this.combobox = new Combobox(input, results)
     this.feedback = document.getElementById(`${this.results.id}-feedback`)
+    this.autoselectEnabled = !!autoselectEnabled
 
     // check to see if there are any default options provided
     this.clientOptions = results.querySelectorAll('[role=option]')
 
     // make sure feedback has all required aria attributes
-    if (!this.feedback?.getAttribute('aria-live')) {
+    if (this.feedback) {
       this.feedback?.setAttribute('aria-live', 'polite')
-    }
-    if (!this.feedback?.getAttribute('aria-atomic')) {
       this.feedback?.setAttribute('aria-atomic', 'true')
     }
 
@@ -75,6 +80,20 @@ export default class Autocomplete {
   }
 
   onKeydown(event: KeyboardEvent): void {
+    // if autoselect is enabled, Enter key will select the first option
+    if (event.key === 'Enter' && this.container.open && this.autoselectEnabled) {
+      const inputActiveDescendantValue = this.input.getAttribute('aria-activedescendant')
+      if (inputActiveDescendantValue) {
+        const activeDescendant = document.getElementById(inputActiveDescendantValue)
+        if (activeDescendant) {
+          event.stopPropagation()
+          event.preventDefault()
+
+          this.onCommit({target: activeDescendant})
+        }
+      }
+    }
+
     if (event.key === 'Escape' && this.container.open) {
       this.container.open = false
       event.stopPropagation()
@@ -103,13 +122,13 @@ export default class Autocomplete {
     this.container.open = false
   }
 
-  onCommit({target}: Event): void {
+  onCommit({target}: Pick<Event, 'target'>): void {
     const selected = target
     if (!(selected instanceof HTMLElement)) return
     this.container.open = false
     if (selected instanceof HTMLAnchorElement) return
     const value = selected.getAttribute('data-autocomplete-value') || selected.textContent!
-    this.updateFeedbackForScreenReaders({event: 'selection', selectionText: value})
+    this.updateFeedbackForScreenReaders({event: 'selection', selectionText: selected.textContent || ''})
     this.container.value = value
   }
 
@@ -158,13 +177,24 @@ export default class Autocomplete {
       .then(html => {
         this.results.innerHTML = html
         this.identifyOptions()
-        const hasResults = !!this.results.querySelector('[role="option"]')
-        const numOptions = this.results.querySelectorAll('[role="option"]').length
-        const activeDescendant = this.results
-          .querySelector('[active-descendant="true"]')
-          ?.getAttribute('data-autocomplete-value')
+        const allNewOptions = this.results.querySelectorAll('[role="option"]')
+        const hasResults = !!allNewOptions.length
+        const numOptions = allNewOptions.length
 
-        this.updateFeedbackForScreenReaders({event: 'new-options', activeDescendant, numOptions})
+        // add active descendant attribute to the input so that it's clear what Enter will do
+        if (this.autoselectEnabled) {
+          const [firstOption] = [...allNewOptions]
+          const firstOptionValue = firstOption?.textContent
+          const firstOptionId = firstOption?.id
+
+          if (firstOption) {
+            this.input.setAttribute('aria-activedescendant', firstOptionId)
+          }
+          this.updateFeedbackForScreenReaders({event: 'new-options', activeDescendant: firstOptionValue, numOptions})
+        } else {
+          this.updateFeedbackForScreenReaders({event: 'new-options', numOptions})
+        }
+
         this.container.open = hasResults
         this.container.dispatchEvent(new CustomEvent('load'))
         this.container.dispatchEvent(new CustomEvent('loadend'))

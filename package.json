@@ -9,7 +9,8 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "clean": "rm -rf dist",
-    "lint": "eslint . --ext .ts,.js && tsc --noEmit",
+    "example": "npm run build && cp ./dist/bundle.js ./examples/dist/bundle.js && http-server -c-1 ./examples",
+    "lint": "eslint . --fix --ext .ts,.js && tsc --noEmit",
     "prebuild": "npm run clean && npm run lint",
     "build": "tsc && rollup -c",
     "pretest": "npm run build",
@@ -34,6 +35,7 @@
     "eslint": "^7.25.0",
     "eslint-plugin-custom-elements": "^0.0.2",
     "eslint-plugin-github": "^4.1.3",
+    "http-server": "^14.0.0",
     "karma": "^6.3.2",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^3.1.0",
