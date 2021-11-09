@@ -152,9 +152,11 @@ export default class Autocomplete {
   }
 
   updateFeedbackForScreenReaders(input: ScreenReaderAccouncementConfig): void {
-    if (this.feedback) {
-      this.feedback.innerHTML = getAnnouncementStringByEvent(input)
-    }
+    setTimeout(() => {
+      if (this.feedback) {
+        this.feedback.innerHTML = getAnnouncementStringByEvent(input)
+      }
+    }, 100)
   }
 
   fetchResults(): void {
