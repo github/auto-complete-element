@@ -4,18 +4,6 @@ import {fragment} from './send'
 import getAnnouncementStringByEvent, {ScreenReaderAccouncementConfig} from './screen-reader-announcements'
 import Combobox from '@github/combobox-nav'
 
-// @jscholes notes:
-// add aria-atomic = true to the feedback container
-// best to put it at the very bottom of the page or:
-// only show it in the reading order when aria-expanded=true (display: none)
-// aria-describedby can be aria-hidden with no problem
-
-// tell the user ahead of time what option will be selected when pressing Enter
-
-// no default options: (you must type something)
-// don't announce anything about options until typing has given you some
-// If the input is emptied AND the listbox has no options, "Suggestions hidden"; aria-expanded = false
-
 export default class Autocomplete {
   container: AutocompleteElement
   input: HTMLInputElement
@@ -130,6 +118,10 @@ export default class Autocomplete {
     const value = selected.getAttribute('data-autocomplete-value') || selected.textContent!
     this.updateFeedbackForScreenReaders({event: 'selection', selectionText: selected.textContent || ''})
     this.container.value = value
+
+    if (!value) {
+      this.updateFeedbackForScreenReaders({event: 'options-hidden'})
+    }
   }
 
   onResultsMouseDown(): void {

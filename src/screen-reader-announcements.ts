@@ -1,16 +1,20 @@
-const createSelectionString = (selectionText: string) => {
-  return `${selectionText} selected.`
+const createActiveDescendantString = (activeDescendant: string) => {
+  return `Press Enter to select ${activeDescendant}.`
 }
 
 const createOptionsString = (numOptions: string) => {
   return `${numOptions} suggested options.`
 }
 
-const createActiveDescendantString = (activeDescendant: string) => {
-  return `Press Enter to select ${activeDescendant}.`
+const createOptionsHiddenString = () => {
+  return `Suggestions hidden.`
 }
 
-type AnnouncementEvent = 'new-options' | 'selection'
+const createSelectionString = (selectionText: string) => {
+  return `${selectionText} selected.`
+}
+
+type AnnouncementEvent = 'new-options' | 'selection' | 'options-hidden'
 export interface ScreenReaderAccouncementConfig {
   event: AnnouncementEvent
   activeDescendant?: string | null
@@ -29,6 +33,10 @@ const getAnnouncementStringByEvent = (input: ScreenReaderAccouncementConfig): st
       }
 
       return createOptionsString('No')
+    }
+
+    case 'options-hidden': {
+      return createOptionsHiddenString();
     }
 
     case 'selection': {
