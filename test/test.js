@@ -90,6 +90,7 @@ describe('auto-complete element', function () {
 
       triggerInput(input, 'hub')
       await once(container, 'loadend')
+      await once(container, 'sr-update')
 
       if (feedback) {
         assert.equal(`${popup.children.length} suggested options.`, feedback.innerHTML)
@@ -197,6 +198,40 @@ describe('auto-complete element', function () {
       assert.isFalse(keydown(input, 'ArrowDown', true))
       assert.isTrue(container.open)
       assert.isFalse(popup.hidden)
+    })
+  })
+
+  describe('autoselect enabled', () => {
+    beforeEach(function () {
+      document.body.innerHTML = `
+        <div id="mocha-fixture">
+          <auto-complete src="/search" for="popup" data-autoselect="true">
+            <input type="text">
+            <ul id="${listboxId}"></ul>
+            <div id="${listboxId}-feedback"></div>
+          </auto-complete>
+        </div>
+      `
+    })
+
+    it('summarizes the available options and informs what will happen on Enter', async function () {
+      const container = document.querySelector('auto-complete')
+      const input = container.querySelector('input')
+      const feedback = container.querySelector(`#${listboxId}-feedback`)
+      const popup = container.querySelector(`#${listboxId}`)
+
+      triggerInput(input, 'hub')
+      await once(container, 'loadend')
+
+      await once(container, 'sr-update')
+      const firstOption = popup.children[0].textContent
+
+      if (feedback) {
+        assert.equal(
+          `${popup.children.length} suggested options. Press Enter to select ${firstOption}.`,
+          feedback.innerHTML
+        )
+      }
     })
   })
 })

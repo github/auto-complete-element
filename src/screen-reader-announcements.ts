@@ -36,7 +36,7 @@ const getAnnouncementStringByEvent = (input: ScreenReaderAccouncementConfig): st
     }
 
     case 'options-hidden': {
-      return createOptionsHiddenString();
+      return createOptionsHiddenString()
     }
 
     case 'selection': {

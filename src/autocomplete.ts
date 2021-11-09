@@ -147,6 +147,7 @@ export default class Autocomplete {
     setTimeout(() => {
       if (this.feedback) {
         this.feedback.innerHTML = getAnnouncementStringByEvent(input)
+        this.container.dispatchEvent(new CustomEvent('sr-update'))
       }
     }, 100)
   }
