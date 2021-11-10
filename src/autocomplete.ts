@@ -4,6 +4,7 @@ import {fragment} from './send'
 import getAnnouncementStringByEvent, {ScreenReaderAccouncementConfig} from './screen-reader-announcements'
 import Combobox from '@github/combobox-nav'
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 const SCREEN_READER_DELAY = window.testScreenReaderDelay || 100
 
