@@ -4,6 +4,9 @@ import {fragment} from './send'
 import getAnnouncementStringByEvent, {ScreenReaderAccouncementConfig} from './screen-reader-announcements'
 import Combobox from '@github/combobox-nav'
 
+// @ts-ignore
+const SCREEN_READER_DELAY = window.testScreenReaderDelay || 100
+
 export default class Autocomplete {
   container: AutocompleteElement
   input: HTMLInputElement
@@ -33,8 +36,8 @@ export default class Autocomplete {
 
     // make sure feedback has all required aria attributes
     if (this.feedback) {
-      this.feedback?.setAttribute('aria-live', 'assertive')
-      this.feedback?.setAttribute('aria-atomic', 'true')
+      this.feedback.setAttribute('aria-live', 'assertive')
+      this.feedback.setAttribute('aria-atomic', 'true')
     }
 
     this.results.hidden = true
@@ -149,7 +152,7 @@ export default class Autocomplete {
         this.feedback.innerHTML = getAnnouncementStringByEvent(input)
         this.container.dispatchEvent(new CustomEvent('sr-update'))
       }
-    }, 100)
+    }, SCREEN_READER_DELAY)
   }
 
   fetchResults(): void {

@@ -15,7 +15,7 @@
   "globals": {
     "AutocompleteElement": "readonly"
   },
-  "ignorePatterns": ["examples/dist"],
+  "ignorePatterns": ["dist/", "examples/dist"],
   "overrides": [
     {
       "files": ["test/*.js", "rollup.config.js"],
