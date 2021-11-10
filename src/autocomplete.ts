@@ -74,14 +74,13 @@ export default class Autocomplete {
   onKeydown(event: KeyboardEvent): void {
     // if autoselect is enabled, Enter key will select the first option
     if (event.key === 'Enter' && this.container.open && this.autoselectEnabled) {
-      const inputActiveDescendantValue = this.input.getAttribute('aria-activedescendant')
-      if (inputActiveDescendantValue) {
-        const activeDescendant = document.getElementById(inputActiveDescendantValue)
-        if (activeDescendant) {
+      const firstOption = this.results.children[0]
+      if (firstOption) {
+        if (firstOption) {
           event.stopPropagation()
           event.preventDefault()
 
-          this.onCommit({target: activeDescendant})
+          this.onCommit({target: firstOption})
         }
       }
     }
@@ -180,16 +179,12 @@ export default class Autocomplete {
         const hasResults = !!allNewOptions.length
         const numOptions = allNewOptions.length
 
-        // add active descendant attribute to the input so that it's clear what Enter will do
+        // inform SR users of which element is "on-deck" so that it's clear what Enter will do
         if (this.autoselectEnabled) {
           const [firstOption] = [...allNewOptions]
           const firstOptionValue = firstOption?.textContent
-          const firstOptionId = firstOption?.id
 
-          if (firstOption) {
-            this.input.setAttribute('aria-activedescendant', firstOptionId)
-          }
-          this.updateFeedbackForScreenReaders({event: 'new-options', activeDescendant: firstOptionValue, numOptions})
+          this.updateFeedbackForScreenReaders({event: 'new-options', firstOption: firstOptionValue, numOptions})
         } else {
           this.updateFeedbackForScreenReaders({event: 'new-options', numOptions})
         }

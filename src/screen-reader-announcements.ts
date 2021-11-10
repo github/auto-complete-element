@@ -1,5 +1,5 @@
-const createActiveDescendantString = (activeDescendant: string) => {
-  return `Press Enter to select ${activeDescendant}.`
+const createAutoselectString = (firstOption: string) => {
+  return `Press Enter to select ${firstOption}.`
 }
 
 const createOptionsString = (numOptions: string) => {
@@ -17,7 +17,7 @@ const createSelectionString = (selectionText: string) => {
 type AnnouncementEvent = 'new-options' | 'selection' | 'options-hidden'
 export interface ScreenReaderAccouncementConfig {
   event: AnnouncementEvent
-  activeDescendant?: string | null
+  firstOption?: string | null
   numOptions?: number
   selectionText?: string
 }
@@ -26,8 +26,8 @@ const getAnnouncementStringByEvent = (input: ScreenReaderAccouncementConfig): st
     case 'new-options': {
       if (input.numOptions) {
         const opts = createOptionsString(input.numOptions.toString())
-        if (input.activeDescendant) {
-          return `${opts} ${createActiveDescendantString(input.activeDescendant)}`
+        if (input.firstOption) {
+          return `${opts} ${createAutoselectString(input.firstOption)}`
         }
         return opts
       }
