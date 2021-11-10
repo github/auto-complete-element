@@ -28,7 +28,13 @@ With a script tag:
 
 ```html
 <auto-complete src="/users/search" for="users-popup">
-  <input type="text">
+  <input type="text" name="users">
+  <!--
+    Optional clear button:
+    - id must match the id of the input or the name of the input plus "-clear"
+    - recommended to be *before* UL elements to avoid conflicting with their blur logic
+  -->
+  <button id="users-clear">X</button>
   <ul id="users-popup"></ul>
   <!--
     Optional div for screen reader feedback. Note the ID matches the ul, but with -feedback appended.

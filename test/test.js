@@ -1,5 +1,3 @@
-const listboxId = 'popup'
-
 describe('auto-complete element', function () {
   describe('element creation', function () {
     it('creates from document.createElement', function () {
@@ -17,7 +15,7 @@ describe('auto-complete element', function () {
     beforeEach(function () {
       document.body.innerHTML = `
         <div id="mocha-fixture">
-          <auto-complete src="/search" for="${listboxId}">
+          <auto-complete src="/search" for="popup">
             <input type="text">
             <ul id="popup"></ul>
             <div id="popup-feedback"></div>
@@ -29,7 +27,7 @@ describe('auto-complete element', function () {
     it('requests html fragment', async function () {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
-      const popup = container.querySelector(`#${listboxId}`)
+      const popup = container.querySelector('#popup')
 
       triggerInput(input, 'hub')
       await once(container, 'loadend')
@@ -40,7 +38,7 @@ describe('auto-complete element', function () {
     it('respects arrow keys', async function () {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
-      const popup = container.querySelector(`#${listboxId}`)
+      const popup = container.querySelector('#popup')
 
       assert.isTrue(keydown(input, 'ArrowDown'))
       triggerInput(input, 'hub')
@@ -112,7 +110,7 @@ describe('auto-complete element', function () {
     it('does not commit on disabled option', async function () {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
-      const popup = container.querySelector(`#${listboxId}`)
+      const popup = container.querySelector('#popup')
 
       triggerInput(input, 'hub')
       await once(container, 'loadend')
@@ -165,7 +163,7 @@ describe('auto-complete element', function () {
     it('closes on Escape', async function () {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
-      const popup = container.querySelector(`#${listboxId}`)
+      const popup = container.querySelector('#popup')
 
       triggerInput(input, 'hub')
       await once(container, 'loadend')
@@ -180,7 +178,7 @@ describe('auto-complete element', function () {
     it('opens and closes on alt + ArrowDown and alt + ArrowUp', async function () {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
-      const popup = container.querySelector(`#${listboxId}`)
+      const popup = container.querySelector('#popup')
 
       triggerInput(input, 'hub')
       await once(container, 'loadend')
@@ -202,11 +200,11 @@ describe('auto-complete element', function () {
     it('clears the input value on click and gives focus back to the input', async () => {
       document.body.innerHTML = `
         <div id="mocha-fixture">
-          <auto-complete src="/search" for="${listboxId}" data-autoselect="true">
+          <auto-complete src="/search" for="popup" data-autoselect="true">
             <input id="example" type="text">
             <button id="example-clear">x</button>
-            <ul id="${listboxId}"></ul>
-            <div id="${listboxId}-feedback"></div>
+            <ul id="popup"></ul>
+            <div id="popup-feedback"></div>
           </auto-complete>
         </div>
       `
@@ -214,25 +212,29 @@ describe('auto-complete element', function () {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
       const clearButton = document.getElementById('example-clear')
+      const feedback = container.querySelector(`#popup-feedback`)
 
       triggerInput(input, 'hub')
       await once(container, 'loadend')
 
       assert.equal(input.value, 'hub')
+      await waitForElementToChange(feedback)
 
       clearButton.click()
       assert.equal(input.value, '')
       assert.equal(container.value, '')
+      await waitForElementToChange(feedback)
+      assert.equal('Input cleared. Suggestions hidden.', feedback.innerHTML)
     })
 
     it('replaces a non-button element with a button one', async () => {
       document.body.innerHTML = `
         <div id="mocha-fixture">
-          <auto-complete src="/search" for="${listboxId}" data-autoselect="true">
+          <auto-complete src="/search" for="popup" data-autoselect="true">
             <input name="example" type="text">
             <span id="example-clear">x</span>
-            <ul id="${listboxId}"></ul>
-            <div id="${listboxId}-feedback"></div>
+            <ul id="popup"></ul>
+            <div id="popup-feedback"></div>
           </auto-complete>
         </div>
       `
@@ -249,7 +251,7 @@ describe('auto-complete element', function () {
     beforeEach(function () {
       document.body.innerHTML = `
         <div id="mocha-fixture">
-          <auto-complete src="/search" for="${listboxId}" data-autoselect="true">
+          <auto-complete src="/search" for="popup" data-autoselect="true">
             <input type="text">
             <ul id="popup"></ul>
             <div id="popup-feedback"></div>

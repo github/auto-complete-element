@@ -44,6 +44,7 @@ export default class Autocomplete {
 
     // if clearButton is not a button, make it one
     if (this.clearButton && this.clearButton.tagName.toLowerCase() !== 'button') {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const [tagName, ...otherAttributes] = this.clearButton.attributes
       const newClearButton = document.createElement('button')
       newClearButton.innerHTML = this.clearButton.innerHTML
@@ -93,7 +94,7 @@ export default class Autocomplete {
     this.input.value = ''
     this.container.value = ''
     this.input.focus()
-    this.container.dispatchEvent(new CustomEvent('clearend'))
+    this.updateFeedbackForScreenReaders(`Input cleared. Suggestions hidden.`)
   }
 
   onKeydown(event: KeyboardEvent): void {
