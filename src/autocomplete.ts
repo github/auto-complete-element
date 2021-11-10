@@ -1,7 +1,12 @@
 import type AutocompleteElement from './auto-complete-element'
 import debounce from './debounce'
 import {fragment} from './send'
-import {createOptionsHiddenString, createOptionsString, createOptionsWithAutoselectString, createSelectionString, ScreenReaderAccouncementConfig} from './screen-reader-announcements'
+import {
+  createOptionsHiddenString,
+  createOptionsString,
+  createOptionsWithAutoselectString,
+  createSelectionString
+} from './screen-reader-announcements'
 import Combobox from '@github/combobox-nav'
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -183,7 +188,9 @@ export default class Autocomplete {
         const [firstOption] = [...allNewOptions]
         const firstOptionValue = firstOption?.textContent
         if (this.autoselectEnabled && firstOptionValue) {
-          this.updateFeedbackForScreenReaders(createOptionsWithAutoselectString(numOptions.toString(), firstOptionValue))
+          this.updateFeedbackForScreenReaders(
+            createOptionsWithAutoselectString(numOptions.toString(), firstOptionValue)
+          )
         } else {
           this.updateFeedbackForScreenReaders(createOptionsString(numOptions.toString()))
         }
