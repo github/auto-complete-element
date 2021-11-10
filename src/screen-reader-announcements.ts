@@ -1,17 +1,21 @@
-const createAutoselectString = (firstOption: string) => {
+export const createAutoselectString = (firstOption: string) => {
   return `Press Enter to select ${firstOption}.`
 }
 
-const createOptionsString = (numOptions: string) => {
+export const createOptionsString = (numOptions: string) => {
   return `${numOptions} suggested options.`
 }
 
-const createOptionsHiddenString = () => {
+export const createOptionsHiddenString = () => {
   return `Suggestions hidden.`
 }
 
-const createSelectionString = (selectionText: string) => {
+export const createSelectionString = (selectionText: string) => {
   return `${selectionText} selected.`
+}
+
+export const createOptionsWithAutoselectString = (numOptions: string, firstOption: string) => {
+  return `${createOptionsString(numOptions)} ${createAutoselectString(firstOption)}`
 }
 
 type AnnouncementEvent = 'new-options' | 'selection' | 'options-hidden'
@@ -21,36 +25,36 @@ export interface ScreenReaderAccouncementConfig {
   numOptions?: number
   selectionText?: string
 }
-const getAnnouncementStringByEvent = (input: ScreenReaderAccouncementConfig): string => {
-  switch (input.event) {
-    case 'new-options': {
-      if (input.numOptions) {
-        const opts = createOptionsString(input.numOptions.toString())
-        if (input.firstOption) {
-          return `${opts} ${createAutoselectString(input.firstOption)}`
-        }
-        return opts
-      }
+// const getAnnouncementStringByEvent = (input: ScreenReaderAccouncementConfig): string => {
+//   switch (input.event) {
+//     case 'new-options': {
+//       if (input.numOptions) {
+//         const opts = createOptionsString(input.numOptions.toString())
+//         if (input.firstOption) {
+//           return `${opts} ${createAutoselectString(input.firstOption)}`
+//         }
+//         return opts
+//       }
 
-      return createOptionsString('No')
-    }
+//       return createOptionsString('No')
+//     }
 
-    case 'options-hidden': {
-      return createOptionsHiddenString()
-    }
+//     case 'options-hidden': {
+//       return createOptionsHiddenString()
+//     }
 
-    case 'selection': {
-      if (input.selectionText) {
-        return createSelectionString(input.selectionText)
-      }
+//     case 'selection': {
+//       if (input.selectionText) {
+//         return createSelectionString(input.selectionText)
+//       }
 
-      return ''
-    }
+//       return ''
+//     }
 
-    default: {
-      return ''
-    }
-  }
-}
+//     default: {
+//       return ''
+//     }
+//   }
+// }
 
-export default getAnnouncementStringByEvent
+// export default getAnnouncementStringByEvent

@@ -1,7 +1,7 @@
 import type AutocompleteElement from './auto-complete-element'
 import debounce from './debounce'
 import {fragment} from './send'
-import getAnnouncementStringByEvent, {ScreenReaderAccouncementConfig} from './screen-reader-announcements'
+import {createOptionsHiddenString, createOptionsString, createOptionsWithAutoselectString, createSelectionString, ScreenReaderAccouncementConfig} from './screen-reader-announcements'
 import Combobox from '@github/combobox-nav'
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -119,11 +119,11 @@ export default class Autocomplete {
     this.container.open = false
     if (selected instanceof HTMLAnchorElement) return
     const value = selected.getAttribute('data-autocomplete-value') || selected.textContent!
-    this.updateFeedbackForScreenReaders({event: 'selection', selectionText: selected.textContent || ''})
+    this.updateFeedbackForScreenReaders(createSelectionString(selected.textContent || ''))
     this.container.value = value
 
     if (!value) {
-      this.updateFeedbackForScreenReaders({event: 'options-hidden'})
+      this.updateFeedbackForScreenReaders(createOptionsHiddenString())
     }
   }
 
@@ -146,10 +146,10 @@ export default class Autocomplete {
     }
   }
 
-  updateFeedbackForScreenReaders(input: ScreenReaderAccouncementConfig): void {
+  updateFeedbackForScreenReaders(inputString: string): void {
     setTimeout(() => {
       if (this.feedback) {
-        this.feedback.innerHTML = getAnnouncementStringByEvent(input)
+        this.feedback.innerHTML = inputString
         this.container.dispatchEvent(new CustomEvent('sr-update'))
       }
     }, SCREEN_READER_DELAY)
@@ -180,13 +180,12 @@ export default class Autocomplete {
         const numOptions = allNewOptions.length
 
         // inform SR users of which element is "on-deck" so that it's clear what Enter will do
-        if (this.autoselectEnabled) {
-          const [firstOption] = [...allNewOptions]
-          const firstOptionValue = firstOption?.textContent
-
-          this.updateFeedbackForScreenReaders({event: 'new-options', firstOption: firstOptionValue, numOptions})
+        const [firstOption] = [...allNewOptions]
+        const firstOptionValue = firstOption?.textContent
+        if (this.autoselectEnabled && firstOptionValue) {
+          this.updateFeedbackForScreenReaders(createOptionsWithAutoselectString(numOptions.toString(), firstOptionValue))
         } else {
-          this.updateFeedbackForScreenReaders({event: 'new-options', numOptions})
+          this.updateFeedbackForScreenReaders(createOptionsString(numOptions.toString()))
         }
 
         this.container.open = hasResults
