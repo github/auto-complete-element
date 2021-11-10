@@ -17,3 +17,7 @@ export const createSelectionString = (selectionText: string): string => {
 export const createOptionsWithAutoselectString = (numOptions: string, firstOption: string): string => {
   return `${createOptionsString(numOptions)} ${createAutoselectString(firstOption)}`
 }
+
+export const createClearString = (): string => {
+  return `Input cleared. ${createOptionsHiddenString}`
+}

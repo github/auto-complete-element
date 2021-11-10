@@ -15,6 +15,7 @@ export default class Autocomplete {
   feedback: HTMLElement | null
   autoselectEnabled: boolean
   clientOptions: NodeListOf<HTMLElement> | null
+  clearButton: HTMLElement | null
 
   interactingWithList: boolean
 
@@ -30,6 +31,7 @@ export default class Autocomplete {
     this.combobox = new Combobox(input, results)
     this.feedback = document.getElementById(`${this.results.id}-feedback`)
     this.autoselectEnabled = autoselectEnabled
+    this.clearButton = document.getElementById(`${this.input.id || this.input.getAttribute('name')}-clear`)
 
     // check to see if there are any default options provided
     this.clientOptions = results.querySelectorAll('[role=option]')
@@ -38,6 +40,19 @@ export default class Autocomplete {
     if (this.feedback) {
       this.feedback.setAttribute('aria-live', 'assertive')
       this.feedback.setAttribute('aria-atomic', 'true')
+    }
+
+    // if clearButton is not a button, make it one
+    if (this.clearButton && this.clearButton.tagName.toLowerCase() !== 'button') {
+      const [tagName, ...otherAttributes] = this.clearButton.attributes
+      const newClearButton = document.createElement('button')
+      newClearButton.innerHTML = this.clearButton.innerHTML
+      newClearButton.id = this.clearButton.id
+      for (const attr of otherAttributes) {
+        newClearButton.setAttribute(attr.name, attr.value)
+      }
+      this.clearButton.parentNode?.replaceChild(newClearButton, this.clearButton)
+      this.clearButton = newClearButton
     }
 
     this.results.hidden = true
@@ -52,6 +67,7 @@ export default class Autocomplete {
     this.onInputFocus = this.onInputFocus.bind(this)
     this.onKeydown = this.onKeydown.bind(this)
     this.onCommit = this.onCommit.bind(this)
+    this.handleClear = this.handleClear.bind(this)
 
     this.input.addEventListener('keydown', this.onKeydown)
     this.input.addEventListener('focus', this.onInputFocus)
@@ -59,6 +75,7 @@ export default class Autocomplete {
     this.input.addEventListener('input', this.onInputChange)
     this.results.addEventListener('mousedown', this.onResultsMouseDown)
     this.results.addEventListener('combobox-commit', this.onCommit)
+    this.clearButton?.addEventListener('click', this.handleClear)
   }
 
   destroy(): void {
@@ -68,6 +85,15 @@ export default class Autocomplete {
     this.input.removeEventListener('input', this.onInputChange)
     this.results.removeEventListener('mousedown', this.onResultsMouseDown)
     this.results.removeEventListener('combobox-commit', this.onCommit)
+  }
+
+  handleClear(event: Event): void {
+    event.preventDefault()
+
+    this.input.value = ''
+    this.container.value = ''
+    this.input.focus()
+    this.container.dispatchEvent(new CustomEvent('clearend'))
   }
 
   onKeydown(event: KeyboardEvent): void {
