@@ -86,14 +86,13 @@ describe('auto-complete element', function () {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
       const feedback = container.querySelector(`#${listboxId}-feedback`)
-      const popup = container.querySelector(`#${listboxId}`)
 
       triggerInput(input, 'hub')
       await once(container, 'loadend')
       await once(container, 'sr-update')
 
       if (feedback) {
-        assert.equal(`${popup.children.length} suggested options.`, feedback.innerHTML)
+        assert.equal('5 suggested options.', feedback.innerHTML)
       }
     })
 
@@ -218,19 +217,14 @@ describe('auto-complete element', function () {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
       const feedback = container.querySelector(`#${listboxId}-feedback`)
-      const popup = container.querySelector(`#${listboxId}`)
 
       triggerInput(input, 'hub')
       await once(container, 'loadend')
 
       await once(container, 'sr-update')
-      const firstOption = popup.children[0].textContent
 
       if (feedback) {
-        assert.equal(
-          `${popup.children.length} suggested options. Press Enter to select ${firstOption}.`,
-          feedback.innerHTML
-        )
+        assert.equal(`5 suggested options. Press Enter to select first.`, feedback.innerHTML)
       }
     })
   })

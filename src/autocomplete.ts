@@ -28,14 +28,14 @@ export default class Autocomplete {
     container: AutocompleteElement,
     input: HTMLInputElement,
     results: HTMLElement,
-    autoselectEnabled?: boolean
+    autoselectEnabled = false
   ) {
     this.container = container
     this.input = input
     this.results = results
     this.combobox = new Combobox(input, results)
     this.feedback = document.getElementById(`${this.results.id}-feedback`)
-    this.autoselectEnabled = !!autoselectEnabled
+    this.autoselectEnabled = autoselectEnabled
 
     // check to see if there are any default options provided
     this.clientOptions = results.querySelectorAll('[role=option]')
@@ -81,12 +81,10 @@ export default class Autocomplete {
     if (event.key === 'Enter' && this.container.open && this.autoselectEnabled) {
       const firstOption = this.results.children[0]
       if (firstOption) {
-        if (firstOption) {
-          event.stopPropagation()
-          event.preventDefault()
+        event.stopPropagation()
+        event.preventDefault()
 
-          this.onCommit({target: firstOption})
-        }
+        this.onCommit({target: firstOption})
       }
     }
 
@@ -152,12 +150,14 @@ export default class Autocomplete {
   }
 
   updateFeedbackForScreenReaders(inputString: string): void {
-    setTimeout(() => {
-      if (this.feedback) {
-        this.feedback.innerHTML = inputString
-        this.container.dispatchEvent(new CustomEvent('sr-update'))
-      }
-    }, SCREEN_READER_DELAY)
+    if (this.feedback) {
+      setTimeout(() => {
+        if (this.feedback) {
+          this.feedback.innerHTML = inputString
+          this.container.dispatchEvent(new CustomEvent('sr-update'))
+        }
+        }, SCREEN_READER_DELAY)
+    }
   }
 
   fetchResults(): void {
@@ -185,7 +185,7 @@ export default class Autocomplete {
         const numOptions = allNewOptions.length
 
         // inform SR users of which element is "on-deck" so that it's clear what Enter will do
-        const [firstOption] = [...allNewOptions]
+        const [firstOption] = allNewOptions
         const firstOptionValue = firstOption?.textContent
         if (this.autoselectEnabled && firstOptionValue) {
           this.updateFeedbackForScreenReaders(

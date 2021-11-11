@@ -52,7 +52,18 @@
       </auto-complete>
       <button type="submit">Save</button>
     </form>
-    <!-- <script type="module" src="./dist/bundle.js"></script> -->
-    <script type="module" src="https://unpkg.com/@github/auto-complete-element@latest/dist/bundle.js"></script>
+
+    <!-- example without autoselect -->
+    <form>
+      <label id="robots-2-label">Robots 2</label>
+      <auto-complete src="/demo" for="items-2-popup" aria-labelledby="robots-2-label" >
+        <input name="robot" type="text" aria-labelledby="robots-2-label" autofocus>
+        <ul id="items-2-popup" aria-labelledby="robots-2-label"></ul>
+        <div id="items-2-popup-feedback" class="sr-only"></div>
+      </auto-complete>
+      <button type="submit">Save</button>
+    </form>
+    <script type="module" src="./dist/bundle.js"></script>
+    <!-- <script type="module" src="https://unpkg.com/@github/auto-complete-element@latest/dist/bundle.js"></script> -->
   </body>
 </html>
