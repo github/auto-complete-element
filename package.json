@@ -10,7 +10,7 @@
   "scripts": {
     "clean": "rm -rf dist",
     "example": "npm run build && cp ./dist/bundle.js ./examples/dist/bundle.js && http-server -c-1 ./examples",
-    "lint": "eslint . --fix --ext .ts,.js && tsc --noEmit",
+    "lint": "eslint . --ext .ts,.js && tsc --noEmit",
     "prebuild": "npm run clean && npm run lint",
     "build": "tsc && rollup -c",
     "pretest": "npm run build",
