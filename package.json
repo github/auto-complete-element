@@ -11,7 +11,7 @@
     "clean": "rm -rf dist",
     "example": "http-server -c-1 ./examples",
     "preexample": "mkdir -p ./examples/dist && npm run build && cp ./dist/bundle.js ./examples/dist/bundle.js",
-    "lint": "eslint . --fix --ext .ts,.js && tsc --noEmit",
+    "lint": "eslint . --ext .ts,.js && tsc --noEmit",
     "prebuild": "npm run clean && npm run lint",
     "build": "tsc && rollup -c",
     "pretest": "npm run build",
