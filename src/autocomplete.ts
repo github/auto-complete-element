@@ -156,7 +156,7 @@ export default class Autocomplete {
           this.feedback.innerHTML = inputString
           this.container.dispatchEvent(new CustomEvent('sr-update'))
         }
-        }, SCREEN_READER_DELAY)
+      }, SCREEN_READER_DELAY)
     }
   }
 
