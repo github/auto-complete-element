@@ -30,6 +30,18 @@ With a script tag:
 <auto-complete src="/users/search" for="users-popup">
   <input type="text">
   <ul id="users-popup"></ul>
+  <!--
+    Optional div for screen reader feedback. Note the ID matches the ul, but with -feedback appended.
+    Recommended: Use a "Screen Reader Only" class to position the element off the visual boundary of the page.
+  -->
+  <div id="users-popup-feedback" class="sr-only"></div>
+</auto-complete>
+```
+
+If you want to enable auto-select (pressing Enter in the input will select the first option), using the above example:
+```html
+<auto-complete data-autoselect="true" src="/users/search" for="users-popup">
+...
 </auto-complete>
 ```
 
