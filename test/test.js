@@ -1,5 +1,3 @@
-const listboxId = 'popup'
-
 describe('auto-complete element', function () {
   describe('element creation', function () {
     it('creates from document.createElement', function () {
@@ -19,8 +17,8 @@ describe('auto-complete element', function () {
         <div id="mocha-fixture">
           <auto-complete src="/search" for="popup">
             <input type="text">
-            <ul id="${listboxId}"></ul>
-            <div id="${listboxId}-feedback"></div>
+            <ul id="popup"></ul>
+            <div id="popup-feedback"></div>
           </auto-complete>
         </div>
       `
@@ -29,7 +27,7 @@ describe('auto-complete element', function () {
     it('requests html fragment', async function () {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
-      const popup = container.querySelector(`#${listboxId}`)
+      const popup = container.querySelector(`#popup`)
 
       triggerInput(input, 'hub')
       await once(container, 'loadend')
@@ -40,7 +38,7 @@ describe('auto-complete element', function () {
     it('respects arrow keys', async function () {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
-      const popup = container.querySelector(`#${listboxId}`)
+      const popup = container.querySelector(`#popup`)
 
       assert.isTrue(keydown(input, 'ArrowDown'))
       triggerInput(input, 'hub')
@@ -85,15 +83,13 @@ describe('auto-complete element', function () {
     it('summarizes the available options on keypress', async function () {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
-      const feedback = container.querySelector(`#${listboxId}-feedback`)
+      const feedback = container.querySelector(`#popup-feedback`)
 
       triggerInput(input, 'hub')
       await once(container, 'loadend')
-      await once(container, 'sr-update')
+      await waitForElementToChange(feedback)
 
-      if (feedback) {
-        assert.equal('5 suggested options.', feedback.innerHTML)
-      }
+      assert.equal('5 suggested options.', feedback.innerHTML)
     })
 
     it('commits on Enter', async function () {
@@ -114,7 +110,7 @@ describe('auto-complete element', function () {
     it('does not commit on disabled option', async function () {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
-      const popup = container.querySelector(`#${listboxId}`)
+      const popup = container.querySelector(`#popup`)
 
       triggerInput(input, 'hub')
       await once(container, 'loadend')
@@ -167,7 +163,7 @@ describe('auto-complete element', function () {
     it('closes on Escape', async function () {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
-      const popup = container.querySelector(`#${listboxId}`)
+      const popup = container.querySelector(`#popup`)
 
       triggerInput(input, 'hub')
       await once(container, 'loadend')
@@ -182,7 +178,7 @@ describe('auto-complete element', function () {
     it('opens and closes on alt + ArrowDown and alt + ArrowUp', async function () {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
-      const popup = container.querySelector(`#${listboxId}`)
+      const popup = container.querySelector(`#popup`)
 
       triggerInput(input, 'hub')
       await once(container, 'loadend')
@@ -206,8 +202,8 @@ describe('auto-complete element', function () {
         <div id="mocha-fixture">
           <auto-complete src="/search" for="popup" data-autoselect="true">
             <input type="text">
-            <ul id="${listboxId}"></ul>
-            <div id="${listboxId}-feedback"></div>
+            <ul id="popup"></ul>
+            <div id="popup-feedback"></div>
           </auto-complete>
         </div>
       `
@@ -216,19 +212,30 @@ describe('auto-complete element', function () {
     it('summarizes the available options and informs what will happen on Enter', async function () {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
-      const feedback = container.querySelector(`#${listboxId}-feedback`)
+      const feedback = container.querySelector(`#popup-feedback`)
 
       triggerInput(input, 'hub')
       await once(container, 'loadend')
+      await waitForElementToChange(feedback)
 
-      await once(container, 'sr-update')
-
-      if (feedback) {
-        assert.equal(`5 suggested options. Press Enter to select first.`, feedback.innerHTML)
-      }
+      assert.equal(`5 suggested options. Press Enter to select first.`, feedback.innerHTML)
     })
   })
 })
+
+function waitForElementToChange(el) {
+  return new Promise(resolve => {
+    const observer = new MutationObserver(mutations => {
+      for (const mutation of mutations) {
+        if (mutation.addedNodes.length > 0) {
+          observer.disconnect()
+          resolve()
+        }
+      }
+    })
+    observer.observe(el, {childList: true, subtree: true})
+  })
+}
 
 function once(element, eventName) {
   return new Promise(resolve => {

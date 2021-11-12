@@ -1,12 +1,6 @@
 import type AutocompleteElement from './auto-complete-element'
 import debounce from './debounce'
 import {fragment} from './send'
-import {
-  createOptionsHiddenString,
-  createOptionsString,
-  createOptionsWithAutoselectString,
-  createSelectionString
-} from './screen-reader-announcements'
 import Combobox from '@github/combobox-nav'
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -122,11 +116,11 @@ export default class Autocomplete {
     this.container.open = false
     if (selected instanceof HTMLAnchorElement) return
     const value = selected.getAttribute('data-autocomplete-value') || selected.textContent!
-    this.updateFeedbackForScreenReaders(createSelectionString(selected.textContent || ''))
+    this.updateFeedbackForScreenReaders(`${selected.textContent || ''} selected.`)
     this.container.value = value
 
     if (!value) {
-      this.updateFeedbackForScreenReaders(createOptionsHiddenString())
+      this.updateFeedbackForScreenReaders(`Suggestions hidden.`)
     }
   }
 
@@ -187,10 +181,10 @@ export default class Autocomplete {
         const firstOptionValue = firstOption?.textContent
         if (this.autoselectEnabled && firstOptionValue) {
           this.updateFeedbackForScreenReaders(
-            createOptionsWithAutoselectString(numOptions.toString(), firstOptionValue)
+            `${numOptions} suggested options. Press Enter to select ${firstOptionValue}.`
           )
         } else {
-          this.updateFeedbackForScreenReaders(createOptionsString(numOptions.toString()))
+          this.updateFeedbackForScreenReaders(`${numOptions} suggested options.`)
         }
 
         this.container.open = hasResults
