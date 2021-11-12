@@ -89,11 +89,9 @@ describe('auto-complete element', function () {
 
       triggerInput(input, 'hub')
       await once(container, 'loadend')
-      await once(container, 'sr-update')
+      await waitForElementToChange(feedback)
 
-      if (feedback) {
-        assert.equal('5 suggested options.', feedback.innerHTML)
-      }
+      assert.equal('5 suggested options.', feedback.innerHTML)
     })
 
     it('commits on Enter', async function () {
@@ -220,15 +218,26 @@ describe('auto-complete element', function () {
 
       triggerInput(input, 'hub')
       await once(container, 'loadend')
+      await waitForElementToChange(feedback)
 
-      await once(container, 'sr-update')
-
-      if (feedback) {
-        assert.equal(`5 suggested options. Press Enter to select first.`, feedback.innerHTML)
-      }
+      assert.equal(`5 suggested options. Press Enter to select first.`, feedback.innerHTML)
     })
   })
 })
+
+function waitForElementToChange(el) {
+  return new Promise(resolve => {
+    const observer = new MutationObserver(mutations => {
+      for (const mutation of mutations) {
+        if (mutation.addedNodes.length > 0) {
+          observer.disconnect()
+          resolve()
+        }
+      }
+    })
+    observer.observe(el, {childList: true, subtree: true})
+  })
+}
 
 function once(element, eventName) {
   return new Promise(resolve => {
