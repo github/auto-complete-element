@@ -150,14 +150,12 @@ export default class Autocomplete {
   }
 
   updateFeedbackForScreenReaders(inputString: string): void {
-    if (this.feedback) {
-      setTimeout(() => {
-        if (this.feedback) {
-          this.feedback.innerHTML = inputString
-          this.container.dispatchEvent(new CustomEvent('sr-update'))
-        }
-      }, SCREEN_READER_DELAY)
-    }
+    setTimeout(() => {
+      if (this.feedback) {
+        this.feedback.innerHTML = inputString
+        this.container.dispatchEvent(new CustomEvent('sr-update'))
+      }
+    }, SCREEN_READER_DELAY)
   }
 
   fetchResults(): void {

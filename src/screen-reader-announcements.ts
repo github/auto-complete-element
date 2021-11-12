@@ -1,19 +1,19 @@
-export const createAutoselectString = (firstOption: string): string => {
+export function createAutoselectString(firstOption: string): string {
   return `Press Enter to select ${firstOption}.`
 }
 
-export const createOptionsString = (numOptions: string): string => {
+export function createOptionsString(numOptions: string): string  {
   return `${numOptions} suggested options.`
 }
 
-export const createOptionsHiddenString = (): string => {
+export function createOptionsHiddenString(): string  {
   return `Suggestions hidden.`
 }
 
-export const createSelectionString = (selectionText: string): string => {
+export function createSelectionString(selectionText: string): string  {
   return `${selectionText} selected.`
 }
 
-export const createOptionsWithAutoselectString = (numOptions: string, firstOption: string): string => {
+export function createOptionsWithAutoselectString(numOptions: string, firstOption: string): string  {
   return `${createOptionsString(numOptions)} ${createAutoselectString(firstOption)}`
 }
