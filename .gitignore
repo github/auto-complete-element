@@ -1,2 +1,5 @@
 dist/
 node_modules/
+
+# copied bundle if the example is run locally
+examples/dist/bundle.js

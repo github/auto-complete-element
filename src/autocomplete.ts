@@ -3,19 +3,42 @@ import debounce from './debounce'
 import {fragment} from './send'
 import Combobox from '@github/combobox-nav'
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+const SCREEN_READER_DELAY = window.testScreenReaderDelay || 100
+
 export default class Autocomplete {
   container: AutocompleteElement
   input: HTMLInputElement
   results: HTMLElement
   combobox: Combobox
+  feedback: HTMLElement | null
+  autoselectEnabled: boolean
+  clientOptions: NodeListOf<HTMLElement> | null
 
   interactingWithList: boolean
 
-  constructor(container: AutocompleteElement, input: HTMLInputElement, results: HTMLElement) {
+  constructor(
+    container: AutocompleteElement,
+    input: HTMLInputElement,
+    results: HTMLElement,
+    autoselectEnabled = false
+  ) {
     this.container = container
     this.input = input
     this.results = results
     this.combobox = new Combobox(input, results)
+    this.feedback = document.getElementById(`${this.results.id}-feedback`)
+    this.autoselectEnabled = autoselectEnabled
+
+    // check to see if there are any default options provided
+    this.clientOptions = results.querySelectorAll('[role=option]')
+
+    // make sure feedback has all required aria attributes
+    if (this.feedback) {
+      this.feedback.setAttribute('aria-live', 'assertive')
+      this.feedback.setAttribute('aria-atomic', 'true')
+    }
 
     this.results.hidden = true
     this.input.setAttribute('autocomplete', 'off')
@@ -48,6 +71,17 @@ export default class Autocomplete {
   }
 
   onKeydown(event: KeyboardEvent): void {
+    // if autoselect is enabled, Enter key will select the first option
+    if (event.key === 'Enter' && this.container.open && this.autoselectEnabled) {
+      const firstOption = this.results.children[0]
+      if (firstOption) {
+        event.stopPropagation()
+        event.preventDefault()
+
+        this.onCommit({target: firstOption})
+      }
+    }
+
     if (event.key === 'Escape' && this.container.open) {
       this.container.open = false
       event.stopPropagation()
@@ -76,13 +110,18 @@ export default class Autocomplete {
     this.container.open = false
   }
 
-  onCommit({target}: Event): void {
+  onCommit({target}: Pick<Event, 'target'>): void {
     const selected = target
     if (!(selected instanceof HTMLElement)) return
     this.container.open = false
     if (selected instanceof HTMLAnchorElement) return
     const value = selected.getAttribute('data-autocomplete-value') || selected.textContent!
+    this.updateFeedbackForScreenReaders(`${selected.textContent || ''} selected.`)
     this.container.value = value
+
+    if (!value) {
+      this.updateFeedbackForScreenReaders(`Suggestions hidden.`)
+    }
   }
 
   onResultsMouseDown(): void {
@@ -90,6 +129,9 @@ export default class Autocomplete {
   }
 
   onInputChange(): void {
+    if (this.feedback && this.feedback.innerHTML) {
+      this.feedback.innerHTML = ''
+    }
     this.container.removeAttribute('value')
     this.fetchResults()
   }
@@ -99,6 +141,14 @@ export default class Autocomplete {
     for (const el of this.results.querySelectorAll('[role="option"]:not([id])')) {
       el.id = `${this.results.id}-option-${id++}`
     }
+  }
+
+  updateFeedbackForScreenReaders(inputString: string): void {
+    setTimeout(() => {
+      if (this.feedback) {
+        this.feedback.innerHTML = inputString
+      }
+    }, SCREEN_READER_DELAY)
   }
 
   fetchResults(): void {
@@ -121,7 +171,21 @@ export default class Autocomplete {
       .then(html => {
         this.results.innerHTML = html
         this.identifyOptions()
-        const hasResults = !!this.results.querySelector('[role="option"]')
+        const allNewOptions = this.results.querySelectorAll('[role="option"]')
+        const hasResults = !!allNewOptions.length
+        const numOptions = allNewOptions.length
+
+        // inform SR users of which element is "on-deck" so that it's clear what Enter will do
+        const [firstOption] = allNewOptions
+        const firstOptionValue = firstOption?.textContent
+        if (this.autoselectEnabled && firstOptionValue) {
+          this.updateFeedbackForScreenReaders(
+            `${numOptions} suggested options. Press Enter to select ${firstOptionValue}.`
+          )
+        } else {
+          this.updateFeedbackForScreenReaders(`${numOptions} suggested options.`)
+        }
+
         this.container.open = hasResults
         this.container.dispatchEvent(new CustomEvent('load'))
         this.container.dispatchEvent(new CustomEvent('loadend'))

@@ -18,6 +18,7 @@ describe('auto-complete element', function () {
           <auto-complete src="/search" for="popup">
             <input type="text">
             <ul id="popup"></ul>
+            <div id="popup-feedback"></div>
           </auto-complete>
         </div>
       `
@@ -77,6 +78,18 @@ describe('auto-complete element', function () {
       assert.equal('first', value)
       assert.equal(input, relatedTarget)
       assert.isTrue(keydown(input, 'Tab'))
+    })
+
+    it('summarizes the available options on keypress', async function () {
+      const container = document.querySelector('auto-complete')
+      const input = container.querySelector('input')
+      const feedback = container.querySelector(`#popup-feedback`)
+
+      triggerInput(input, 'hub')
+      await once(container, 'loadend')
+      await waitForElementToChange(feedback)
+
+      assert.equal('5 suggested options.', feedback.innerHTML)
     })
 
     it('commits on Enter', async function () {
@@ -182,7 +195,47 @@ describe('auto-complete element', function () {
       assert.isFalse(popup.hidden)
     })
   })
+
+  describe('autoselect enabled', () => {
+    beforeEach(function () {
+      document.body.innerHTML = `
+        <div id="mocha-fixture">
+          <auto-complete src="/search" for="popup" data-autoselect="true">
+            <input type="text">
+            <ul id="popup"></ul>
+            <div id="popup-feedback"></div>
+          </auto-complete>
+        </div>
+      `
+    })
+
+    it('summarizes the available options and informs what will happen on Enter', async function () {
+      const container = document.querySelector('auto-complete')
+      const input = container.querySelector('input')
+      const feedback = container.querySelector(`#popup-feedback`)
+
+      triggerInput(input, 'hub')
+      await once(container, 'loadend')
+      await waitForElementToChange(feedback)
+
+      assert.equal(`5 suggested options. Press Enter to select first.`, feedback.innerHTML)
+    })
+  })
 })
+
+function waitForElementToChange(el) {
+  return new Promise(resolve => {
+    const observer = new MutationObserver(mutations => {
+      for (const mutation of mutations) {
+        if (mutation.addedNodes.length > 0) {
+          observer.disconnect()
+          resolve()
+        }
+      }
+    })
+    observer.observe(el, {childList: true, subtree: true})
+  })
+}
 
 function once(element, eventName) {
   return new Promise(resolve => {

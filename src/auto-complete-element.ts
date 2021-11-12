@@ -13,7 +13,8 @@ export default class AutocompleteElement extends HTMLElement {
     const input = this.querySelector('input')
     const results = document.getElementById(listId)
     if (!(input instanceof HTMLInputElement) || !results) return
-    state.set(this, new Autocomplete(this, input, results))
+    const autoselectEnabled = this.getAttribute('data-autoselect') === 'true'
+    state.set(this, new Autocomplete(this, input, results, autoselectEnabled))
     results.setAttribute('role', 'listbox')
   }
 
