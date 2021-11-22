@@ -31,7 +31,7 @@ export default class Autocomplete {
     this.combobox = new Combobox(input, results)
     this.feedback = document.getElementById(`${this.results.id}-feedback`)
     this.autoselectEnabled = autoselectEnabled
-    this.clearButton = document.getElementById(`${this.input.id || this.input.getAttribute('name')}-clear`)
+    this.clearButton = document.getElementById(`${this.input.id || this.input.name}-clear`)
 
     // check to see if there are any default options provided
     this.clientOptions = results.querySelectorAll('[role=option]')
@@ -94,7 +94,7 @@ export default class Autocomplete {
     this.input.value = ''
     this.container.value = ''
     this.input.focus()
-    this.updateFeedbackForScreenReaders(`Input cleared. Suggestions hidden.`)
+    this.updateFeedbackForScreenReaders('Input cleared. Suggestions hidden.')
   }
 
   onKeydown(event: KeyboardEvent): void {
