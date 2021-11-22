@@ -94,7 +94,7 @@ export default class Autocomplete {
     this.input.value = ''
     this.container.value = ''
     this.input.focus()
-    this.updateFeedbackForScreenReaders(`Input cleared. Suggestions hidden.`)
+    this.updateFeedbackForScreenReaders('Input cleared. Suggestions hidden.')
   }
 
   onKeydown(event: KeyboardEvent): void {
