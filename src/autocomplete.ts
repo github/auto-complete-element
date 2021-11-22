@@ -56,6 +56,13 @@ export default class Autocomplete {
       this.clearButton = newClearButton
     }
 
+    // if clearButton doesn't have an accessible label, give it one
+    if (this.clearButton && !this.clearButton.getAttribute('aria-label')) {
+      const labelElem = document.querySelector(`label[for="${this.input.name}"`);
+      const label = labelElem?.innerHTML || this.input.getAttribute('aria-label') || '';
+      this.clearButton.setAttribute('aria-label', `clear ${label}`)
+    }
+
     this.results.hidden = true
     this.input.setAttribute('autocomplete', 'off')
     this.input.setAttribute('spellcheck', 'false')
@@ -94,7 +101,7 @@ export default class Autocomplete {
     this.input.value = ''
     this.container.value = ''
     this.input.focus()
-    this.updateFeedbackForScreenReaders('Input cleared. Suggestions hidden.')
+    this.updateFeedbackForScreenReaders('Suggestions hidden.')
   }
 
   onKeydown(event: KeyboardEvent): void {

@@ -39,7 +39,7 @@
   </head>
   <body>
     <form>
-      <label id="robots-label">Robots</label>
+      <label id="robots-label" for="robot">Robots</label>
       <!-- To enable auto-select (select first on Enter), use data-autoselect="true" -->
       <auto-complete src="/demo" for="items-popup" aria-labelledby="robots-label" data-autoselect="true">
         <input name="robot" type="text" aria-labelledby="robots-label" autofocus>
@@ -57,10 +57,10 @@
 
     <!-- example where clear button uses input id -->
     <form>
-      <label id="robots-a-label">Robots-a</label>
+      <label id="robots-a-label" for="robot-a">Robots (using Input ID)</label>
       <!-- To enable auto-select (select first on Enter), use data-autoselect="true" -->
-      <auto-complete src="/demo" for="items-popup" aria-labelledby="robots-a-label" data-autoselect="true">
-        <input id="robot-a" name="robot-a" type="search" aria-labelledby="robots-a-label" autofocus>
+      <auto-complete src="/demo" for="items-a-popup" aria-labelledby="robots-a-label" data-autoselect="true">
+        <input id="robot-a" name="robot-a" type="text" aria-labelledby="robots-a-label" autofocus>
         <!-- if a clear button is passed in, recommended to be *before* UL elements to avoid conflicting with their blur logic -->
         <button id="robot-a-clear">x</button>
         <ul id="items-a-popup" aria-labelledby="robots-a-label"></ul>
@@ -75,7 +75,7 @@
 
     <!-- example without autoselect -->
     <form>
-      <label id="robots-2-label">Robots 2</label>
+      <label id="robots-2-label" for="robot-2">Robots (without autoselect on enter)</label>
       <auto-complete src="/demo" for="items-2-popup" aria-labelledby="robots-2-label" >
         <input name="robot-2" type="text" aria-labelledby="robots-2-label" autofocus>
         <ul id="items-2-popup" aria-labelledby="robots-2-label"></ul>
