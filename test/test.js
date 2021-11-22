@@ -224,7 +224,7 @@ describe('auto-complete element', function () {
       assert.equal(input.value, '')
       assert.equal(container.value, '')
       await waitForElementToChange(feedback)
-      assert.equal('Input cleared. Suggestions hidden.', feedback.innerHTML)
+      assert.equal('Suggestions hidden.', feedback.innerHTML)
     })
 
     it('replaces a non-button element with a button one', async () => {

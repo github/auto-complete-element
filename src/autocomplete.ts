@@ -58,8 +58,8 @@ export default class Autocomplete {
 
     // if clearButton doesn't have an accessible label, give it one
     if (this.clearButton && !this.clearButton.getAttribute('aria-label')) {
-      const labelElem = document.querySelector(`label[for="${this.input.name}"`);
-      const label = labelElem?.innerHTML || this.input.getAttribute('aria-label') || '';
+      const labelElem = document.querySelector(`label[for="${this.input.name}"`)
+      const label = labelElem?.innerHTML || this.input.getAttribute('aria-label') || ''
       this.clearButton.setAttribute('aria-label', `clear ${label}`)
     }
 
