@@ -227,23 +227,23 @@ describe('auto-complete element', function () {
       assert.equal('Suggestions hidden.', feedback.innerHTML)
     })
 
-    it('replaces a non-button element with a button one', async () => {
-      document.body.innerHTML = `
-        <div id="mocha-fixture">
-          <auto-complete src="/search" for="popup" data-autoselect="true">
-            <input name="example" type="text">
-            <span id="example-clear">x</span>
-            <ul id="popup"></ul>
-            <div id="popup-feedback"></div>
-          </auto-complete>
-        </div>
-      `
-      const container = document.querySelector('auto-complete')
-      const input = container.querySelector('input')
-      triggerInput(input, 'hub')
-      await once(container, 'loadend')
-      const clearButton = document.getElementById('example-clear')
-      assert.equal(clearButton.tagName, 'BUTTON')
+    it('throws an error if a non-button element is provided', async () => {
+      function buildInvalidButton() {
+        document.body.innerHTML = `
+          <div id="mocha-fixture">
+            <auto-complete src="/search" for="popup" data-autoselect="true">
+              <input name="example" type="text">
+              <span id="example-clear">x</span>
+              <ul id="popup"></ul>
+              <div id="popup-feedback"></div>
+            </auto-complete>
+          </div>
+        `
+      }
+      assert.throws(
+        buildInvalidButton,
+        new Error('Accessibility violation: SPAN provided for clear button. Please use a "button" element.')
+      )
     })
   })
 

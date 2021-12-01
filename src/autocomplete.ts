@@ -51,14 +51,12 @@ export default class Autocomplete {
       buttonError.textContent = buttonErrorText
       this.clearButton.parentNode?.replaceChild(buttonError, this.clearButton)
       this.clearButton = buttonError
-      // eslint-disable-next-line no-console
-      console.log(this.clearButton)
       throw new Error(buttonErrorMessage)
     }
 
     // if clearButton doesn't have an accessible label, give it one
     if (this.clearButton && !this.clearButton.getAttribute('aria-label')) {
-      const labelElem = document.querySelector(`label[for="${this.input.name}"`)
+      const labelElem = document.querySelector(`label[for="${this.input.name}"]`)
       const label = labelElem?.innerHTML || this.input.getAttribute('aria-label') || ''
       this.clearButton.setAttribute('aria-label', `clear ${label}`)
     }
