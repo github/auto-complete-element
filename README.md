@@ -33,6 +33,8 @@ With a script tag:
     Optional clear button:
     - id must match the id of the input or the name of the input plus "-clear"
     - recommended to be *before* UL elements to avoid conflicting with their blur logic
+    
+    Please see Note below on this button for more details
   -->
   <button id="users-clear">X</button>
   <ul id="users-popup"></ul>
@@ -66,6 +68,12 @@ item whose display text needs to be different:
 ```html
 <li role="option" data-autocomplete-value="bb8">BB-8 (astromech)</li>
 ```
+
+### A Note on Clear button
+While `input type="search"` comes with an `x` that clears the content of the field and refocuses it on many browsers, the implementation for this control is not keyboard accessible, and so we've opted to enable a customizable clear button so that your keyboard users will be able to interact with it.
+
+As an example:
+> In Chrome, this 'x' isn't a button but a div with a pseudo="-webkit-search-cancel-button". It doesn't have a tab index or a way to navigate to it without a mouse. Additionally, this control is only visible on mouse hover.
 
 ## Attributes
 
