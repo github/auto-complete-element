@@ -99,6 +99,7 @@ export default class Autocomplete {
     this.input.value = ''
     this.container.value = ''
     this.input.focus()
+    this.input.dispatchEvent(new Event('change'))
     this.updateFeedbackForScreenReaders('Suggestions hidden.')
   }
 
