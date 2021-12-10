@@ -11,11 +11,12 @@
     "clean": "rm -rf dist",
     "example": "http-server -c-1 ./examples",
     "preexample": "mkdir -p ./examples/dist && npm run build && cp ./dist/bundle.js ./examples/dist/bundle.js",
-    "lint": "eslint . --ext .ts,.js && tsc --noEmit",
+    "lint": "eslint . --fix --ext .ts,.js && tsc --noEmit",
     "prebuild": "npm run clean && npm run lint",
     "build": "tsc && rollup -c",
     "pretest": "npm run build",
     "test": "karma start test/karma.config.cjs",
+    "test:helpers": "mocha -r ts-node/register test/**/*.test.ts",
     "prepublishOnly": "npm run build",
     "postpublish": "npm publish --ignore-scripts --@github:registry='https://npm.pkg.github.com'"
   },
@@ -28,7 +29,10 @@
     "dist"
   ],
   "dependencies": {
-    "@github/combobox-nav": "^2.0.2"
+    "@github/combobox-nav": "^2.0.2",
+    "@types/jsdom": "^16.2.13",
+    "jsdom": "^19.0.0",
+    "ts-node": "^10.4.0"
   },
   "devDependencies": {
     "@github/prettier-config": "0.0.4",

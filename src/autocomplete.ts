@@ -43,15 +43,17 @@ export default class Autocomplete {
     }
 
     // if clearButton is not a button, show error
-    if (this.clearButton && this.clearButton.tagName.toLowerCase() !== 'button') {
+    if (this.clearButton && !(this.clearButton instanceof HTMLButtonElement)) {
       const buttonErrorMessage = `Accessibility violation: ${this.clearButton.tagName} provided for clear button. Please use a "button" element.`
       const buttonErrorText = '\u26a0 Error: See console'
       const buttonError = document.createElement('span')
       buttonError.setAttribute('style', 'color:#92140C')
+      buttonError.id = `${this.input.id || this.input.name}-error`
       buttonError.textContent = buttonErrorText
       this.clearButton.parentNode?.replaceChild(buttonError, this.clearButton)
       this.clearButton = buttonError
-      throw new Error(buttonErrorMessage)
+      // eslint-disable-next-line no-console
+      console.error(buttonErrorMessage)
     }
 
     // if clearButton doesn't have an accessible label, give it one
