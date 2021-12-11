@@ -89,7 +89,7 @@ describe('auto-complete element', function () {
       await once(container, 'loadend')
       await waitForElementToChange(feedback)
 
-      assert.equal('5 suggested options.', feedback.innerHTML)
+      assert.equal('5 results.', feedback.innerHTML)
     })
 
     it('commits on Enter', async function () {
@@ -224,26 +224,8 @@ describe('auto-complete element', function () {
       assert.equal(input.value, '')
       assert.equal(container.value, '')
       await waitForElementToChange(feedback)
-      assert.equal('Suggestions hidden.', feedback.innerHTML)
-    })
-
-    it('throws an error if a non-button element is provided', async () => {
-      function buildInvalidButton() {
-        document.body.innerHTML = `
-          <div id="mocha-fixture">
-            <auto-complete src="/search" for="popup" data-autoselect="true">
-              <input name="example" type="text">
-              <span id="example-clear">x</span>
-              <ul id="popup"></ul>
-              <div id="popup-feedback"></div>
-            </auto-complete>
-          </div>
-        `
-      }
-      assert.throws(
-        buildInvalidButton,
-        new Error('Accessibility violation: SPAN provided for clear button. Please use a "button" element.')
-      )
+      assert.equal('Results hidden.', feedback.innerHTML)
+      assert.equal(document.activeElement, input)
     })
   })
 
@@ -269,7 +251,7 @@ describe('auto-complete element', function () {
       await once(container, 'loadend')
       await waitForElementToChange(feedback)
 
-      assert.equal(`5 suggested options. Press Enter to select first.`, feedback.innerHTML)
+      assert.equal(`5 results. first is the top result: Press Enter to activate.`, feedback.innerHTML)
     })
   })
 })

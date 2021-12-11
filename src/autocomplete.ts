@@ -38,30 +38,25 @@ export default class Autocomplete {
 
     // make sure feedback has all required aria attributes
     if (this.feedback) {
-      this.feedback.setAttribute('aria-live', 'assertive')
+      this.feedback.setAttribute('aria-live', 'polite')
       this.feedback.setAttribute('aria-atomic', 'true')
-    }
-
-    // if clearButton is not a button, show error
-    if (this.clearButton && this.clearButton.tagName.toLowerCase() !== 'button') {
-      const buttonErrorMessage = `Accessibility violation: ${this.clearButton.tagName} provided for clear button. Please use a "button" element.`
-      const buttonErrorText = '\u26a0 Error: See console'
-      const buttonError = document.createElement('span')
-      buttonError.setAttribute('style', 'color:#92140C')
-      buttonError.textContent = buttonErrorText
-      this.clearButton.parentNode?.replaceChild(buttonError, this.clearButton)
-      this.clearButton = buttonError
-      throw new Error(buttonErrorMessage)
     }
 
     // if clearButton doesn't have an accessible label, give it one
     if (this.clearButton && !this.clearButton.getAttribute('aria-label')) {
       const labelElem = document.querySelector(`label[for="${this.input.name}"]`)
-      const label = labelElem?.textContent || this.input.getAttribute('aria-label') || ''
-      this.clearButton.setAttribute('aria-label', `clear ${label}`)
+      this.clearButton.setAttribute('aria-label', `clear:`)
+      this.clearButton.setAttribute('aria-labelledby', `${this.clearButton.id} ${labelElem?.id || ''}`)
+    }
+
+    // initialize with the input being expanded=false
+    if (!this.input.getAttribute('aria-expanded')) {
+      this.input.setAttribute('aria-expanded', 'false')
     }
 
     this.results.hidden = true
+    // @jscholes recommends a generic "results" label as the results are already related to the combobox, which is properly labelled
+    this.results.setAttribute('aria-label', 'results')
     this.input.setAttribute('autocomplete', 'off')
     this.input.setAttribute('spellcheck', 'false')
 
@@ -96,11 +91,16 @@ export default class Autocomplete {
   handleClear(event: Event): void {
     event.preventDefault()
 
+    if (this.input.getAttribute('aria-expanded') === 'true') {
+      this.input.setAttribute('aria-expanded', 'false')
+      this.updateFeedbackForScreenReaders('Results hidden.')
+    }
+
     this.input.value = ''
     this.container.value = ''
     this.input.focus()
     this.input.dispatchEvent(new Event('change'))
-    this.updateFeedbackForScreenReaders('Suggestions hidden.')
+    this.container.open = false
   }
 
   onKeydown(event: KeyboardEvent): void {
@@ -153,7 +153,7 @@ export default class Autocomplete {
     this.container.value = value
 
     if (!value) {
-      this.updateFeedbackForScreenReaders(`Suggestions hidden.`)
+      this.updateFeedbackForScreenReaders(`Results hidden.`)
     }
   }
 
@@ -208,15 +208,15 @@ export default class Autocomplete {
         const hasResults = !!allNewOptions.length
         const numOptions = allNewOptions.length
 
-        // inform SR users of which element is "on-deck" so that it's clear what Enter will do
         const [firstOption] = allNewOptions
         const firstOptionValue = firstOption?.textContent
         if (this.autoselectEnabled && firstOptionValue) {
+          // inform SR users of which element is "on-deck" so that it's clear what Enter will do
           this.updateFeedbackForScreenReaders(
-            `${numOptions} suggested options. Press Enter to select ${firstOptionValue}.`
+            `${numOptions} results. ${firstOptionValue} is the top result: Press Enter to activate.`
           )
         } else {
-          this.updateFeedbackForScreenReaders(`${numOptions} suggested options.`)
+          this.updateFeedbackForScreenReaders(`${numOptions || 'No'} results.`)
         }
 
         this.container.open = hasResults
