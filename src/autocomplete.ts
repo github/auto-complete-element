@@ -3,9 +3,27 @@ import debounce from './debounce'
 import {fragment} from './send'
 import Combobox from '@github/combobox-nav'
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-const SCREEN_READER_DELAY = window.testScreenReaderDelay || 100
+// @jscholes:
+/* clear button */
+// ensure "suggestions hidden" only fires if the suggestions were visible
+
+/* other */
+// this autopopulation with the value instead of the label of the option ??
+// disabled options shouldn't happen
+// "As soon as you move focus from the control, the list should hide"
+
+/*
+This autocomplete behavior may not be relevant everywhere.
+
+Label dropdown case
+- add tabindex=0 to listbox
+- remove aria-expanded
+- remove combobox role
+** doesn't get the value in the input itself
+
+*/
+
+const SCREEN_READER_DELAY = 300
 
 export default class Autocomplete {
   container: AutocompleteElement
@@ -38,32 +56,24 @@ export default class Autocomplete {
 
     // make sure feedback has all required aria attributes
     if (this.feedback) {
-      this.feedback.setAttribute('aria-live', 'assertive')
+      // this.feedback.setAttribute('aria-live', 'assertive')
+      this.feedback.setAttribute('aria-live', 'polite')
       this.feedback.setAttribute('aria-atomic', 'true')
-    }
-
-    // if clearButton is not a button, show error
-    if (this.clearButton && !(this.clearButton instanceof HTMLButtonElement)) {
-      const buttonErrorMessage = `Accessibility violation: ${this.clearButton.tagName} provided for clear button. Please use a "button" element.`
-      const buttonErrorText = '\u26a0 Error: See console'
-      const buttonError = document.createElement('span')
-      buttonError.setAttribute('style', 'color:#92140C')
-      buttonError.id = `${this.input.id || this.input.name}-error`
-      buttonError.textContent = buttonErrorText
-      this.clearButton.parentNode?.replaceChild(buttonError, this.clearButton)
-      this.clearButton = buttonError
-      // eslint-disable-next-line no-console
-      console.error(buttonErrorMessage)
     }
 
     // if clearButton doesn't have an accessible label, give it one
     if (this.clearButton && !this.clearButton.getAttribute('aria-label')) {
       const labelElem = document.querySelector(`label[for="${this.input.name}"]`)
-      const label = labelElem?.innerHTML || this.input.getAttribute('aria-label') || ''
-      this.clearButton.setAttribute('aria-label', `clear ${label}`)
+      this.clearButton.setAttribute('aria-label', `clear:`)
+      this.clearButton.setAttribute('aria-labelledby', `${this.clearButton.id} ${labelElem?.id || ''}`)
     }
 
+    if (!this.input.getAttribute('aria-expanded')) {
+      this.input.setAttribute('aria-expanded', 'false')
+    }
+    
     this.results.hidden = true
+    this.results.setAttribute('aria-label', 'results')
     this.input.setAttribute('autocomplete', 'off')
     this.input.setAttribute('spellcheck', 'false')
 
@@ -101,7 +111,12 @@ export default class Autocomplete {
     this.input.value = ''
     this.container.value = ''
     this.input.focus()
-    this.updateFeedbackForScreenReaders('Suggestions hidden.')
+    
+    if (this.input.getAttribute('aria-expanded') === 'true') {
+      this.container.open = false
+      this.input.setAttribute('aria-expanded', 'false')
+      this.updateFeedbackForScreenReaders('Results hidden.')
+    }
   }
 
   onKeydown(event: KeyboardEvent): void {
@@ -154,7 +169,7 @@ export default class Autocomplete {
     this.container.value = value
 
     if (!value) {
-      this.updateFeedbackForScreenReaders(`Suggestions hidden.`)
+      this.updateFeedbackForScreenReaders(`Results hidden.`)
     }
   }
 
@@ -209,15 +224,15 @@ export default class Autocomplete {
         const hasResults = !!allNewOptions.length
         const numOptions = allNewOptions.length
 
-        // inform SR users of which element is "on-deck" so that it's clear what Enter will do
         const [firstOption] = allNewOptions
         const firstOptionValue = firstOption?.textContent
         if (this.autoselectEnabled && firstOptionValue) {
+          // inform SR users of which element is "on-deck" so that it's clear what Enter will do
           this.updateFeedbackForScreenReaders(
-            `${numOptions} suggested options. Press Enter to select ${firstOptionValue}.`
+            `${numOptions} results. ${firstOptionValue} is the top result: Press Enter to activate.`
           )
         } else {
-          this.updateFeedbackForScreenReaders(`${numOptions} suggested options.`)
+          this.updateFeedbackForScreenReaders(`${numOptions || 0} results.`)
         }
 
         this.container.open = hasResults

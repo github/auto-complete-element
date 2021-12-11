@@ -12,6 +12,12 @@ declare global {
   }
 }
 
+/**
+ * TODO: return an object like { isValid: boolean, errorMessage?: string } so it's easy to see why it's valid / invalid
+ * 
+ * @param htmlString 
+ * @returns 
+ */
 function validateDOMUsage(htmlString: string): boolean {
   const dom = new JSDOM(htmlString)
   const {document} = dom.window

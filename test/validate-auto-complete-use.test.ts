@@ -24,5 +24,5 @@ describe('validateDOMUsage', function () {
     assert.equal(validateDOMUsage(testString), false)
   })
 
-  it('returns true otherwise', function () {})
+  // it('returns true otherwise', function () {})
 })

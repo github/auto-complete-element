@@ -45,7 +45,7 @@
         <input name="robot" type="text" aria-labelledby="robots-label" autofocus>
         <!-- if a clear button is passed in, recommended to be *before* UL elements to avoid conflicting with their blur logic -->
         <button id="robot-clear">x</button>
-        <ul id="items-popup" aria-labelledby="robots-label"></ul>
+        <ul id="items-popup"></ul>
         <!-- For built-in screen-reader announcements:
           - Note the ID is the same as the <ul> with "feedback" appended
           - Also note that aria attributes will be added programmatically if they aren't set correctly  
@@ -63,7 +63,7 @@
         <input id="robot-a" name="robot-a" type="text" aria-labelledby="robots-a-label" autofocus>
         <!-- if a clear button is passed in, recommended to be *before* UL elements to avoid conflicting with their blur logic -->
         <button id="robot-a-clear">x</button>
-        <ul id="items-a-popup" aria-labelledby="robots-a-label"></ul>
+        <ul id="items-a-popup"></ul>
         <!-- For built-in screen-reader announcements:
           - Note the ID is the same as the <ul> with "feedback" appended
           - Also note that aria attributes will be added programmatically if they aren't set correctly  
@@ -78,12 +78,12 @@
       <label id="robots-2-label" for="robot-2">Robots (without autoselect on enter)</label>
       <auto-complete src="/demo" for="items-2-popup" aria-labelledby="robots-2-label" >
         <input name="robot-2" type="text" aria-labelledby="robots-2-label" autofocus>
-        <ul id="items-2-popup" aria-labelledby="robots-2-label"></ul>
+        <ul id="items-2-popup"></ul>
         <div id="items-2-popup-feedback" class="sr-only"></div>
       </auto-complete>
       <button type="submit">Save</button>
     </form>
-    <!-- <script type="module" src="./dist/bundle.js"></script> -->
-    <script type="module" src="https://unpkg.com/@github/auto-complete-element@latest/dist/bundle.js"></script>
+    <script type="module" src="./dist/bundle.js"></script>
+    <!-- <script type="module" src="https://unpkg.com/@github/auto-complete-element@latest/dist/bundle.js"></script> -->
   </body>
 </html>
