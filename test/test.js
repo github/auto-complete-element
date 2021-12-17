@@ -89,7 +89,7 @@ describe('auto-complete element', function () {
       await once(container, 'loadend')
       await waitForElementToChange(feedback)
 
-      assert.equal('5 suggested options.', feedback.innerHTML)
+      assert.equal('5 results.', feedback.innerHTML)
     })
 
     it('commits on Enter', async function () {
@@ -196,6 +196,39 @@ describe('auto-complete element', function () {
     })
   })
 
+  describe('clear button provided', () => {
+    it('clears the input value on click and gives focus back to the input', async () => {
+      document.body.innerHTML = `
+        <div id="mocha-fixture">
+          <auto-complete src="/search" for="popup" data-autoselect="true">
+            <input id="example" type="text">
+            <button id="example-clear">x</button>
+            <ul id="popup"></ul>
+            <div id="popup-feedback"></div>
+          </auto-complete>
+        </div>
+      `
+
+      const container = document.querySelector('auto-complete')
+      const input = container.querySelector('input')
+      const clearButton = document.getElementById('example-clear')
+      const feedback = container.querySelector(`#popup-feedback`)
+
+      triggerInput(input, 'hub')
+      await once(container, 'loadend')
+
+      assert.equal(input.value, 'hub')
+      await waitForElementToChange(feedback)
+
+      clearButton.click()
+      assert.equal(input.value, '')
+      assert.equal(container.value, '')
+      await waitForElementToChange(feedback)
+      assert.equal('Results hidden.', feedback.innerHTML)
+      assert.equal(document.activeElement, input)
+    })
+  })
+
   describe('autoselect enabled', () => {
     beforeEach(function () {
       document.body.innerHTML = `
@@ -218,7 +251,7 @@ describe('auto-complete element', function () {
       await once(container, 'loadend')
       await waitForElementToChange(feedback)
 
-      assert.equal(`5 suggested options. Press Enter to select first.`, feedback.innerHTML)
+      assert.equal(`5 results. first is the top result: Press Enter to activate.`, feedback.innerHTML)
     })
   })
 })

@@ -15,6 +15,7 @@ export default class Autocomplete {
   feedback: HTMLElement | null
   autoselectEnabled: boolean
   clientOptions: NodeListOf<HTMLElement> | null
+  clearButton: HTMLElement | null
 
   interactingWithList: boolean
 
@@ -30,17 +31,32 @@ export default class Autocomplete {
     this.combobox = new Combobox(input, results)
     this.feedback = document.getElementById(`${this.results.id}-feedback`)
     this.autoselectEnabled = autoselectEnabled
+    this.clearButton = document.getElementById(`${this.input.id || this.input.name}-clear`)
 
     // check to see if there are any default options provided
     this.clientOptions = results.querySelectorAll('[role=option]')
 
     // make sure feedback has all required aria attributes
     if (this.feedback) {
-      this.feedback.setAttribute('aria-live', 'assertive')
+      this.feedback.setAttribute('aria-live', 'polite')
       this.feedback.setAttribute('aria-atomic', 'true')
     }
 
+    // if clearButton doesn't have an accessible label, give it one
+    if (this.clearButton && !this.clearButton.getAttribute('aria-label')) {
+      const labelElem = document.querySelector(`label[for="${this.input.name}"]`)
+      this.clearButton.setAttribute('aria-label', `clear:`)
+      this.clearButton.setAttribute('aria-labelledby', `${this.clearButton.id} ${labelElem?.id || ''}`)
+    }
+
+    // initialize with the input being expanded=false
+    if (!this.input.getAttribute('aria-expanded')) {
+      this.input.setAttribute('aria-expanded', 'false')
+    }
+
     this.results.hidden = true
+    // @jscholes recommends a generic "results" label as the results are already related to the combobox, which is properly labelled
+    this.results.setAttribute('aria-label', 'results')
     this.input.setAttribute('autocomplete', 'off')
     this.input.setAttribute('spellcheck', 'false')
 
@@ -52,6 +68,7 @@ export default class Autocomplete {
     this.onInputFocus = this.onInputFocus.bind(this)
     this.onKeydown = this.onKeydown.bind(this)
     this.onCommit = this.onCommit.bind(this)
+    this.handleClear = this.handleClear.bind(this)
 
     this.input.addEventListener('keydown', this.onKeydown)
     this.input.addEventListener('focus', this.onInputFocus)
@@ -59,6 +76,7 @@ export default class Autocomplete {
     this.input.addEventListener('input', this.onInputChange)
     this.results.addEventListener('mousedown', this.onResultsMouseDown)
     this.results.addEventListener('combobox-commit', this.onCommit)
+    this.clearButton?.addEventListener('click', this.handleClear)
   }
 
   destroy(): void {
@@ -68,6 +86,21 @@ export default class Autocomplete {
     this.input.removeEventListener('input', this.onInputChange)
     this.results.removeEventListener('mousedown', this.onResultsMouseDown)
     this.results.removeEventListener('combobox-commit', this.onCommit)
+  }
+
+  handleClear(event: Event): void {
+    event.preventDefault()
+
+    if (this.input.getAttribute('aria-expanded') === 'true') {
+      this.input.setAttribute('aria-expanded', 'false')
+      this.updateFeedbackForScreenReaders('Results hidden.')
+    }
+
+    this.input.value = ''
+    this.container.value = ''
+    this.input.focus()
+    this.input.dispatchEvent(new Event('change'))
+    this.container.open = false
   }
 
   onKeydown(event: KeyboardEvent): void {
@@ -120,7 +153,7 @@ export default class Autocomplete {
     this.container.value = value
 
     if (!value) {
-      this.updateFeedbackForScreenReaders(`Suggestions hidden.`)
+      this.updateFeedbackForScreenReaders(`Results hidden.`)
     }
   }
 
@@ -175,15 +208,15 @@ export default class Autocomplete {
         const hasResults = !!allNewOptions.length
         const numOptions = allNewOptions.length
 
-        // inform SR users of which element is "on-deck" so that it's clear what Enter will do
         const [firstOption] = allNewOptions
         const firstOptionValue = firstOption?.textContent
         if (this.autoselectEnabled && firstOptionValue) {
+          // inform SR users of which element is "on-deck" so that it's clear what Enter will do
           this.updateFeedbackForScreenReaders(
-            `${numOptions} suggested options. Press Enter to select ${firstOptionValue}.`
+            `${numOptions} results. ${firstOptionValue} is the top result: Press Enter to activate.`
           )
         } else {
-          this.updateFeedbackForScreenReaders(`${numOptions} suggested options.`)
+          this.updateFeedbackForScreenReaders(`${numOptions || 'No'} results.`)
         }
 
         this.container.open = hasResults
