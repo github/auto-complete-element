@@ -1,3 +1,5 @@
+process.env.CHROME_BIN = require('chromium').path
+
 function completer(request, response, next) {
   if (request.method === 'GET' && request.url.startsWith('/search?q=hub')) {
     response.writeHead(200)
@@ -13,10 +15,13 @@ function completer(request, response, next) {
   next()
 }
 
-module.exports = function(config) {
+module.exports = function (config) {
   config.set({
     frameworks: ['mocha', 'chai'],
-    files: [{pattern: '../dist/bundle.js', type: 'module'}, {pattern: 'test.js', type: 'module'}],
+    files: [
+      {pattern: '../dist/bundle.js', type: 'module'},
+      {pattern: 'test.js', type: 'module'}
+    ],
     reporters: ['mocha'],
     port: 9876,
     colors: true,
