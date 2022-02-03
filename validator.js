@@ -2,7 +2,7 @@
  * see https://github.com/dequelabs/axe-core/blob/develop/doc/rule-descriptions.md
  *
  * must have input
- * 
+ *
  * 'aria-command-name' maybe
  * if element provided with *-clear, must be button element
  *
@@ -14,12 +14,10 @@
  */
 const axeValidationRules = {}
 
-function ourFunFunction () {
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+function ourFunFunction() {
   return false
 }
-
-
-
 
 export default {
   axeValidationRules,

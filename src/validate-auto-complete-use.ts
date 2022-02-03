@@ -24,7 +24,8 @@ function validateDOMUsage(htmlString: string): {isValid: boolean; errorMessage?:
 
   if (!document.getElementsByTagName('INPUT').length) {
     // return false
-    console.log("HELLO")
+    // eslint-disable-next-line no-console
+    console.log('HELLO')
     return {
       isValid: false,
       errorMessage: 'no input element found'
@@ -45,9 +46,3 @@ function validateDOMUsage(htmlString: string): {isValid: boolean; errorMessage?:
 }
 
 export default validateDOMUsage
-
-
-
-
-
-
