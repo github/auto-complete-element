@@ -19,6 +19,7 @@ module.exports = function (config) {
     files: [
       {pattern: '../dist/bundle.js', type: 'module'},
       {pattern: 'test.js', type: 'module'},
+      // TODO: To get our tests to run - should probably update the pattern to a regex looking for tests
       {pattern: 'validation-tests.js', type: 'module'}
     ],
     reporters: ['mocha'],
