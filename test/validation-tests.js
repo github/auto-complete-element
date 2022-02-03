@@ -30,6 +30,9 @@ suite('custom axe rules', function () {
       const container = document.getElementById('mocha-fixture')
       container.innerHTML = `<details-dialog></details-dialog>`
 
+      // eslint-disable-next-line no-console
+      console.log('HEY')
+
       const result = await axeResult('details-dialog-should-have-accessible-name', container)
       assert.lengthOf(result.violations, 1)
       assert.equal(result.violations[0].help, 'Details Dialog must have an accessible name')
