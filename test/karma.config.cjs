@@ -30,13 +30,10 @@ module.exports = function (config) {
     singleRun: true,
     concurrency: Infinity,
     middleware: ['completer'],
-    // preprocessors: {
-    //   './test/*.js': ['node-resolve'],
-    //   '../node_modules/axe-core/*.js': ['node-resolve']
-    // },
-    // proxies: {
-    //   '/node_modules/': '/base/node_modules/'
-    // },
+    preprocessors: {
+      './*.js': ['node-resolve'],
+      '../node_modules/axe-core/*.js': ['node-resolve']
+    },
     plugins: [
       'karma-*',
       {
