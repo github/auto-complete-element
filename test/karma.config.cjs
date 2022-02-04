@@ -18,9 +18,8 @@ module.exports = function (config) {
     frameworks: ['mocha', 'chai'],
     files: [
       {pattern: '../dist/bundle.js', type: 'module'},
-      {pattern: 'test.js', type: 'module'},
-      // TODO: To get our tests to run - should probably update the pattern to a regex looking for tests
-      {pattern: 'validation-tests.js', type: 'module'}
+      {pattern: './*.js', type: 'module'},
+      {pattern: '../node_modules/axe-core/**/*.js', type: 'module'}
     ],
     reporters: ['mocha'],
     port: 9876,
@@ -31,6 +30,13 @@ module.exports = function (config) {
     singleRun: true,
     concurrency: Infinity,
     middleware: ['completer'],
+    // preprocessors: {
+    //   './test/*.js': ['node-resolve'],
+    //   '../node_modules/axe-core/*.js': ['node-resolve']
+    // },
+    // proxies: {
+    //   '/node_modules/': '/base/node_modules/'
+    // },
     plugins: [
       'karma-*',
       {

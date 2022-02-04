@@ -1,19 +1,19 @@
 // import validateDOMUsage from '../src/validate-auto-complete-use'
 
 // TODO: Issue importing axe and getting it to work with the tests - maybe missing some config from the karma.config.cjs file
-// import axe from 'axe-core'
+import axe from './node_modules/axe-core/axe.js'
 
-// async function axeResult(id, fixture) {
-//   return new Promise((resolve, reject) => {
-//     axe.run(fixture, {runOnly: {type: 'rule', values: [id]}}, (err, results) => {
-//       if (err) {
-//         reject(err)
-//       } else {
-//         resolve(results)
-//       }
-//     })
-//   })
-// }
+async function axeResult(id, fixture) {
+  return new Promise((resolve, reject) => {
+    axe.run(fixture, {runOnly: {type: 'rule', values: [id]}}, (err, results) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(results)
+      }
+    })
+  })
+}
 
 describe('custom axe rules', function () {
   // setup(function () {
@@ -33,14 +33,14 @@ describe('custom axe rules', function () {
   })
 
   // Kate's tests for inspo from https://github.com/github/github/pull/207717/files#diff-d34069f99c0ca8611b3c4a6faed568a1fdefec96f7fe0c03aee0221d662f59e4
-  //   test('passes when aria-label is set', async function () {
-  //     const container = document.getElementById('mocha-fixture')!
-  //     container.innerHTML = `<details-dialog aria-label="Keyboard shortcuts"></details-dialog>`
+  it('passes when aria-label is set', async function () {
+    const container = document.getElementById('mocha-fixture')
+    container.innerHTML = `<details-dialog aria-label="Keyboard shortcuts"></details-dialog>`
 
-  //     const result = await axeResult('details-dialog-should-have-accessible-name', container)
-  //     assert.lengthOf(result.violations, 0)
-  //     assert.lengthOf(result.passes, 1)
-  //   })
+    const result = await axeResult('details-dialog-should-have-accessible-name', container)
+    assert.lengthOf(result.violations, 0)
+    assert.lengthOf(result.passes, 1)
+  })
 })
 
 // axe.run(dom.window, {}, function (err, results) {

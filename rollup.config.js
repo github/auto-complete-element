@@ -1,4 +1,5 @@
 import resolve from 'rollup-plugin-node-resolve'
+// import common from '@rollup/plugin-commonjs'
 
 export default [
   {
@@ -16,6 +17,11 @@ export default [
       file: 'dist/bundle.js',
       format: 'es'
     },
-    plugins: [resolve()]
+    plugins: [
+      resolve()
+      // common({
+      //   include: ['./node_modules/axe-core/**']
+      // })
+    ]
   }
 ]
