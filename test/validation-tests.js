@@ -1,7 +1,7 @@
 // import validateDOMUsage from '../src/validate-auto-complete-use'
 
 // TODO: Issue importing axe and getting it to work with the tests - maybe missing some config from the karma.config.cjs file
-import axe from './node_modules/axe-core/axe.js'
+import axe from 'axe-core'
 
 async function axeResult(id, fixture) {
   return new Promise((resolve, reject) => {
