@@ -33,7 +33,7 @@ With a script tag:
     Optional clear button:
     - id must match the id of the input or the name of the input plus "-clear"
     - recommended to be *before* UL elements to avoid conflicting with their blur logic
-    
+
     Please see Note below on this button for more details
   -->
   <button id="users-clear">X</button>
@@ -133,6 +133,10 @@ Browsers without native [custom element support][support] require a [polyfill][]
 npm install
 npm test
 ```
+
+To view changes locally, run `npm run examples`.
+
+In `examples/index.html`, uncomment `<!--<script type="module" src="./dist/bundle.js"></script>-->` and comment out the script referencing the `unpkg` version. This allows you to use the `src` code in this repo. Otherwise, you will be pulling the latest published code, which will not reflect the local changes you are making.
 
 ## License
 
