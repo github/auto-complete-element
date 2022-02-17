@@ -33,6 +33,7 @@
   "devDependencies": {
     "@github/prettier-config": "0.0.4",
     "chai": "^4.3.4",
+    "chromium": "^3.0.3",
     "eslint": "^7.25.0",
     "eslint-plugin-custom-elements": "^0.0.2",
     "eslint-plugin-github": "^4.1.3",
