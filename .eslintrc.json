@@ -36,6 +36,12 @@
       "globals": {
         "assert": true
       }
+    },
+    {
+      "files": "validator.js",
+      "rules": {
+        "@typescript-eslint/explicit-module-boundary-types": "off"
+      }
     }
   ]
 }

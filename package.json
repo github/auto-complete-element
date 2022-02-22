@@ -15,7 +15,7 @@
     "prebuild": "npm run clean && npm run lint",
     "build": "tsc && rollup -c",
     "pretest": "npm run build",
-    "test": "karma start test/karma.config.cjs",
+    "test": "karma start karma.config.cjs",
     "prepublishOnly": "npm run build",
     "postpublish": "npm publish --ignore-scripts --@github:registry='https://npm.pkg.github.com'"
   },
@@ -32,7 +32,8 @@
   },
   "devDependencies": {
     "@github/prettier-config": "0.0.4",
-    "chai": "^4.3.4",
+    "axe-core": "^4.4.0",
+    "chai": "^4.3.6",
     "chromium": "^3.0.3",
     "eslint": "^7.25.0",
     "eslint-plugin-custom-elements": "^0.0.2",
