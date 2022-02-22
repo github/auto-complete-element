@@ -83,7 +83,7 @@ import {validate} from '@github/auto-complete-element/validator.js'
 
 validate(document)
 ```
-Passes and failures may be determined by the length of the `passes` and `violations` keys on the returned object:
+Passes and failures may be determined by the length of the `passes` and `violations` arrays on the returned object:
 ```js
 {
   passes: [],
