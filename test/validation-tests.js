@@ -217,12 +217,12 @@ describe('all validation checks', function () {
 
     describe('passes when provided with all correct children, explicit label', function () {
       const testString = `
-      <label for='example-input-field'>My Auto Complete Label</label>
+      <label for="example-input-field">My Auto Complete Label</label>
       <auto-complete src="/search" for="popup" data-autoselect="true">
-      <input name="example" type="text">
-      <button id="example-clear">x</button>
-      <ul id="popup"></ul>
-      <div id="popup-feedback"></div>
+        <input name="example" type="text" id="example-input-field">
+        <button id="example-input-field-clear">x</button>
+        <ul id="popup"></ul>
+        <div id="popup-feedback"></div>
       </auto-complete>
       `
       it('javascript validator passes', () => {
