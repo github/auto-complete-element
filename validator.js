@@ -19,23 +19,26 @@ const CLEAR_BUTTON_HELP_TEXT = 'If provided with clear button, it must be a butt
  */
 
 function checkForInput(autoCompleteElement) {
-  return autoCompleteElement.getElementsByTagName('INPUT').length === 1
+  return autoCompleteElement.querySelectorAll('input').length === 1
 }
 
 function checkForOptionalClearButton(autoCompleteElement) {
-  const [input] = autoCompleteElement.getElementsByTagName('INPUT')
+  const [input] = autoCompleteElement.querySelectorAll('input')
   if (!input) {
     return true
   }
   const clearButtonId = `${input.id || input.getAttribute('name')}-clear`
   const clearButton = autoCompleteElement.ownerDocument.getElementById(clearButtonId)
-  if (clearButton && !(clearButton instanceof HTMLButtonElement)) {
-    return false
+  if (!clearButton) {
+    return true
   }
-  return true
+  if (clearButton && clearButton instanceof HTMLButtonElement) {
+    return true
+  }
+  return false
 }
 
-const generatedRules = [
+const rules = [
   {
     id: INPUT_RULE_ID,
     excludeHidden: true,
@@ -58,7 +61,7 @@ const generatedRules = [
   }
 ]
 
-const generatedChecks = [
+const checks = [
   {
     id: `${INPUT_RULE_ID}_0`,
     evaluate: checkForInput,
@@ -76,17 +79,17 @@ export function validator(domNode) {
     passes: [],
     violations: []
   }
-  for (const autoCompleteElement of domNode.getElementsByTagName(SELECTOR)) {
-    for (const rule of generatedRules) {
+  for (const element of domNode.getElementsByTagName(SELECTOR)) {
+    for (const rule of rules) {
       for (const checkId of rule.all) {
-        const thisCheck = generatedChecks.find(check => check.id === checkId)
-        const checkResult = thisCheck.evaluate(autoCompleteElement)
+        const thisCheck = checks.find(check => check.id === checkId)
+        const checkResult = thisCheck.evaluate(element)
 
         result[checkResult ? 'passes' : 'violations'].push({
           id: rule.id,
           help: rule.metadata.help,
           helpUrl: rule.metadata.helpUrl,
-          nodes: [autoCompleteElement]
+          nodes: [element]
         })
       }
     }
@@ -101,7 +104,7 @@ export function validator(domNode) {
  */
 export default function combineRules(ruleset = {}) {
   return Object.assign({}, ruleset, {
-    checks: (ruleset.checks || []).concat(generatedChecks),
-    rules: (ruleset.rules || []).concat(generatedRules)
+    checks: (ruleset.checks || []).concat(checks),
+    rules: (ruleset.rules || []).concat(rules)
   })
 }

@@ -16,12 +16,6 @@ function getAxeResult(htmlString, rules) {
   return axe.run(makeDOMNode(htmlString), {runOnly: {type: 'rule', values: rules}})
 }
 
-function getViolationDescriptions(result) {
-  return (
-    result && result.violations && result.violations.map(viol => viol.nodes && viol.nodes[0].failureSummary).join('\n')
-  )
-}
-
 describe('all validation checks', function () {
   describe('input', function () {
     describe('if none provided', function () {
@@ -34,14 +28,14 @@ describe('all validation checks', function () {
       it('javascript validator fails', function () {
         const result = getValidatorResult(testString)
         assert.lengthOf(result.passes, 1)
-        assert.lengthOf(result.violations, 1, getViolationDescriptions(result))
+        assert.lengthOf(result.violations, 1)
         assert.equal(result.violations[0].id, 'required-input-element-child')
         assert.equal(result.violations[0].help, 'This component requires an input field to be provided.')
       })
       it('axe check fails', async function () {
         const result = await getAxeResult(testString, ['required-input-element-child', 'optional-clear-must-be-button'])
         assert.lengthOf(result.passes, 1)
-        assert.lengthOf(result.violations, 1, getViolationDescriptions(result))
+        assert.lengthOf(result.violations, 1)
         assert.equal(result.violations[0].id, 'required-input-element-child')
         assert.equal(result.violations[0].help, 'This component requires an input field to be provided.')
       })
@@ -59,14 +53,14 @@ describe('all validation checks', function () {
       it('javscript validator fails', function () {
         const result = getValidatorResult(testString)
         assert.lengthOf(result.passes, 1)
-        assert.lengthOf(result.violations, 1, getViolationDescriptions(result))
+        assert.lengthOf(result.violations, 1)
         assert.equal(result.violations[0].id, 'required-input-element-child')
         assert.equal(result.violations[0].help, 'This component requires an input field to be provided.')
       })
       it('axe check validator fails', async function () {
         const result = await getAxeResult(testString, ['required-input-element-child', 'optional-clear-must-be-button'])
         assert.lengthOf(result.passes, 1)
-        assert.lengthOf(result.violations, 1, getViolationDescriptions(result))
+        assert.lengthOf(result.violations, 1)
         assert.equal(result.violations[0].id, 'required-input-element-child')
         assert.equal(result.violations[0].help, 'This component requires an input field to be provided.')
       })
@@ -82,14 +76,14 @@ describe('all validation checks', function () {
       it('javscript validator fails', function () {
         const result = getValidatorResult(testString)
         assert.lengthOf(result.passes, 1)
-        assert.lengthOf(result.violations, 1, getViolationDescriptions(result))
+        assert.lengthOf(result.violations, 1)
         assert.equal(result.violations[0].id, 'required-input-element-child')
         assert.equal(result.violations[0].help, 'This component requires an input field to be provided.')
       })
       it('axe check fails', async function () {
         const result = await getAxeResult(testString, ['required-input-element-child', 'optional-clear-must-be-button'])
         assert.lengthOf(result.passes, 1)
-        assert.lengthOf(result.violations, 1, getViolationDescriptions(result))
+        assert.lengthOf(result.violations, 1)
         assert.equal(result.violations[0].id, 'required-input-element-child')
         assert.equal(result.violations[0].help, 'This component requires an input field to be provided.')
       })
@@ -112,14 +106,14 @@ describe('all validation checks', function () {
       it('javascript validator fails', function () {
         const result = getValidatorResult(testString)
         assert.lengthOf(result.passes, 1)
-        assert.lengthOf(result.violations, 1, getViolationDescriptions(result))
+        assert.lengthOf(result.violations, 1)
         assert.equal(result.violations[0].id, ['optional-clear-must-be-button'])
         assert.equal(result.violations[0].help, 'If provided with clear button, it must be a button element.')
       })
       it('axe check fails', async function () {
         const result = await getAxeResult(testString, ['required-input-element-child', 'optional-clear-must-be-button'])
         assert.lengthOf(result.passes, 1)
-        assert.lengthOf(result.violations, 1, getViolationDescriptions(result))
+        assert.lengthOf(result.violations, 1)
         assert.equal(result.violations[0].id, ['optional-clear-must-be-button'])
         assert.equal(result.violations[0].help, 'If provided with clear button, it must be a button element.')
       })
@@ -139,14 +133,14 @@ describe('all validation checks', function () {
       it('javascript validator fails', function () {
         const result = getValidatorResult(testString)
         assert.lengthOf(result.passes, 1)
-        assert.lengthOf(result.violations, 1, getViolationDescriptions(result))
+        assert.lengthOf(result.violations, 1)
         assert.equal(result.violations[0].id, ['optional-clear-must-be-button'])
         assert.equal(result.violations[0].help, 'If provided with clear button, it must be a button element.')
       })
       it('axe check fails', async function () {
         const result = await getAxeResult(testString, ['required-input-element-child', 'optional-clear-must-be-button'])
         assert.lengthOf(result.passes, 1)
-        assert.lengthOf(result.violations, 1, getViolationDescriptions(result))
+        assert.lengthOf(result.violations, 1)
         assert.equal(result.violations[0].id, ['optional-clear-must-be-button'])
         assert.equal(result.violations[0].help, 'If provided with clear button, it must be a button element.')
       })
@@ -169,12 +163,12 @@ describe('all validation checks', function () {
       it('javascript validator passes', () => {
         const result = getValidatorResult(testString)
         assert.lengthOf(result.passes, 2)
-        assert.lengthOf(result.violations, 0, getViolationDescriptions(result))
+        assert.lengthOf(result.violations, 0)
       })
       it('axe check passes', async function () {
         const result = await getAxeResult(testString, ['required-input-element-child', 'optional-clear-must-be-button'])
         assert.lengthOf(result.passes, 2)
-        assert.lengthOf(result.violations, 0, getViolationDescriptions(result))
+        assert.lengthOf(result.violations, 0)
       })
     })
 
@@ -190,12 +184,12 @@ describe('all validation checks', function () {
       it('javascript validator passes', () => {
         const result = getValidatorResult(testString)
         assert.lengthOf(result.passes, 2)
-        assert.lengthOf(result.violations, 0, getViolationDescriptions(result))
+        assert.lengthOf(result.violations, 0)
       })
       it('axe check passes', async function () {
         const result = await getAxeResult(testString, ['required-input-element-child', 'optional-clear-must-be-button'])
         assert.lengthOf(result.passes, 2)
-        assert.lengthOf(result.violations, 0, getViolationDescriptions(result))
+        assert.lengthOf(result.violations, 0)
       })
     })
 
@@ -212,12 +206,12 @@ describe('all validation checks', function () {
       it('javascript validator passes', () => {
         const result = getValidatorResult(testString)
         assert.lengthOf(result.passes, 2)
-        assert.lengthOf(result.violations, 0, getViolationDescriptions(result))
+        assert.lengthOf(result.violations, 0)
       })
       it('axe check passes', async function () {
         const result = await getAxeResult(testString, ['required-input-element-child', 'optional-clear-must-be-button'])
         assert.lengthOf(result.passes, 2)
-        assert.lengthOf(result.violations, 0, getViolationDescriptions(result))
+        assert.lengthOf(result.violations, 0)
       })
     })
 
@@ -234,12 +228,12 @@ describe('all validation checks', function () {
       it('javascript validator passes', () => {
         const result = getValidatorResult(testString)
         assert.lengthOf(result.passes, 2)
-        assert.lengthOf(result.violations, 0, getViolationDescriptions(result))
+        assert.lengthOf(result.violations, 0)
       })
       it('axe check passes', async function () {
         const result = await getAxeResult(testString, ['required-input-element-child', 'optional-clear-must-be-button'])
         assert.lengthOf(result.passes, 2)
-        assert.lengthOf(result.violations, 0, getViolationDescriptions(result))
+        assert.lengthOf(result.violations, 0)
       })
     })
   })

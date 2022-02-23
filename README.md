@@ -75,22 +75,6 @@ While `input type="search"` comes with an `x` that clears the content of the fie
 As an example:
 > In Chrome, this 'x' isn't a button but a div with a pseudo="-webkit-search-cancel-button". It doesn't have a tab index or a way to navigate to it without a mouse. Additionally, this control is only visible on mouse hover.
 
-### Validate usage in your project
-
-To confirm your usage is working as designed,
-```js
-import {validate} from '@github/auto-complete-element/validator.js' 
-
-validate(document)
-```
-Passes and failures may be determined by the length of the `passes` and `violations` arrays on the returned object:
-```js
-{
-  passes: [],
-  violations: []
-}
-```
-
 
 ## Attributes
 
@@ -168,6 +152,22 @@ const autoCompleteRules = autoCompleteRulesBuilder() // optionally, pass in your
 
 axe.configure(autoCompleteRules)
 axe.run(document)
+```
+
+## Validate usage in your project
+
+To confirm your usage is working as designed,
+```js
+import {validate} from '@github/auto-complete-element/validator.js' 
+
+validate(document)
+```
+Passes and failures may be determined by the length of the `passes` and `violations` arrays on the returned object:
+```js
+{
+  passes: [],
+  violations: []
+}
 ```
 
 ## License
