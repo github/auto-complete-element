@@ -23,7 +23,7 @@ function checkForInput(autoCompleteElement) {
 }
 
 function checkForOptionalClearButton(autoCompleteElement) {
-  const [input] = autoCompleteElement.querySelectorAll('input')
+  const input = autoCompleteElement.querySelectorAll('input')
   if (!input) {
     return true
   }
