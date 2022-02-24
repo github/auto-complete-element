@@ -4,20 +4,6 @@ const INPUT_HELP_TEXT = 'This component requires an input field to be provided.'
 const CLEAR_BUTTON_RULE_ID = 'optional-clear-must-be-button'
 const CLEAR_BUTTON_HELP_TEXT = 'If provided with clear button, it must be a button element.'
 
-/**
- * see https://github.com/dequelabs/axe-core/blob/develop/doc/rule-descriptions.md
- *
- * must have input element
- *
- * if element provided with *-clear, must be button element
- *
- * 'label-title-only'
- *  must have 1 of:
- * - label
- * - aria-label
- * - aria-labelledby
- */
-
 function checkForInput(autoCompleteElement) {
   return autoCompleteElement.querySelectorAll('input').length === 1
 }
