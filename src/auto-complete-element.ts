@@ -1,5 +1,5 @@
-import AutocompleteEvent from './auto-complete-event'
 import Autocomplete from './autocomplete'
+import AutocompleteEvent from './auto-complete-event'
 
 const state = new WeakMap()
 

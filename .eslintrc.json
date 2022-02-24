@@ -42,6 +42,12 @@
       "rules": {
         "@typescript-eslint/explicit-module-boundary-types": "off"
       }
+    },
+    {
+      "files": ["*.config.js"],
+      "rules": {
+        "filenames/match-regex": "off"
+      }
     }
   ]
 }
