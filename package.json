@@ -25,7 +25,8 @@
   ],
   "license": "MIT",
   "files": [
-    "dist"
+    "dist",
+    "validator.js"
   ],
   "dependencies": {
     "@github/combobox-nav": "^2.0.2"
