@@ -1,0 +1,6 @@
+{
+  "globals": {
+    "axe": "readonly",
+    "chai": "readonly"
+  }
+}

@@ -18,7 +18,13 @@ function completer(request, response, next) {
 module.exports = function (config) {
   config.set({
     frameworks: ['mocha', 'chai'],
-    files: [{ pattern: '../dist/bundle.js', type: 'module' }, { pattern: 'test.js', type: 'module' }],
+    files: [
+      {pattern: './dist/bundle.js', type: 'module'},
+      // import axe.min.js to make `axe` available globally in the tests
+      {pattern: './node_modules/axe-core/axe.min.js', type: 'module'},
+      {pattern: './test/*.js', type: 'module'},
+      {pattern: './validator.js', type: 'module'}
+    ],
     reporters: ['mocha'],
     port: 9876,
     colors: true,

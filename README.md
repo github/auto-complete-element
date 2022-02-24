@@ -75,6 +75,7 @@ While `input type="search"` comes with an `x` that clears the content of the fie
 As an example:
 > In Chrome, this 'x' isn't a button but a div with a pseudo="-webkit-search-cancel-button". It doesn't have a tab index or a way to navigate to it without a mouse. Additionally, this control is only visible on mouse hover.
 
+
 ## Attributes
 
 - `open` is true when the auto-complete result list is visible
@@ -137,6 +138,37 @@ npm test
 To view changes locally, run `npm run examples`.
 
 In `examples/index.html`, uncomment `<!--<script type="module" src="./dist/bundle.js"></script>-->` and comment out the script referencing the `unpkg` version. This allows you to use the `src` code in this repo. Otherwise, you will be pulling the latest published code, which will not reflect the local changes you are making.
+
+## Accessibility Testing
+
+We have included some custom rules that assist in providing guardrails to confirm this component is being used accessibly.
+
+If you are using the `axe-core` library in your project,
+```js
+import axe from 'axe-core'
+import autoCompleteRulesBuilder from '@github/auto-complete-element/validator'
+
+const autoCompleteRules = autoCompleteRulesBuilder() // optionally, pass in your app's custom rules object, it will build and return the full object
+
+axe.configure(autoCompleteRules)
+axe.run(document)
+```
+
+## Validate usage in your project
+
+To confirm your usage is working as designed,
+```js
+import {validate} from '@github/auto-complete-element/validator' 
+
+validate(document)
+```
+Passes and failures may be determined by the length of the `passes` and `violations` arrays on the returned object:
+```js
+{
+  passes: [],
+  violations: []
+}
+```
 
 ## License
 
