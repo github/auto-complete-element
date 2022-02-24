@@ -32,7 +32,7 @@ function checkForOptionalClearButton(autoCompleteElement) {
   if (!clearButton) {
     return true
   }
-  if (clearButton && clearButton instanceof HTMLButtonElement) {
+  if (clearButton instanceof HTMLButtonElement) {
     return true
   }
   return false
