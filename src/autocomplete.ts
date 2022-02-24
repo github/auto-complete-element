@@ -1,7 +1,7 @@
 import type AutocompleteElement from './auto-complete-element'
 import Combobox from '@github/combobox-nav'
-import debounce from './debounce'
-import {fragment} from './send'
+import debounce from './debounce.js'
+import {fragment} from './send.js'
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore

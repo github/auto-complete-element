@@ -10,7 +10,9 @@
   "rules": {
     "github/no-then": "off",
     "no-invalid-this": "off",
-    "custom-elements/tag-name-matches-class": ["error", {"suffix": "Element"}]
+    "custom-elements/tag-name-matches-class": ["error", {"suffix": "Element"}],
+    "import/extensions": ["error", "always"],
+    "import/no-unresolved": "off"
   },
   "globals": {
     "AutocompleteElement": "readonly"
