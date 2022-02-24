@@ -146,7 +146,7 @@ We have included some custom rules that assist in providing guardrails to confir
 If you are using the `axe-core` library in your project,
 ```js
 import axe from 'axe-core'
-import autoCompleteRulesBuilder from '../validator.js'
+import autoCompleteRulesBuilder from '@github/auto-complete-element/validator'
 
 const autoCompleteRules = autoCompleteRulesBuilder() // optionally, pass in your app's custom rules object, it will build and return the full object
 
@@ -158,7 +158,7 @@ axe.run(document)
 
 To confirm your usage is working as designed,
 ```js
-import {validate} from '@github/auto-complete-element/validator.js' 
+import {validate} from '@github/auto-complete-element/validator' 
 
 validate(document)
 ```
