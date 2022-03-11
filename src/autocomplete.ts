@@ -1,7 +1,7 @@
 import type AutocompleteElement from './auto-complete-element'
-import debounce from './debounce'
-import {fragment} from './send'
 import Combobox from '@github/combobox-nav'
+import debounce from './debounce.js'
+import {fragment} from './send.js'
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -93,6 +93,7 @@ export default class Autocomplete {
 
     if (this.input.getAttribute('aria-expanded') === 'true') {
       this.input.setAttribute('aria-expanded', 'false')
+      // eslint-disable-next-line i18n-text/no-en
       this.updateFeedbackForScreenReaders('Results hidden.')
     }
 
@@ -153,6 +154,7 @@ export default class Autocomplete {
     this.container.value = value
 
     if (!value) {
+      // eslint-disable-next-line i18n-text/no-en
       this.updateFeedbackForScreenReaders(`Results hidden.`)
     }
   }
@@ -162,8 +164,8 @@ export default class Autocomplete {
   }
 
   onInputChange(): void {
-    if (this.feedback && this.feedback.innerHTML) {
-      this.feedback.innerHTML = ''
+    if (this.feedback && this.feedback.textContent) {
+      this.feedback.textContent = ''
     }
     this.container.removeAttribute('value')
     this.fetchResults()
@@ -179,7 +181,7 @@ export default class Autocomplete {
   updateFeedbackForScreenReaders(inputString: string): void {
     setTimeout(() => {
       if (this.feedback) {
-        this.feedback.innerHTML = inputString
+        this.feedback.textContent = inputString
       }
     }, SCREEN_READER_DELAY)
   }
@@ -202,6 +204,7 @@ export default class Autocomplete {
     this.container.dispatchEvent(new CustomEvent('loadstart'))
     fragment(this.input, url.toString())
       .then(html => {
+        // eslint-disable-next-line github/no-inner-html
         this.results.innerHTML = html
         this.identifyOptions()
         const allNewOptions = this.results.querySelectorAll('[role="option"]')

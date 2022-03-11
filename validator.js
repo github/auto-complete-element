@@ -1,7 +1,9 @@
 const SELECTOR = 'auto-complete'
 const INPUT_RULE_ID = 'required-input-element-child'
+// eslint-disable-next-line i18n-text/no-en
 const INPUT_HELP_TEXT = 'This component requires an input field to be provided.'
 const CLEAR_BUTTON_RULE_ID = 'optional-clear-must-be-button'
+// eslint-disable-next-line i18n-text/no-en
 const CLEAR_BUTTON_HELP_TEXT = 'If provided with clear button, it must be a button element.'
 
 function checkForInput(autoCompleteElement) {
