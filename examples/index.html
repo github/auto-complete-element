@@ -13,6 +13,12 @@
       }
     </style>
     <script>
+      var robotsList = `
+            <li role="option" data-autocomplete-value="@hubot">Hubot</li>
+            <li role="option" data-autocomplete-value="@bender">Bender</li>
+            <li role="option" data-autocomplete-value="@bb-8">BB-8</li>
+            <li role="option" data-autocomplete-value="@r2d2" aria-disabled="true">R2-D2 (powered down)</li>
+          `;
       class FakeXMLHttpRequest {
         abort() {
           // Do nothing.
@@ -25,12 +31,7 @@
         }
         send() {
           this.status = 200
-          this.responseText = `
-            <li role="option" data-autocomplete-value="@hubot">Hubot</li>
-            <li role="option" data-autocomplete-value="@bender">Bender</li>
-            <li role="option" data-autocomplete-value="@bb-8">BB-8</li>
-            <li role="option" data-autocomplete-value="@r2d2" aria-disabled="true">R2-D2 (powered down)</li>
-          `
+          this.responseText = robotsList
           setTimeout(this.onload.bind(this), 0)
         }
       }
@@ -83,7 +84,24 @@
       </auto-complete>
       <button type="submit">Save</button>
     </form>
-    <!--<script type="module" src="./dist/bundle.js"></script>-->
+
+    <!-- example with a custom fetching result method -->
+    <form>
+      <label id="custom-fetching-robots-label" for="custom-fetching-robot">Custom Fetching Robots</label>
+      <auto-complete id="custom-fetching-method" src="/demo" for="custom-fetching-items-popup" aria-labelledby="custom-fetching-robots-label" data-autoselect="true">
+        <input name="custom-fetching-robot" type="text" aria-labelledby="custom-fetching-robots-label" autofocus>
+        <ul id="custom-fetching-items-popup"></ul>
+        <div id="custom-fetching-items-popup-feedback" class="sr-only"></div>
+      </auto-complete>
+      <button type="submit">Save</button>
+    </form>
+    <script>
+      window.fetch = () => Promise.resolve(new Response(robotsList));
+      // fetchResult must be a function that return a Promise of string and that accepts as parameters an element and an URL
+      document.querySelector("auto-complete#custom-fetching-method").fetchResult = async (el, url) => (await fetch(url)).text();
+    </script>
+
+<!--    <script type="module" src="./dist/bundle.js"></script>-->
     <script type="module" src="https://unpkg.com/@github/auto-complete-element@latest/dist/bundle.js"></script>
   </body>
 </html>

@@ -81,6 +81,10 @@ As an example:
 - `open` is true when the auto-complete result list is visible
 - `value` is the selected value from the list or the empty string when cleared
 
+## Properties
+
+- `fetchResult` is the method that will be call to fetch the results
+
 ## Events
 
 ### Network request lifecycle events

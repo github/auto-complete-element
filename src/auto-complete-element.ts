@@ -1,10 +1,14 @@
 import Autocomplete from './autocomplete.js'
 import AutocompleteEvent from './auto-complete-event.js'
+import {fragment} from "./send";
 
 const state = new WeakMap()
 
 // eslint-disable-next-line custom-elements/file-name-matches-element
 export default class AutocompleteElement extends HTMLElement {
+  #fetchResult?: (el: Element, url: string) => Promise<string>;
+
+
   connectedCallback(): void {
     const listId = this.getAttribute('for')
     if (!listId) return
@@ -53,6 +57,17 @@ export default class AutocompleteElement extends HTMLElement {
       this.removeAttribute('open')
     }
   }
+
+
+  get fetchResult(): (el: Element, url: string) => Promise<string> {
+    return this.#fetchResult ?? fragment;
+
+  }
+
+  set fetchResult(fetchResult:(el: Element, url: string) => Promise<string>) {
+    this.#fetchResult = fetchResult;
+  }
+
 
   static get observedAttributes(): string[] {
     return ['open', 'value']
