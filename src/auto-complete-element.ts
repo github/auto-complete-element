@@ -6,9 +6,6 @@ const state = new WeakMap()
 
 // eslint-disable-next-line custom-elements/file-name-matches-element
 export default class AutocompleteElement extends HTMLElement {
-  #fetchResult?: (el: Element, url: string) => Promise<string>;
-
-
   connectedCallback(): void {
     const listId = this.getAttribute('for')
     if (!listId) return
