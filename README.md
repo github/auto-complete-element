@@ -83,7 +83,7 @@ As an example:
 
 ## Properties
 
-- `fetchResult` is the method that will be call to fetch the results
+- `fetchResult` you can override the default method used to query for results by overriding this property: `document.querySelector('auto-complete').fetchResult = async (el, url) => (await fetch(url)).text()`
 
 ## Events
 
