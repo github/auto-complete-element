@@ -193,6 +193,22 @@ describe('auto-complete element', function () {
       assert.isTrue(container.open)
       assert.isFalse(popup.hidden)
     })
+
+    it('allows providing a custom fetch method', async () => {
+      const container = document.querySelector('auto-complete')
+      const input = container.querySelector('input')
+      const popup = container.querySelector('#popup')
+
+      container.fetchResult = async () => `
+        <li>Mock Custom Fetch Result 1</li>
+        <li>Mock Custom Fetch Result 2</li>
+      `
+
+      triggerInput(input, 'hub')
+      await once(container, 'loadend')
+      assert.equal(2, popup.children.length)
+      assert.equal(popup.querySelector('li').textContent, 'Mock Custom Fetch Result 1')
+    })
   })
 
   describe('clear button provided', () => {
@@ -255,194 +271,6 @@ describe('auto-complete element', function () {
   })
 })
 
-
-describe('requesting server results using a custom fetching result method', function () {
-  beforeEach(function () {
-    document.body.innerHTML = `
-        <div id="mocha-fixture">
-          <auto-complete src="/search" for="popup">
-            <input type="text">
-            <ul id="popup"></ul>
-            <div id="popup-feedback"></div>
-          </auto-complete>
-        </div>
-      `
-    mockFetch();
-    const container = document.querySelector('auto-complete');
-    container.fetchResult = async (el, url) => (await fetch(url)).text();
-  })
-
-  it('requests html fragment', async function () {
-    const container = document.querySelector('auto-complete')
-    const input = container.querySelector('input')
-    const popup = container.querySelector('#popup')
-
-    triggerInput(input, 'hub')
-    await once(container, 'loadend')
-    assert.equal(5, popup.children.length)
-  })
-
-  it('respects arrow keys', async function () {
-    const container = document.querySelector('auto-complete')
-    const input = container.querySelector('input')
-    const popup = container.querySelector('#popup')
-
-    assert.isTrue(keydown(input, 'ArrowDown'))
-    triggerInput(input, 'hub')
-    await once(container, 'loadend')
-
-    assert.isNull(popup.querySelector('[aria-selected="true"]'))
-    assert.isFalse(keydown(input, 'ArrowDown'))
-    assert.equal('first', popup.querySelector('[aria-selected="true"]').textContent)
-    assert.isFalse(keydown(input, 'ArrowDown'))
-    assert.equal('second', popup.querySelector('[aria-selected="true"]').textContent)
-    assert.isFalse(keydown(input, 'ArrowUp'))
-    assert.equal('first', popup.querySelector('[aria-selected="true"]').textContent)
-  })
-
-  it('dispatches change event on commit', async function () {
-    const container = document.querySelector('auto-complete')
-    const input = container.querySelector('input')
-
-    triggerInput(input, 'hub')
-    await once(container, 'loadend')
-
-    let value
-    let relatedTarget
-    container.addEventListener(
-        'auto-complete-change',
-        function (event) {
-          value = event.target.value
-          relatedTarget = event.relatedTarget
-        },
-        {once: true}
-    )
-
-    assert.isTrue(keydown(input, 'Enter'))
-    assert.equal('', container.value)
-    assert.isFalse(keydown(input, 'ArrowDown'))
-    assert.isFalse(keydown(input, 'Enter'))
-    assert.equal('first', value)
-    assert.equal(input, relatedTarget)
-    assert.isTrue(keydown(input, 'Tab'))
-  })
-
-  it('summarizes the available options on keypress', async function () {
-    const container = document.querySelector('auto-complete')
-    const input = container.querySelector('input')
-    const feedback = container.querySelector(`#popup-feedback`)
-
-    triggerInput(input, 'hub')
-    await once(container, 'loadend')
-    await waitForElementToChange(feedback)
-
-    assert.equal('5 results.', feedback.innerHTML)
-  })
-
-  it('commits on Enter', async function () {
-    const container = document.querySelector('auto-complete')
-    const input = container.querySelector('input')
-
-    triggerInput(input, 'hub')
-    await once(container, 'loadend')
-
-    assert.isTrue(keydown(input, 'Enter'))
-    assert.equal('', container.value)
-    assert.isFalse(keydown(input, 'ArrowDown'))
-    assert.isFalse(keydown(input, 'Enter'))
-    assert.equal('first', container.value)
-    assert.isFalse(container.open)
-  })
-
-  it('does not commit on disabled option', async function () {
-    const container = document.querySelector('auto-complete')
-    const input = container.querySelector('input')
-    const popup = container.querySelector('#popup')
-
-    triggerInput(input, 'hub')
-    await once(container, 'loadend')
-
-    assert.isFalse(keydown(input, 'ArrowDown'))
-    assert.isFalse(keydown(input, 'ArrowDown'))
-    assert.isFalse(keydown(input, 'ArrowDown'))
-    assert.isFalse(keydown(input, 'ArrowDown'))
-    assert.equal('fourth', popup.querySelector('[aria-selected="true"]').textContent)
-    assert.isFalse(keydown(input, 'Enter'))
-    assert.equal('', container.value)
-    assert.isTrue(container.open)
-  })
-
-  it('does not commit text value on link item navigation', async function () {
-    const container = document.querySelector('auto-complete')
-    const input = container.querySelector('input')
-
-    triggerInput(input, 'hub')
-    await once(container, 'loadend')
-
-    const link = container.querySelector('a[role=option]')
-
-    assert.equal('', container.value)
-    link.click()
-    assert.equal('', container.value)
-    assert.equal('#hash', window.location.hash)
-    assert.isFalse(container.open)
-  })
-
-  it('does not close on blur after mousedown', async function () {
-    const container = document.querySelector('auto-complete')
-    const input = container.querySelector('input')
-
-    triggerInput(input, 'hub')
-    await once(container, 'loadend')
-
-    const link = container.querySelector('a[role=option]')
-
-    assert.equal('', container.value)
-    link.dispatchEvent(new MouseEvent('mousedown', {bubbles: true}))
-    input.dispatchEvent(new Event('blur'))
-    assert(container.open)
-
-    await new Promise(resolve => setTimeout(resolve, 100))
-    input.dispatchEvent(new Event('blur'))
-    assert.isFalse(container.open)
-  })
-
-  it('closes on Escape', async function () {
-    const container = document.querySelector('auto-complete')
-    const input = container.querySelector('input')
-    const popup = container.querySelector('#popup')
-
-    triggerInput(input, 'hub')
-    await once(container, 'loadend')
-
-    assert.isTrue(container.open)
-    assert.isFalse(popup.hidden)
-    assert.isFalse(keydown(input, 'Escape'))
-    assert.isFalse(container.open)
-    assert.isTrue(popup.hidden)
-  })
-
-  it('opens and closes on alt + ArrowDown and alt + ArrowUp', async function () {
-    const container = document.querySelector('auto-complete')
-    const input = container.querySelector('input')
-    const popup = container.querySelector('#popup')
-
-    triggerInput(input, 'hub')
-    await once(container, 'loadend')
-
-    assert.isTrue(container.open)
-    assert.isFalse(popup.hidden)
-
-    assert.isFalse(keydown(input, 'ArrowUp', true))
-    assert.isFalse(container.open)
-    assert.isTrue(popup.hidden)
-
-    assert.isFalse(keydown(input, 'ArrowDown', true))
-    assert.isTrue(container.open)
-    assert.isFalse(popup.hidden)
-  })
-})
-
 function waitForElementToChange(el) {
   return new Promise(resolve => {
     const observer = new MutationObserver(mutations => {
@@ -457,18 +285,6 @@ function waitForElementToChange(el) {
   })
 }
 
-
-function mockFetch(){
-  window.fetch = () => {
-    return Promise.resolve(new Response(`
-      <li role="option" data-autocomplete-value="first"><span>first</span></li>
-      <li role="option"><span>second</span></li>
-      <li role="option"><span>third</span></li>
-      <li role="option" aria-disabled="true"><span>fourth</span></li>
-      <li><a role="option" href="#hash">link</a></li>
-    `))
-  }
-}
 function once(element, eventName) {
   return new Promise(resolve => {
     element.addEventListener(eventName, resolve, {once: true})
