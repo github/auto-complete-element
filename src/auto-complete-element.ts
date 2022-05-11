@@ -58,16 +58,7 @@ export default class AutocompleteElement extends HTMLElement {
     }
   }
 
-
-  get fetchResult(): (el: Element, url: string) => Promise<string> {
-    return this.#fetchResult ?? fragment;
-
-  }
-
-  set fetchResult(fetchResult:(el: Element, url: string) => Promise<string>) {
-    this.#fetchResult = fetchResult;
-  }
-
+  fetchResult: (el: Element, url: string) => Promise<string> = fragment;
 
   static get observedAttributes(): string[] {
     return ['open', 'value']
