@@ -201,7 +201,8 @@ export default class Autocomplete {
     url.search = params.toString()
 
     this.container.dispatchEvent(new CustomEvent('loadstart'))
-    this.container.fetchResult(this.input, url.toString())
+    this.container
+      .fetchResult(this.input, url.toString())
       .then(html => {
         // eslint-disable-next-line github/no-inner-html
         this.results.innerHTML = html
