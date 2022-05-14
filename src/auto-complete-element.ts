@@ -1,6 +1,6 @@
 import Autocomplete from './autocomplete.js'
 import AutocompleteEvent from './auto-complete-event.js'
-import {fragment} from "./send";
+import {fragment} from './send'
 
 const state = new WeakMap()
 
@@ -55,7 +55,7 @@ export default class AutocompleteElement extends HTMLElement {
     }
   }
 
-  fetchResult: = fragment;
+  fetchResult = fragment
 
   static get observedAttributes(): string[] {
     return ['open', 'value']
