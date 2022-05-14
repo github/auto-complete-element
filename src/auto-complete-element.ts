@@ -1,6 +1,6 @@
 import Autocomplete from './autocomplete.js'
 import AutocompleteEvent from './auto-complete-event.js'
-import {fragment} from './send'
+import {fragment} from './send.js'
 
 const state = new WeakMap()
 
