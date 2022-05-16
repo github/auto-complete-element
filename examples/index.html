@@ -1,14 +1,14 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
     <title>Auto-complete examples</title>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <style>
-      auto-complete [aria-selected="true"],
-      auto-complete [role="option"]:hover {
+      auto-complete [aria-selected='true'],
+      auto-complete [role='option']:hover {
         background-color: lavender;
       }
-      auto-complete [aria-disabled="true"] {
+      auto-complete [aria-disabled='true'] {
         color: grey;
       }
     </style>
@@ -43,7 +43,7 @@
       <label id="robots-label" for="robot">Robots</label>
       <!-- To enable auto-select (select first on Enter), use data-autoselect="true" -->
       <auto-complete src="/demo" for="items-popup" aria-labelledby="robots-label" data-autoselect="true">
-        <input name="robot" type="text" aria-labelledby="robots-label" autofocus>
+        <input name="robot" type="text" aria-labelledby="robots-label" autofocus />
         <!-- if a clear button is passed in, recommended to be *before* UL elements to avoid conflicting with their blur logic -->
         <button id="robot-clear">x</button>
         <ul id="items-popup"></ul>
@@ -61,7 +61,7 @@
       <label id="robots-a-label" for="robot-a">Robots (using Input ID)</label>
       <!-- To enable auto-select (select first on Enter), use data-autoselect="true" -->
       <auto-complete src="/demo" for="items-a-popup" aria-labelledby="robots-a-label" data-autoselect="true">
-        <input id="robot-a" name="robot-a" type="text" aria-labelledby="robots-a-label" autofocus>
+        <input id="robot-a" name="robot-a" type="text" aria-labelledby="robots-a-label" autofocus />
         <!-- if a clear button is passed in, recommended to be *before* UL elements to avoid conflicting with their blur logic -->
         <button id="robot-a-clear">x</button>
         <ul id="items-a-popup"></ul>
@@ -77,8 +77,8 @@
     <!-- example without autoselect -->
     <form>
       <label id="robots-2-label" for="robot-2">Robots (without autoselect on enter)</label>
-      <auto-complete src="/demo" for="items-2-popup" aria-labelledby="robots-2-label" >
-        <input name="robot-2" type="text" aria-labelledby="robots-2-label" autofocus>
+      <auto-complete src="/demo" for="items-2-popup" aria-labelledby="robots-2-label">
+        <input name="robot-2" type="text" aria-labelledby="robots-2-label" autofocus />
         <ul id="items-2-popup"></ul>
         <div id="items-2-popup-feedback" class="sr-only"></div>
       </auto-complete>
