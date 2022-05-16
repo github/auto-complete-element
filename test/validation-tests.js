@@ -1,4 +1,5 @@
 import autoCompleteRulesBuilder, {validator} from '../validator.js'
+import chai, {assert} from 'chai'
 chai.config.truncateThreshold = Infinity
 
 const autoCompleteRules = autoCompleteRulesBuilder()

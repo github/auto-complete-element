@@ -1,3 +1,7 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import AutoCompleteElement from '../dist/index.js'
+import {assert} from 'chai'
+
 describe('auto-complete element', function () {
   describe('element creation', function () {
     it('creates from document.createElement', function () {
