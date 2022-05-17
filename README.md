@@ -81,6 +81,10 @@ As an example:
 - `open` is true when the auto-complete result list is visible
 - `value` is the selected value from the list or the empty string when cleared
 
+## Properties
+
+- `fetchResult` you can override the default method used to query for results by overriding this property: `document.querySelector('auto-complete').fetchResult = async (el, url) => (await fetch(url)).text()`
+
 ## Events
 
 ### Network request lifecycle events

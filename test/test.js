@@ -31,7 +31,6 @@ describe('auto-complete element', function () {
 
       triggerInput(input, 'hub')
       await once(container, 'loadend')
-
       assert.equal(5, popup.children.length)
     })
 
@@ -193,6 +192,22 @@ describe('auto-complete element', function () {
       assert.isFalse(keydown(input, 'ArrowDown', true))
       assert.isTrue(container.open)
       assert.isFalse(popup.hidden)
+    })
+
+    it('allows providing a custom fetch method', async () => {
+      const container = document.querySelector('auto-complete')
+      const input = container.querySelector('input')
+      const popup = container.querySelector('#popup')
+
+      container.fetchResult = async () => `
+        <li>Mock Custom Fetch Result 1</li>
+        <li>Mock Custom Fetch Result 2</li>
+      `
+
+      triggerInput(input, 'hub')
+      await once(container, 'loadend')
+      assert.equal(2, popup.children.length)
+      assert.equal(popup.querySelector('li').textContent, 'Mock Custom Fetch Result 1')
     })
   })
 

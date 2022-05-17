@@ -1,7 +1,6 @@
 import type AutocompleteElement from './auto-complete-element'
 import Combobox from '@github/combobox-nav'
 import debounce from './debounce.js'
-import {fragment} from './send.js'
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -202,7 +201,8 @@ export default class Autocomplete {
     url.search = params.toString()
 
     this.container.dispatchEvent(new CustomEvent('loadstart'))
-    fragment(this.input, url.toString())
+    this.container
+      .fetchResult(this.input, url.toString())
       .then(html => {
         // eslint-disable-next-line github/no-inner-html
         this.results.innerHTML = html
