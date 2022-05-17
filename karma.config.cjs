@@ -1,8 +1,5 @@
 /* eslint-disable filenames/match-regex */
 
-// eslint-disable-next-line import/no-commonjs, no-undef, @typescript-eslint/no-var-requires
-process.env.CHROME_BIN = require('chromium').path
-
 function completer(request, response, next) {
   if (request.method === 'GET' && request.url.startsWith('/search?q=hub')) {
     response.writeHead(200)
