@@ -12,9 +12,11 @@ export default class Autocomplete {
   results: HTMLElement
   combobox: Combobox
   feedback: HTMLElement | null
+  inputFilterFeedback: HTMLElement | null
   autoselectEnabled: boolean
   clientOptions: NodeListOf<HTMLElement> | null
   clearButton: HTMLElement | null
+  tokenRanges: any
 
   interactingWithList: boolean
 
@@ -29,8 +31,10 @@ export default class Autocomplete {
     this.results = results
     this.combobox = new Combobox(input, results)
     this.feedback = document.getElementById(`${this.results.id}-feedback`)
+    this.inputFilterFeedback = document.getElementById(`${this.results.id}-filter-feedback`)
     this.autoselectEnabled = autoselectEnabled
     this.clearButton = document.getElementById(`${this.input.id || this.input.name}-clear`)
+    this.tokenRanges = []
 
     // check to see if there are any default options provided
     this.clientOptions = results.querySelectorAll('[role=option]')
@@ -39,6 +43,12 @@ export default class Autocomplete {
     if (this.feedback) {
       this.feedback.setAttribute('aria-live', 'polite')
       this.feedback.setAttribute('aria-atomic', 'true')
+    }
+
+    // make sure feedback has all required aria attributes
+    if (this.inputFilterFeedback) {
+      this.inputFilterFeedback.setAttribute('aria-live', 'polite')
+      this.inputFilterFeedback.setAttribute('aria-atomic', 'true')
     }
 
     // if clearButton doesn't have an accessible label, give it one
@@ -129,6 +139,69 @@ export default class Autocomplete {
       event.stopPropagation()
       event.preventDefault()
     }
+
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+      const inputValue: string = this.input.value
+      const cursorLocation: number = this.input.selectionStart || 0
+      const tokens: string[] = inputValue.split(' ')
+      const screenReaderFeedbackString = (action: string, filter: string, value: string) =>
+        `${action} the ${filter} filter with ${value} value`
+
+      for (let i = 0; i < this.tokenRanges.length; i++) {
+        const currentTokenRange = this.tokenRanges[i]
+        // Early return if the token does not include a `:` denoting a filter
+        if (!tokens[i].includes(':')) return
+
+        if (
+          (event.key === 'ArrowRight' &&
+            cursorLocation >= currentTokenRange[0] &&
+            cursorLocation < currentTokenRange[1]) ||
+          (event.key === 'ArrowLeft' &&
+            cursorLocation >= currentTokenRange[0] &&
+            cursorLocation - 1 < currentTokenRange[1])
+        ) {
+          const currentRangeValue: string | undefined = tokens[i]
+          let action = 'Entering'
+
+          if (
+            (cursorLocation + 1 === currentTokenRange[1] && event.key === 'ArrowRight') ||
+            (cursorLocation - 1 <= currentTokenRange[0] && event.key === 'ArrowLeft')
+          ) {
+            action = 'Leaving'
+          }
+
+          const [filter, value] = currentRangeValue.split(':')
+          // Only do this one time until it changes
+          if (
+            this.inputFilterFeedback &&
+            this.inputFilterFeedback.textContent !== screenReaderFeedbackString(action, filter, value)
+          ) {
+            this.inputFilterFeedback.textContent = screenReaderFeedbackString(action, filter, value)
+          }
+        }
+      }
+      /** Scenarios:
+      - user presses left arrow
+        - enters filter
+        - leaves filter
+        - doesn't enter or leave a filter
+      - user presses right arrow
+        - enters filter
+        - leaves filter
+        - doesn't enter or leave a filter
+
+      Assumptions:
+        - user will never enter or leave a filter from another filter
+        - a filter and value are separated by a `:`
+
+      // user input samples
+      `repo:github/accessibility design`
+      `is:issue assignee:@lindseywild is:open`
+      `accessibility`
+      `is:pr interactions:>2000`
+      `language:swift closed:>2014-06-11`
+     */
+    }
   }
 
   onInputFocus(): void {
@@ -163,6 +236,27 @@ export default class Autocomplete {
   }
 
   onInputChange(): void {
+    const inputValue: string = this.input.value
+    const tokens: string[] = inputValue.split(' ')
+
+    // Reset tokens array
+    this.tokenRanges = []
+
+    // Creates an array of indecies
+    tokens.map((token, index) => {
+      let startIndex = 0
+      let endIndex = token.length
+
+      if (index > 0) {
+        // Gets previous array's end value
+        const previousValue = this.tokenRanges.at(-1)[1]
+        startIndex = previousValue + 1
+        endIndex = startIndex + token.length
+      }
+
+      this.tokenRanges.push([startIndex, endIndex])
+    })
+
     if (this.feedback && this.feedback.textContent) {
       this.feedback.textContent = ''
     }

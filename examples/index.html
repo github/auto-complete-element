@@ -40,6 +40,25 @@
   </head>
   <body>
     <form>
+      <label id="robots-label" for="robot">Robots (Example with multi-tokens)</label>
+      <!-- To enable auto-select (select first on Enter), use data-autoselect="true" -->
+      <auto-complete src="/demo" for="items-popup" aria-labelledby="robots-label" data-autoselect="true">
+        <input name="robot" type="text" aria-labelledby="robots-label" autofocus />
+        <!-- if a clear button is passed in, recommended to be *before* UL elements to avoid conflicting with their blur logic -->
+        <button id="robot-clear">x</button>
+        <ul id="items-popup"></ul>
+        <!-- For built-in screen-reader announcements:
+          - Note the ID is the same as the <ul> with "feedback" appended
+          - Also note that aria attributes will be added programmatically if they aren't set correctly  
+        -->
+        <div id="items-popup-feedback" class="sr-only"></div>
+        <!-- Provides feedback if entering/leaving a filter in the input -->
+        <div id="items-popup-filter-feedback"></div>
+      </auto-complete>
+      <button type="submit">Save</button>
+    </form>
+
+    <form>
       <label id="robots-label" for="robot">Robots</label>
       <!-- To enable auto-select (select first on Enter), use data-autoselect="true" -->
       <auto-complete src="/demo" for="items-popup" aria-labelledby="robots-label" data-autoselect="true">
@@ -101,7 +120,8 @@
       document.querySelector("auto-complete#custom-fetching-method").fetchResult = async (el, url) => (await fetch(url)).text();
     </script>
 
-<!--    <script type="module" src="./dist/bundle.js"></script>-->
-    <script type="module" src="https://unpkg.com/@github/auto-complete-element@latest/dist/bundle.js"></script>
+
+   <script type="module" src="./dist/bundle.js"></script>
+    <!-- <script type="module" src="https://unpkg.com/@github/auto-complete-element@latest/dist/bundle.js"></script> -->
   </body>
 </html>

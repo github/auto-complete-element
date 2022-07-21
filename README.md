@@ -139,7 +139,7 @@ npm install
 npm test
 ```
 
-To view changes locally, run `npm run examples`.
+To view changes locally, run `npm run example`.
 
 In `examples/index.html`, uncomment `<!--<script type="module" src="./dist/bundle.js"></script>-->` and comment out the script referencing the `unpkg` version. This allows you to use the `src` code in this repo. Otherwise, you will be pulling the latest published code, which will not reflect the local changes you are making.
 
