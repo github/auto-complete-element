@@ -9,7 +9,7 @@ const SCREEN_READER_DELAY = window.testScreenReaderDelay || 100
 export default class Autocomplete {
   container: AutocompleteElement
   input: HTMLInputElement
-  tokenizedInput: HTMLElement | null
+  tokenizedInput: HTMLElement
   results: HTMLElement
   combobox: Combobox
   feedback: HTMLElement | null
@@ -22,14 +22,15 @@ export default class Autocomplete {
   constructor(
     container: AutocompleteElement,
     input: HTMLInputElement,
+    tokenizedInput: HTMLElement,
     results: HTMLElement,
     autoselectEnabled = false
   ) {
     this.container = container
     this.input = input
+    this.tokenizedInput = tokenizedInput
     this.results = results
     this.combobox = new Combobox(input, results)
-    this.tokenizedInput = document.getElementById(`${this.results.id}-tokenized-input`)
     this.feedback = document.getElementById(`${this.results.id}-feedback`)
     this.autoselectEnabled = autoselectEnabled
     this.clearButton = document.getElementById(`${this.input.id || this.input.name}-clear`)
@@ -190,7 +191,7 @@ export default class Autocomplete {
         tokenItem.setAttribute('data-input-type', 'text')
       }
 
-      tokenItem.setAttribute('aria-hidden', 'true')
+      // TODO: If a selection is made from the list, replace the visual div with the contents
       tokenItem.textContent = `${token}`
       this.tokenizedInput?.appendChild(tokenItem)
       this.tokenizedInput?.appendChild(tokenItemSpace)

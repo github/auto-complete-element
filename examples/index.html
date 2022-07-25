@@ -43,7 +43,7 @@
       <label id="robots-label" for="robot">Robots</label>
       <!-- To enable auto-select (select first on Enter), use data-autoselect="true" -->
       <auto-complete src="/demo" for="items-popup" aria-labelledby="robots-label" data-autoselect="true">
-        <div id="items-popup-tokenized-input"></div>
+        <div id="items-popup-tokenized-input" aria-hidden="true" data-tokenized-input></div>
         <input name="robot" type="text" aria-labelledby="robots-label" autofocus />
         <!-- if a clear button is passed in, recommended to be *before* UL elements to avoid conflicting with their blur logic -->
         <button id="robot-clear">x</button>

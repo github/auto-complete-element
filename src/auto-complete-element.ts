@@ -12,10 +12,14 @@ export default class AutocompleteElement extends HTMLElement {
 
     // eslint-disable-next-line custom-elements/no-dom-traversal-in-connectedcallback
     const input = this.querySelector('input')
+    // eslint-disable-next-line custom-elements/no-dom-traversal-in-connectedcallback
+    const tokenizedInput = this.querySelector<HTMLElement>('[data-tokenized-input]')
+    // eslint-disable-next-line no-console
+    console.log(tokenizedInput)
     const results = document.getElementById(listId)
     if (!(input instanceof HTMLInputElement) || !results) return
     const autoselectEnabled = this.getAttribute('data-autoselect') === 'true'
-    state.set(this, new Autocomplete(this, input, results, autoselectEnabled))
+    state.set(this, new Autocomplete(this, input, tokenizedInput as HTMLElement, results, autoselectEnabled))
     results.setAttribute('role', 'listbox')
   }
 
@@ -74,6 +78,28 @@ export default class AutocompleteElement extends HTMLElement {
       case 'value':
         if (newValue !== null) {
           autocomplete.input.value = newValue
+
+          // TODO: Deduplicate this from `autocomplete.ts`
+          autocomplete.tokenizedInput.textContent = ''
+
+          const tokens = newValue.split(' ')
+
+          for (const token of tokens) {
+            const tokenItem = document.createElement('span')
+            const tokenItemSpace = document.createElement('span')
+            tokenItemSpace.textContent = ' '
+
+            if (token.includes(':')) {
+              tokenItem.setAttribute('data-input-type', 'token')
+              tokenItem.style.border = '1px solid hotpink'
+            } else {
+              tokenItem.setAttribute('data-input-type', 'text')
+            }
+
+            tokenItem.textContent = `${token}`
+            autocomplete.tokenizedInput?.appendChild(tokenItem)
+            autocomplete.tokenizedInput?.appendChild(tokenItemSpace)
+          }
         }
         this.dispatchEvent(
           new AutocompleteEvent('auto-complete-change', {
