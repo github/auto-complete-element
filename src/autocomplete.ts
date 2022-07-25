@@ -6,6 +6,34 @@ import debounce from './debounce.js'
 // @ts-ignore
 const SCREEN_READER_DELAY = window.testScreenReaderDelay || 100
 
+/** Scenarios:
+  - user types "i" and is greeted with results for `is:`
+    first options: in:, involves:, is:
+  - user selects `is:` and it's added to the input with the colon
+  - input realizes it's a filter, so it triggers a new json file with all of the options for `is:`
+    - next options: "discussion", "issue", "open", "project", "pr"
+  - user types `p` and list narrows to `project` and `pr`
+  - user selects `project` and it's autofilled after the `is:` with a space after
+
+  - if a colon is pressed, it triggers a new set of results to be loaded
+
+  Assumptions:
+    - a filter and value are separated by a `:`
+
+    // If input matches a filter (regex for colon)
+      // Swap out the source with a new source
+      // Provide an array of mappings, maybe?
+      // If a user deletes input, go back to the previous source
+      // Store the previous source
+
+  // user input samples
+    `repo:github/accessibility design`
+    `is:issue assignee:@lindseywild is:open`
+    `accessibility`
+    `is:pr interactions:>2000`
+    `language:swift closed:>2014-06-11`
+  */
+
 export default class Autocomplete {
   container: AutocompleteElement
   input: HTMLInputElement
@@ -52,6 +80,9 @@ export default class Autocomplete {
     if (!this.input.getAttribute('aria-expanded')) {
       this.input.setAttribute('aria-expanded', 'false')
     }
+
+    // eslint-disable-next-line no-console
+    console.log('Hey?')
 
     this.results.hidden = true
     // @jscholes recommends a generic "results" label as the results are already related to the combobox, which is properly labelled
@@ -162,7 +193,19 @@ export default class Autocomplete {
     this.interactingWithList = true
   }
 
-  onInputChange(): void {
+  onInputChange(e: Event): void {
+    // eslint-disable-next-line no-console
+    console.log('input has changed', (e.target as any)?.value)
+    if ((e.target as any).value === 'is:') {
+      // eslint-disable-next-line github/no-inner-html
+      this.results.innerHTML = `
+        <li role="option" data-autocomplete-value="@hubot">Hubotsssss</li>
+        <li role="option" data-autocomplete-value="@bender">Bender</li>
+        <li role="option" data-autocomplete-value="@bb-8">BB-8</li>
+        <li role="option" data-autocomplete-value="@r2d2" aria-disabled="true">R2-D2 (powered down)</li>
+      `
+    }
+
     if (this.feedback && this.feedback.textContent) {
       this.feedback.textContent = ''
     }
