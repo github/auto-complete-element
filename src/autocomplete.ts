@@ -9,6 +9,7 @@ const SCREEN_READER_DELAY = window.testScreenReaderDelay || 100
 export default class Autocomplete {
   container: AutocompleteElement
   input: HTMLInputElement
+  tokenizedInput: HTMLElement | null
   results: HTMLElement
   combobox: Combobox
   feedback: HTMLElement | null
@@ -28,6 +29,7 @@ export default class Autocomplete {
     this.input = input
     this.results = results
     this.combobox = new Combobox(input, results)
+    this.tokenizedInput = document.getElementById(`${this.results.id}-tokenized-input`)
     this.feedback = document.getElementById(`${this.results.id}-feedback`)
     this.autoselectEnabled = autoselectEnabled
     this.clearButton = document.getElementById(`${this.input.id || this.input.name}-clear`)
@@ -61,6 +63,7 @@ export default class Autocomplete {
 
     this.interactingWithList = false
 
+    // Change this so the results are more instant - remove debounce?
     this.onInputChange = debounce(this.onInputChange.bind(this), 300)
     this.onResultsMouseDown = this.onResultsMouseDown.bind(this)
     this.onInputBlur = this.onInputBlur.bind(this)
@@ -162,7 +165,33 @@ export default class Autocomplete {
     this.interactingWithList = true
   }
 
-  onInputChange(): void {
+  // Detect if input is a token
+  // If so, create an overlaying div
+  // Add a data-attribute to the token
+  // If clear is pressed, clear out input
+
+  onInputChange(event: Event): void {
+    if (this.tokenizedInput) {
+      this.tokenizedInput.textContent = ''
+    }
+
+    const inputValue = (event.target as any).value
+    const tokens = inputValue.split(' ')
+
+    for (const token of tokens) {
+      const tokenItem = document.createElement('span')
+
+      if (token.includes(':')) {
+        tokenItem.setAttribute('data-input-type', 'token')
+      } else {
+        tokenItem.setAttribute('data-input-type', 'text')
+      }
+
+      tokenItem.setAttribute('aria-hidden', 'true')
+      tokenItem.textContent = `${token} `
+      this.tokenizedInput?.appendChild(tokenItem)
+    }
+
     if (this.feedback && this.feedback.textContent) {
       this.feedback.textContent = ''
     }

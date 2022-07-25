@@ -43,6 +43,7 @@
       <label id="robots-label" for="robot">Robots</label>
       <!-- To enable auto-select (select first on Enter), use data-autoselect="true" -->
       <auto-complete src="/demo" for="items-popup" aria-labelledby="robots-label" data-autoselect="true">
+        <div id="items-popup-tokenized-input"></div>
         <input name="robot" type="text" aria-labelledby="robots-label" autofocus />
         <!-- if a clear button is passed in, recommended to be *before* UL elements to avoid conflicting with their blur logic -->
         <button id="robot-clear">x</button>
@@ -56,52 +57,7 @@
       <button type="submit">Save</button>
     </form>
 
-    <!-- example where clear button uses input id -->
-    <form>
-      <label id="robots-a-label" for="robot-a">Robots (using Input ID)</label>
-      <!-- To enable auto-select (select first on Enter), use data-autoselect="true" -->
-      <auto-complete src="/demo" for="items-a-popup" aria-labelledby="robots-a-label" data-autoselect="true">
-        <input id="robot-a" name="robot-a" type="text" aria-labelledby="robots-a-label" autofocus />
-        <!-- if a clear button is passed in, recommended to be *before* UL elements to avoid conflicting with their blur logic -->
-        <button id="robot-a-clear">x</button>
-        <ul id="items-a-popup"></ul>
-        <!-- For built-in screen-reader announcements:
-          - Note the ID is the same as the <ul> with "feedback" appended
-          - Also note that aria attributes will be added programmatically if they aren't set correctly  
-        -->
-        <div id="items-a-popup-feedback" class="sr-only"></div>
-      </auto-complete>
-      <button type="submit">Save</button>
-    </form>
-
-    <!-- example without autoselect -->
-    <form>
-      <label id="robots-2-label" for="robot-2">Robots (without autoselect on enter)</label>
-      <auto-complete src="/demo" for="items-2-popup" aria-labelledby="robots-2-label">
-        <input name="robot-2" type="text" aria-labelledby="robots-2-label" autofocus />
-        <ul id="items-2-popup"></ul>
-        <div id="items-2-popup-feedback" class="sr-only"></div>
-      </auto-complete>
-      <button type="submit">Save</button>
-    </form>
-
-    <!-- example with a custom fetching result method -->
-    <form>
-      <label id="custom-fetching-robots-label" for="custom-fetching-robot">Custom Fetching Robots</label>
-      <auto-complete id="custom-fetching-method" src="/demo" for="custom-fetching-items-popup" aria-labelledby="custom-fetching-robots-label" data-autoselect="true">
-        <input name="custom-fetching-robot" type="text" aria-labelledby="custom-fetching-robots-label" autofocus>
-        <ul id="custom-fetching-items-popup"></ul>
-        <div id="custom-fetching-items-popup-feedback" class="sr-only"></div>
-      </auto-complete>
-      <button type="submit">Save</button>
-    </form>
-    <script>
-      window.fetch = () => Promise.resolve(new Response(robotsList));
-      // fetchResult must be a function that return a Promise of string and that accepts as parameters an element and an URL
-      document.querySelector("auto-complete#custom-fetching-method").fetchResult = async (el, url) => (await fetch(url)).text();
-    </script>
-
-<!--    <script type="module" src="./dist/bundle.js"></script>-->
-    <script type="module" src="https://unpkg.com/@github/auto-complete-element@latest/dist/bundle.js"></script>
+    <script type="module" src="./dist/bundle.js"></script>
+    <!-- <script type="module" src="https://unpkg.com/@github/auto-complete-element@latest/dist/bundle.js"></script> -->
   </body>
 </html>
