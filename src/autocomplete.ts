@@ -1,6 +1,6 @@
 import type AutocompleteElement from './auto-complete-element'
 import Combobox from '@github/combobox-nav'
-import debounce from './debounce.js'
+// import debounce from './debounce.js'
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -64,7 +64,8 @@ export default class Autocomplete {
     this.interactingWithList = false
 
     // Change this so the results are more instant - remove debounce?
-    this.onInputChange = debounce(this.onInputChange.bind(this), 300)
+    // this.onInputChange = debounce(this.onInputChange.bind(this), 300)
+    this.onInputChange = this.onInputChange.bind(this)
     this.onResultsMouseDown = this.onResultsMouseDown.bind(this)
     this.onInputBlur = this.onInputBlur.bind(this)
     this.onInputFocus = this.onInputFocus.bind(this)
@@ -97,6 +98,10 @@ export default class Autocomplete {
       this.input.setAttribute('aria-expanded', 'false')
       // eslint-disable-next-line i18n-text/no-en
       this.updateFeedbackForScreenReaders('Results hidden.')
+    }
+
+    if (this.tokenizedInput) {
+      this.tokenizedInput.textContent = ''
     }
 
     this.input.value = ''
@@ -165,11 +170,6 @@ export default class Autocomplete {
     this.interactingWithList = true
   }
 
-  // Detect if input is a token
-  // If so, create an overlaying div
-  // Add a data-attribute to the token
-  // If clear is pressed, clear out input
-
   onInputChange(event: Event): void {
     if (this.tokenizedInput) {
       this.tokenizedInput.textContent = ''
@@ -180,16 +180,20 @@ export default class Autocomplete {
 
     for (const token of tokens) {
       const tokenItem = document.createElement('span')
+      const tokenItemSpace = document.createElement('span')
+      tokenItemSpace.textContent = ' '
 
       if (token.includes(':')) {
         tokenItem.setAttribute('data-input-type', 'token')
+        tokenItem.style.border = '1px solid hotpink'
       } else {
         tokenItem.setAttribute('data-input-type', 'text')
       }
 
       tokenItem.setAttribute('aria-hidden', 'true')
-      tokenItem.textContent = `${token} `
+      tokenItem.textContent = `${token}`
       this.tokenizedInput?.appendChild(tokenItem)
+      this.tokenizedInput?.appendChild(tokenItemSpace)
     }
 
     if (this.feedback && this.feedback.textContent) {
