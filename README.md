@@ -176,4 +176,4 @@ Passes and failures may be determined by the length of the `passes` and `violati
 
 ## License
 
-Distributed under the MIT license. See LICENSE for details.
+Distributed under the MIT license. See LICENSE for the details.
