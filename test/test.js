@@ -314,6 +314,34 @@ describe('auto-complete element', function () {
       assert.equal(feedback.textContent, '')
     })
   })
+
+  describe('shadowdom', () => {
+    let shadow = null
+    beforeEach(function () {
+      const fixture = document.createElement('div')
+      fixture.id = 'mocha-fixture'
+      document.body.append(fixture)
+      shadow = fixture.attachShadow({mode: 'open'})
+      shadow.innerHTML = `
+          <auto-complete src="/search" for="popup">
+            <input type="text">
+            <ul id="popup"></ul>
+            <div id="popup-feedback"></div>
+          </auto-complete>
+        </div>
+      `
+    })
+
+    it('uses rootNode to find idrefs', async function () {
+      const container = shadow.querySelector('auto-complete')
+      const input = container.querySelector('input')
+      const popup = container.querySelector('#popup')
+
+      triggerInput(input, 'hub')
+      await once(container, 'loadend')
+      assert.equal(5, popup.children.length)
+    })
+  })
 })
 
 function waitForElementToChange(el) {
