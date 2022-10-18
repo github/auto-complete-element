@@ -8,11 +8,12 @@ const state = new WeakMap()
 export default class AutocompleteElement extends HTMLElement {
   connectedCallback(): void {
     const listId = this.getAttribute('for')
+    if (!this.isConnected) return
     if (!listId) return
 
     // eslint-disable-next-line custom-elements/no-dom-traversal-in-connectedcallback
     const input = this.querySelector('input')
-    const results = this.getRootNode().getElementById(listId)
+    const results = (this.getRootNode() as Document).getElementById(listId)
     if (!(input instanceof HTMLInputElement) || !results) return
     const autoselectEnabled = this.getAttribute('data-autoselect') === 'true'
     state.set(this, new Autocomplete(this, input, results, autoselectEnabled))
