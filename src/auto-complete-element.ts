@@ -12,7 +12,7 @@ export default class AutocompleteElement extends HTMLElement {
 
     // eslint-disable-next-line custom-elements/no-dom-traversal-in-connectedcallback
     const input = this.querySelector('input')
-    const results = this.querySelector('#'+listId)
+    const results = this.getRootNode().getElementById(listId)
     if (!(input instanceof HTMLInputElement) || !results) return
     const autoselectEnabled = this.getAttribute('data-autoselect') === 'true'
     state.set(this, new Autocomplete(this, input, results, autoselectEnabled))
