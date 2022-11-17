@@ -59,7 +59,7 @@ export default class Autocomplete {
     if (!this.results.getAttribute('aria-label')) {
       this.results.setAttribute('aria-label', 'results')
     }
-    
+
     this.input.setAttribute('autocomplete', 'off')
     this.input.setAttribute('spellcheck', 'false')
 
