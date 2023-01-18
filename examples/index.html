@@ -101,7 +101,19 @@
       document.querySelector("auto-complete#custom-fetching-method").fetchResult = async (el, url) => (await fetch(url)).text();
     </script>
 
+    <form>
+      <label id="fetch-on-empty-robots-label" for="fetch-on-empty-robot">Fetch on empty Robots</label>
+      <!-- To enable fetch on empty use fetch-on-empty attribute -->
+      <auto-complete src="/demo" for="fetch-on-empty-items-popup" aria-labelledby="fetch-on-empty-robots-label" fetch-on-empty>
+        <input name="fetch-on-empty-robot" type="text" aria-labelledby="fetch-on-empty-robots-label" autofocus />
+        <button id="fetch-on-empty-robot-clear">x</button>
+        <ul id="fetch-on-empty-items-popup"></ul>
+        <div id="fetch-on-empty-items-popup-feedback" class="sr-only"></div>
+      </auto-complete>
+      <button type="submit">Save</button>
+    </form>
+
 <!--    <script type="module" src="./dist/bundle.js"></script>-->
-    <script type="module" src="https://unpkg.com/@github/auto-complete-element@latest/dist/bundle.js"></script>
+        <script type="module" src="https://unpkg.com/@github/auto-complete-element@latest/dist/bundle.js"></script>
   </body>
 </html>

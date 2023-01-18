@@ -55,6 +55,18 @@ export default class AutocompleteElement extends HTMLElement {
     }
   }
 
+  get fetchOnEmpty(): boolean {
+    return this.hasAttribute('fetch-on-empty')
+  }
+
+  set fetchOnEmpty(fetchOnEmpty: boolean) {
+    if (fetchOnEmpty) {
+      this.setAttribute('fetch-on-empty', '')
+    } else {
+      this.removeAttribute('fetch-on-empty')
+    }
+  }
+
   fetchResult = fragment
 
   static get observedAttributes(): string[] {
