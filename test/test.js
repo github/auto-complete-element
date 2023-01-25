@@ -300,6 +300,19 @@ describe('auto-complete element', function () {
       assert.equal(popup.querySelector('li').textContent, 'Mock Custom Fetch Result 1')
       assert.equal(feedback.textContent, '')
     })
+    
+    it('does not fetch result when value is empty, if fetch-on-empty removed', async function () {
+      const input = container.querySelector('input')
+      const popup = container.querySelector(`#popup`)
+      const feedback = container.querySelector(`#popup-feedback`)
+      container.fetchOnEmpty = false
+
+      triggerInput(input, '')
+      await new Promise(resolve => setTimeout(resolve, 100))
+
+      assert.equal(0, popup.children.length)
+      assert.equal(feedback.textContent, '')
+    })
   })
 })
 
