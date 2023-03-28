@@ -202,10 +202,10 @@ export default class Autocomplete {
 
     this.container.dispatchEvent(new CustomEvent('loadstart'))
     this.container
-      .fetchResult(this.input, url.toString())
+      .fetchResult(url)
       .then(html => {
         // eslint-disable-next-line github/no-inner-html
-        this.results.innerHTML = html
+        this.results.innerHTML = html as string
         this.identifyOptions()
         const allNewOptions = this.results.querySelectorAll('[role="option"]')
         const hasResults = !!allNewOptions.length

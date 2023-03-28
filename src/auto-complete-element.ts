@@ -1,11 +1,27 @@
 import Autocomplete from './autocomplete.js'
 import AutocompleteEvent from './auto-complete-event.js'
-import {fragment} from './send.js'
 
 const state = new WeakMap()
 
+export interface CSPTrustedTypesPolicy {
+  createHTML: (s: string, response: Response) => CSPTrustedHTMLToStringable
+}
+
+// Note: basically every object (and some primitives) in JS satisfy this
+// `CSPTrustedHTMLToStringable` interface, but this is the most compatible shape
+// we can use.
+interface CSPTrustedHTMLToStringable {
+  toString: () => string
+}
+
+let cspTrustedTypesPolicyPromise: Promise<CSPTrustedTypesPolicy> | null = null
+
 // eslint-disable-next-line custom-elements/file-name-matches-element
 export default class AutocompleteElement extends HTMLElement {
+  static setCSPTrustedTypesPolicy(policy: CSPTrustedTypesPolicy | Promise<CSPTrustedTypesPolicy> | null): void {
+    cspTrustedTypesPolicyPromise = policy === null ? policy : Promise.resolve(policy)
+  }
+
   #forElement: HTMLElement | null = null
   get forElement(): HTMLElement | null {
     if (this.#forElement?.isConnected) {
@@ -87,6 +103,7 @@ export default class AutocompleteElement extends HTMLElement {
     }
   }
 
+  // HEAD
   get fetchOnEmpty(): boolean {
     return this.hasAttribute('fetch-on-empty')
   }
@@ -95,8 +112,26 @@ export default class AutocompleteElement extends HTMLElement {
     this.toggleAttribute('fetch-on-empty', fetchOnEmpty)
   }
 
-  fetchResult = fragment
-
+  #requestController?: AbortController
+  async fetchResult(url: URL): Promise<string | CSPTrustedHTMLToStringable> {
+    this.#requestController?.abort()
+    const {signal} = (this.#requestController = new AbortController())
+    const res = await fetch(url.toString(), {
+      signal,
+      headers: {
+        Accept: 'text/fragment+html'
+      }
+    })
+    if (!res.ok) {
+      throw new Error(await res.text())
+    }
+    if (cspTrustedTypesPolicyPromise) {
+      const cspTrustedTypesPolicy = await cspTrustedTypesPolicyPromise
+      return cspTrustedTypesPolicy.createHTML(await res.text(), res)
+    }
+    return await res.text()
+  }
+  //f21528e (add csp trusted types policy)
   static get observedAttributes(): string[] {
     return ['open', 'value', 'for']
   }
