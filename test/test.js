@@ -269,6 +269,51 @@ describe('auto-complete element', function () {
       assert.equal(`5 results. first is the top result: Press Enter to activate.`, feedback.innerHTML)
     })
   })
+
+  describe('fetch on empty enabled', () => {
+    let container
+    beforeEach(function () {
+      document.body.innerHTML = `
+        <div id="mocha-fixture">
+          <auto-complete fetch-on-empty src="/moke" for="popup" data-autoselect="true">
+            <input type="text" value="1">
+            <ul id="popup"></ul>
+            <div id="popup-feedback"></div>
+          </auto-complete>
+        </div>
+      `
+      container = document.querySelector('auto-complete')
+      container.fetchResult = async () => `
+        <li>Mock Custom Fetch Result 1</li>
+        <li>Mock Custom Fetch Result 2</li>`
+    })
+
+    it('should fetch result when value is empty', async function () {
+      const input = container.querySelector('input')
+      const popup = container.querySelector(`#popup`)
+      const feedback = container.querySelector(`#popup-feedback`)
+
+      triggerInput(input, '')
+      await once(container, 'loadend')
+
+      assert.equal(2, popup.children.length)
+      assert.equal(popup.querySelector('li').textContent, 'Mock Custom Fetch Result 1')
+      assert.equal(feedback.textContent, '')
+    })
+
+    it('does not fetch result when value is empty, if fetch-on-empty removed', async function () {
+      const input = container.querySelector('input')
+      const popup = container.querySelector(`#popup`)
+      const feedback = container.querySelector(`#popup-feedback`)
+      container.fetchOnEmpty = false
+
+      triggerInput(input, '')
+      await new Promise(resolve => setTimeout(resolve, 100))
+
+      assert.equal(0, popup.children.length)
+      assert.equal(feedback.textContent, '')
+    })
+  })
 })
 
 function waitForElementToChange(el) {
