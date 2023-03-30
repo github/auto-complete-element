@@ -342,6 +342,34 @@ describe('auto-complete element', function () {
       assert.equal(5, popup.children.length)
     })
   })
+
+  describe('redefining elements', () => {
+    beforeEach(function () {
+      document.body.innerHTML = `
+        <div id="mocha-fixture">
+          <auto-complete src="/search" data-autoselect="true">
+            <input type="text">
+            <input id="second" type="text">
+            <ul></ul>
+            <div id="popup-feedback"></div>
+          </auto-complete>
+        </div>
+      `
+    })
+
+    it('changes where content gets rendered based on properties', async function () {
+      const container = document.querySelector('auto-complete')
+      const input = container.querySelector('input#second')
+      const list = container.querySelector('ul')
+      container.forElement = list
+      container.inputElement = input
+
+      triggerInput(input, 'hub')
+      await once(container, 'loadend')
+
+      assert.equal(5, list.children.length)
+    })
+  })
 })
 
 function waitForElementToChange(el) {

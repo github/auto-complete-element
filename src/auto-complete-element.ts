@@ -6,18 +6,40 @@ const state = new WeakMap()
 
 // eslint-disable-next-line custom-elements/file-name-matches-element
 export default class AutocompleteElement extends HTMLElement {
-  connectedCallback(): void {
-    const listId = this.getAttribute('for')
-    if (!this.isConnected) return
-    if (!listId) return
+  #forElement: HTMLElement | null = null
+  get forElement(): HTMLElement | null {
+    if (this.#forElement?.isConnected) {
+      return this.#forElement
+    }
+    const id = this.getAttribute('for')
+    const root = this.getRootNode()
+    if (id && (root instanceof Document || root instanceof ShadowRoot)) {
+      return root.getElementById(id)
+    }
+    return null
+  }
 
-    // eslint-disable-next-line custom-elements/no-dom-traversal-in-connectedcallback
-    const input = this.querySelector('input')
-    const results = (this.getRootNode() as Document).getElementById(listId)
-    if (!(input instanceof HTMLInputElement) || !results) return
-    const autoselectEnabled = this.getAttribute('data-autoselect') === 'true'
-    state.set(this, new Autocomplete(this, input, results, autoselectEnabled))
-    results.setAttribute('role', 'listbox')
+  set forElement(element: HTMLElement | null) {
+    this.#forElement = element
+    this.setAttribute('for', '')
+  }
+
+  #inputElement: HTMLInputElement | null = null
+  get inputElement(): HTMLInputElement | null {
+    if (this.#inputElement?.isConnected) {
+      return this.#inputElement
+    }
+    return this.querySelector<HTMLInputElement>('input')
+  }
+
+  set inputElement(input: HTMLInputElement | null) {
+    this.#inputElement = input
+    this.#reattachState()
+  }
+
+  connectedCallback(): void {
+    if (!this.isConnected) return
+    this.#reattachState()
   }
 
   disconnectedCallback(): void {
@@ -26,6 +48,15 @@ export default class AutocompleteElement extends HTMLElement {
       autocomplete.destroy()
       state.delete(this)
     }
+  }
+
+  #reattachState() {
+    state.get(this)?.destroy()
+    const {forElement, inputElement} = this
+    if (!forElement || !inputElement) return
+    const autoselectEnabled = this.getAttribute('data-autoselect') === 'true'
+    state.set(this, new Autocomplete(this, inputElement, forElement, autoselectEnabled))
+    forElement.setAttribute('role', 'listbox')
   }
 
   get src(): string {
@@ -67,7 +98,7 @@ export default class AutocompleteElement extends HTMLElement {
   fetchResult = fragment
 
   static get observedAttributes(): string[] {
-    return ['open', 'value']
+    return ['open', 'value', 'for']
   }
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -75,6 +106,10 @@ export default class AutocompleteElement extends HTMLElement {
 
     const autocomplete = state.get(this)
     if (!autocomplete) return
+
+    if (this.forElement !== state.get(this)?.results || this.inputElement !== state.get(this)?.input) {
+      this.#reattachState()
+    }
 
     switch (name) {
       case 'open':
