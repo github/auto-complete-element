@@ -370,6 +370,41 @@ describe('auto-complete element', function () {
       assert.equal(5, list.children.length)
     })
   })
+
+  describe('trustedHTML', () => {
+    beforeEach(function () {
+      document.body.innerHTML = `
+        <div id="mocha-fixture">
+          <auto-complete src="/search" for="popup" data-autoselect="true">
+            <input type="text">
+            <ul id="popup"></ul>
+            <div id="popup-feedback"></div>
+          </auto-complete>
+        </div>
+      `
+    })
+
+    it('calls trusted types policy, passing response to it', async function () {
+      const calls = []
+      const html = '<li><strong>replacement</strong></li>'
+      window.AutocompleteElement.setCSPTrustedTypesPolicy({
+        createHTML(str, res) {
+          calls.push([str, res])
+          return html
+        }
+      })
+      const container = document.querySelector('auto-complete')
+      const popup = container.querySelector('#popup')
+      const input = container.querySelector('input')
+
+      triggerInput(input, 'hub')
+      await once(container, 'loadend')
+
+      assert.equal(calls.length, 1)
+      assert.equal(popup.children.length, 1)
+      assert.equal(popup.innerHTML, html)
+    })
+  })
 })
 
 function waitForElementToChange(el) {
