@@ -54,8 +54,12 @@ export default class Autocomplete {
     }
 
     this.results.hidden = true
+
     // @jscholes recommends a generic "results" label as the results are already related to the combobox, which is properly labelled
-    this.results.setAttribute('aria-label', 'results')
+    if (!this.results.getAttribute('aria-label')) {
+      this.results.setAttribute('aria-label', 'results')
+    }
+
     this.input.setAttribute('autocomplete', 'off')
     this.input.setAttribute('spellcheck', 'false')
 
