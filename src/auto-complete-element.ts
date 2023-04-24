@@ -119,8 +119,8 @@ export default class AutocompleteElement extends HTMLElement {
     const res = await fetch(url.toString(), {
       signal,
       headers: {
-        Accept: 'text/fragment+html'
-      }
+        Accept: 'text/fragment+html',
+      },
     })
     if (!res.ok) {
       throw new Error(await res.text())
@@ -157,8 +157,8 @@ export default class AutocompleteElement extends HTMLElement {
         this.dispatchEvent(
           new AutocompleteEvent('auto-complete-change', {
             bubbles: true,
-            relatedTarget: autocomplete.input
-          })
+            relatedTarget: autocomplete.input,
+          }),
         )
         break
     }

@@ -1,9 +1,0 @@
-{
-  "globals": {
-    "axe": "readonly",
-    "chai": "readonly"
-  },
-  "rules": {
-    "github/no-inner-html": "off"
-  }
-}

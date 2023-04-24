@@ -1,6 +1,6 @@
 export default function debounce<T extends unknown[]>(
   callback: (...Rest: T) => unknown,
-  wait = 0
+  wait = 0,
 ): (...Rest: T) => void {
   let timeout: number
   return function (...Rest) {

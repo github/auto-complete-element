@@ -1,3 +1,5 @@
+import {assert, chai} from '@open-wc/testing'
+import 'axe-core'
 import autoCompleteRulesBuilder from '../validator.js'
 chai.config.truncateThreshold = Infinity
 
@@ -9,6 +11,7 @@ function makeDOMNode(htmlString) {
 }
 
 function getAxeResult(htmlString) {
+  const {axe} = globalThis
   axe.reset()
   axe.configure(autoCompleteRules)
   const document = makeDOMNode(htmlString)
