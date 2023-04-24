@@ -1,6 +1,5 @@
 {
   "root": true,
-  "plugins": ["custom-elements"],
   "extends": [
     "plugin:github/browser",
     "plugin:github/recommended",
@@ -8,47 +7,34 @@
     "plugin:custom-elements/recommended"
   ],
   "rules": {
-    "github/no-then": "off",
-    "no-invalid-this": "off",
-    "custom-elements/tag-name-matches-class": ["error", {"suffix": "Element"}],
+    "custom-elements/tag-name-matches-class": [
+      "error",
+      {
+        "suffix": "Element"
+      }
+    ],
+    "custom-elements/define-tag-after-class-definition": "off",
+    "custom-elements/no-method-prefixed-with-on": "off",
+    "custom-elements/expose-class-on-global": "off",
     "import/extensions": ["error", "always"],
     "import/no-unresolved": "off"
   },
-  "globals": {
-    "AutocompleteElement": "readonly"
-  },
-  "ignorePatterns": ["dist/", "examples/dist"],
   "overrides": [
     {
-      "files": ["test/*.js", "rollup.config.js"],
-      "parser": "espree",
-      "parserOptions": {
-        "ecmaVersion": 8
-      },
+      "files": "src/*-define.ts",
       "rules": {
-        "github/unescaped-html-literal": "off"
+        "@typescript-eslint/no-namespace": "off"
       }
     },
     {
       "files": "test/**/*.js",
-      "excludedFiles": "test/karma.config.js",
+      "rules": {
+        "github/unescaped-html-literal": "off",
+        "github/no-inner-html": "off",
+        "i18n-text/no-en": "off"
+      },
       "env": {
         "mocha": true
-      },
-      "globals": {
-        "assert": true
-      }
-    },
-    {
-      "files": "validator.js",
-      "rules": {
-        "@typescript-eslint/explicit-module-boundary-types": "off"
-      }
-    },
-    {
-      "files": ["*.config.js"],
-      "rules": {
-        "filenames/match-regex": "off"
       }
     }
   ]

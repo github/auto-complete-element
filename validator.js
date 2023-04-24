@@ -33,9 +33,9 @@ const rules = [
     selector: SELECTOR,
     metadata: {
       help: INPUT_HELP_TEXT,
-      helpUrl: ''
+      helpUrl: '',
     },
-    all: [`${INPUT_RULE_ID}_0`]
+    all: [`${INPUT_RULE_ID}_0`],
   },
   {
     id: CLEAR_BUTTON_RULE_ID,
@@ -43,29 +43,29 @@ const rules = [
     selector: SELECTOR,
     metadata: {
       help: CLEAR_BUTTON_HELP_TEXT,
-      helpUrl: ''
+      helpUrl: '',
     },
-    all: [`${CLEAR_BUTTON_RULE_ID}_0`]
-  }
+    all: [`${CLEAR_BUTTON_RULE_ID}_0`],
+  },
 ]
 
 const checks = [
   {
     id: `${INPUT_RULE_ID}_0`,
     evaluate: checkForInput,
-    metadata: {impact: 'critical'}
+    metadata: {impact: 'critical'},
   },
   {
     id: `${CLEAR_BUTTON_RULE_ID}_0`,
     evaluate: checkForOptionalClearButton,
-    metadata: {impact: 'critical'}
-  }
+    metadata: {impact: 'critical'},
+  },
 ]
 
 export function validator(domNode) {
   const result = {
     passes: [],
-    violations: []
+    violations: [],
   }
   for (const element of domNode.getElementsByTagName(SELECTOR)) {
     for (const rule of rules) {
@@ -77,7 +77,7 @@ export function validator(domNode) {
           id: rule.id,
           help: rule.metadata.help,
           helpUrl: rule.metadata.helpUrl,
-          nodes: [element]
+          nodes: [element],
         })
       }
     }
@@ -93,6 +93,6 @@ export function validator(domNode) {
 export default function combineRules(ruleset = {}) {
   return Object.assign({}, ruleset, {
     checks: (ruleset.checks || []).concat(checks),
-    rules: (ruleset.rules || []).concat(rules)
+    rules: (ruleset.rules || []).concat(rules),
   })
 }

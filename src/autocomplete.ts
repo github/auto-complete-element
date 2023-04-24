@@ -22,7 +22,7 @@ export default class Autocomplete {
     container: AutocompleteElement,
     input: HTMLInputElement,
     results: HTMLElement,
-    autoselectEnabled = false
+    autoselectEnabled = false,
   ) {
     this.container = container
     this.input = input
@@ -207,6 +207,7 @@ export default class Autocomplete {
     this.container.dispatchEvent(new CustomEvent('loadstart'))
     this.container
       .fetchResult(url)
+      // eslint-disable-next-line github/no-then
       .then(html => {
         // eslint-disable-next-line github/no-inner-html
         this.results.innerHTML = html as string
@@ -220,7 +221,7 @@ export default class Autocomplete {
         if (this.autoselectEnabled && firstOptionValue) {
           // inform SR users of which element is "on-deck" so that it's clear what Enter will do
           this.updateFeedbackForScreenReaders(
-            `${numOptions} results. ${firstOptionValue} is the top result: Press Enter to activate.`
+            `${numOptions} results. ${firstOptionValue} is the top result: Press Enter to activate.`,
           )
         } else {
           this.updateFeedbackForScreenReaders(`${numOptions || 'No'} results.`)
@@ -230,6 +231,7 @@ export default class Autocomplete {
         this.container.dispatchEvent(new CustomEvent('load'))
         this.container.dispatchEvent(new CustomEvent('loadend'))
       })
+      // eslint-disable-next-line github/no-then
       .catch(() => {
         this.container.dispatchEvent(new CustomEvent('error'))
         this.container.dispatchEvent(new CustomEvent('loadend'))

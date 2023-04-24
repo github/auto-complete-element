@@ -1,13 +1,18 @@
+import {assert} from '@open-wc/testing'
+import {AutoCompleteElement} from '../src/index.ts'
+
 describe('auto-complete element', function () {
   describe('element creation', function () {
     it('creates from document.createElement', function () {
       const el = document.createElement('auto-complete')
       assert.equal('AUTO-COMPLETE', el.nodeName)
+      assert.ok(el instanceof AutoCompleteElement)
     })
 
     it('creates from constructor', function () {
       const el = new window.AutocompleteElement()
       assert.equal('AUTO-COMPLETE', el.nodeName)
+      assert.ok(el instanceof AutoCompleteElement)
     })
   })
 
@@ -67,7 +72,7 @@ describe('auto-complete element', function () {
           value = event.target.value
           relatedTarget = event.relatedTarget
         },
-        {once: true}
+        {once: true},
       )
 
       assert.isTrue(keydown(input, 'Enter'))
@@ -391,7 +396,7 @@ describe('auto-complete element', function () {
         createHTML(str, res) {
           calls.push([str, res])
           return html
-        }
+        },
       })
       const container = document.querySelector('auto-complete')
       const popup = container.querySelector('#popup')
@@ -437,7 +442,7 @@ const keyCodes = {
   ArrowUp: 38,
   Enter: 13,
   Escape: 27,
-  Tab: 9
+  Tab: 9,
 }
 
 function keydown(element, key, alt = false) {
@@ -445,7 +450,7 @@ function keydown(element, key, alt = false) {
     shiftKey: false,
     altKey: alt,
     ctrlKey: false,
-    metaKey: false
+    metaKey: false,
   }
 
   key = key.replace(/\b(Ctrl|Alt|Meta)\+/g, function (_, type) {

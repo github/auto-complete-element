@@ -1,0 +1,168 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/auto-complete-element.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "AutocompleteElement",
+          "members": [
+            {
+              "kind": "method",
+              "name": "setCSPTrustedTypesPolicy",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "policy",
+                  "type": {
+                    "text": "CSPTrustedTypesPolicy | Promise<CSPTrustedTypesPolicy> | null"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "#forElement",
+              "privacy": "private",
+              "type": {
+                "text": "HTMLElement | null"
+              },
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "forElement",
+              "type": {
+                "text": "HTMLElement | null"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "#inputElement",
+              "privacy": "private",
+              "type": {
+                "text": "HTMLInputElement | null"
+              },
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "inputElement",
+              "type": {
+                "text": "HTMLInputElement | null"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "#reattachState"
+            },
+            {
+              "kind": "field",
+              "name": "src",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "fetchOnEmpty",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "#requestController",
+              "privacy": "private",
+              "type": {
+                "text": "AbortController | undefined"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "fetchResult",
+              "return": {
+                "type": {
+                  "text": "Promise<string | CSPTrustedHTMLToStringable>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "url",
+                  "type": {
+                    "text": "URL"
+                  }
+                }
+              ]
+            }
+          ],
+          "events": [
+            {
+              "name": "auto-complete-change",
+              "type": {
+                "text": "AutocompleteEvent"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "open"
+            },
+            {
+              "name": "value"
+            },
+            {
+              "name": "for"
+            }
+          ],
+          "superclass": {
+            "name": "HTMLElement"
+          },
+          "tagName": "auto-complete",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "AutocompleteElement",
+            "module": "src/auto-complete-element.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "auto-complete",
+          "declaration": {
+            "name": "AutocompleteElement",
+            "module": "src/auto-complete-element.ts"
+          }
+        }
+      ]
+    }
+  ]
+}
