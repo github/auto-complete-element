@@ -12,23 +12,22 @@ export default {
   browsers: [browser('chromium')],
   testFramework: {
     config: {
-      timeout: 500,
+      timeout: 1000,
     },
   },
 
   middleware: [
     async ({request, response}, next) => {
-      const {method, path} = request
-      if (method === 'POST') {
-        if (path.startsWith('/fail')) {
-          response.status = 422
-          // eslint-disable-next-line i18n-text/no-en
-          response.body = 'This is an error'
-        } else if (path.startsWith('/success')) {
-          response.status = 200
-          // eslint-disable-next-line i18n-text/no-en
-          response.body = 'This is a warning'
-        }
+      const {method, url} = request
+      if (method === 'GET' && url.startsWith('/search?q=hub')) {
+        response.status = 200
+        response.body = `
+            <li role="option" data-autocomplete-value="first"><span>first</span></li>
+            <li role="option"><span>second</span></li>
+            <li role="option"><span>third</span></li>
+            <li role="option" aria-disabled="true"><span>fourth</span></li>
+            <li><a role="option" href="#hash">link</a></li>
+          `
       }
       await next()
     },
