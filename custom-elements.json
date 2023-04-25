@@ -9,8 +9,42 @@
         {
           "kind": "class",
           "description": "",
-          "name": "AutocompleteElement",
+          "name": "AutoCompleteEvent",
           "members": [
+            {
+              "kind": "field",
+              "name": "relatedTarget",
+              "type": {
+                "text": "HTMLInputElement"
+              },
+              "default": "relatedTarget"
+            }
+          ],
+          "superclass": {
+            "name": "Event",
+            "module": "src/auto-complete-element.ts"
+          }
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "AutoCompleteElement",
+          "members": [
+            {
+              "kind": "method",
+              "name": "define",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "tag",
+                  "default": "'auto-complete'"
+                },
+                {
+                  "name": "registry",
+                  "default": "customElements"
+                }
+              ]
+            },
             {
               "kind": "method",
               "name": "setCSPTrustedTypesPolicy",
@@ -123,7 +157,7 @@
             {
               "name": "auto-complete-change",
               "type": {
-                "text": "AutocompleteEvent"
+                "text": "AutoCompleteEvent"
               }
             }
           ],
@@ -141,24 +175,31 @@
           "superclass": {
             "name": "HTMLElement"
           },
-          "tagName": "auto-complete",
           "customElement": true
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "default",
+          "name": "AutoCompleteEvent",
           "declaration": {
-            "name": "AutocompleteElement",
+            "name": "AutoCompleteEvent",
             "module": "src/auto-complete-element.ts"
           }
         },
         {
-          "kind": "custom-element-definition",
-          "name": "auto-complete",
+          "kind": "js",
+          "name": "AutoCompleteElement",
           "declaration": {
-            "name": "AutocompleteElement",
+            "name": "AutoCompleteElement",
+            "module": "src/auto-complete-element.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "AutoCompleteElement",
             "module": "src/auto-complete-element.ts"
           }
         }
