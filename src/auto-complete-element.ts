@@ -1,5 +1,18 @@
 import Autocomplete from './autocomplete.js'
-import AutocompleteEvent from './auto-complete-event.js'
+const HTMLElement = globalThis.HTMLElement || (null as unknown as (typeof window)['HTMLElement'])
+
+type AutoCompleteEventInit = EventInit & {
+  relatedTarget: HTMLInputElement
+}
+
+export class AutoCompleteEvent extends Event {
+  relatedTarget: HTMLInputElement
+
+  constructor(type: 'auto-complete-change', {relatedTarget, ...init}: AutoCompleteEventInit) {
+    super(type, init)
+    this.relatedTarget = relatedTarget
+  }
+}
 
 const state = new WeakMap()
 
@@ -16,8 +29,12 @@ interface CSPTrustedHTMLToStringable {
 
 let cspTrustedTypesPolicyPromise: Promise<CSPTrustedTypesPolicy> | null = null
 
-// eslint-disable-next-line custom-elements/file-name-matches-element
-export default class AutocompleteElement extends HTMLElement {
+export class AutoCompleteElement extends HTMLElement {
+  static define(tag = 'auto-complete', registry = customElements) {
+    registry.define(tag, this)
+    return this
+  }
+
   static setCSPTrustedTypesPolicy(policy: CSPTrustedTypesPolicy | Promise<CSPTrustedTypesPolicy> | null): void {
     cspTrustedTypesPolicyPromise = policy === null ? policy : Promise.resolve(policy)
   }
@@ -155,7 +172,7 @@ export default class AutocompleteElement extends HTMLElement {
           autocomplete.input.value = newValue
         }
         this.dispatchEvent(
-          new AutocompleteEvent('auto-complete-change', {
+          new AutoCompleteEvent('auto-complete-change', {
             bubbles: true,
             relatedTarget: autocomplete.input,
           }),
@@ -165,17 +182,4 @@ export default class AutocompleteElement extends HTMLElement {
   }
 }
 
-declare global {
-  interface Window {
-    AutocompleteElement: typeof AutocompleteElement
-  }
-  interface HTMLElementTagNameMap {
-    'auto-complete': AutocompleteElement
-  }
-}
-
-if (!window.customElements.get('auto-complete')) {
-  window.AutocompleteElement = AutocompleteElement
-  // eslint-disable-next-line custom-elements/tag-name-matches-class
-  window.customElements.define('auto-complete', AutocompleteElement)
-}
+export default AutoCompleteElement
