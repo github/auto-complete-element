@@ -27,7 +27,9 @@ export default class Autocomplete {
     this.container = container
     this.input = input
     this.results = results
-    this.combobox = new Combobox(input, results)
+    this.combobox = new Combobox(input, results, {
+      defaultFirstOption: autoselectEnabled,
+    })
     this.feedback = (container.getRootNode() as Document).getElementById(`${this.results.id}-feedback`)
     this.autoselectEnabled = autoselectEnabled
     this.clearButton = (container.getRootNode() as Document).getElementById(`${this.input.id || this.input.name}-clear`)
@@ -108,17 +110,6 @@ export default class Autocomplete {
   }
 
   onKeydown(event: KeyboardEvent): void {
-    // if autoselect is enabled, Enter key will select the first option
-    if (event.key === 'Enter' && this.container.open && this.autoselectEnabled) {
-      const firstOption = this.results.children[0]
-      if (firstOption) {
-        event.stopPropagation()
-        event.preventDefault()
-
-        this.onCommit({target: firstOption})
-      }
-    }
-
     if (event.key === 'Escape' && this.container.open) {
       this.container.open = false
       event.stopPropagation()
@@ -212,6 +203,7 @@ export default class Autocomplete {
         // eslint-disable-next-line github/no-inner-html
         this.results.innerHTML = html as string
         this.identifyOptions()
+        this.combobox.indicateDefaultOption()
         const allNewOptions = this.results.querySelectorAll('[role="option"]')
         const hasResults = !!allNewOptions.length
         const numOptions = allNewOptions.length
