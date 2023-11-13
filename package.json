@@ -15,7 +15,7 @@
     "bundle": "esbuild --bundle dist/index.js --keep-names --outfile=dist/bundle.js --format=esm",
     "build": "tsc && npm run bundle && npm run manifest",
     "prepublishOnly": "npm run build",
-    "pretest": "npm run build",
+    "pretest": "npm run build; npx playwright install",
     "test": "web-test-runner",
     "postpublish": "npm publish --ignore-scripts --@github:registry='https://npm.pkg.github.com'",
     "manifest": "custom-elements-manifest analyze"
@@ -33,7 +33,7 @@
     "@github/combobox-nav": "^2.1.7"
   },
   "devDependencies": {
-    "@custom-elements-manifest/analyzer": "^0.8.0",
+    "@custom-elements-manifest/analyzer": "^0.9.0",
     "@github/prettier-config": "^0.0.6",
     "@open-wc/testing": "^3.1.8",
     "@web/dev-server-esbuild": "^0.4.1",
@@ -48,7 +48,7 @@
     "karma-mocha": "^2.0.1",
     "karma-mocha-reporter": "^2.2.5",
     "rollup-plugin-node-resolve": "^5.2.0",
-    "typescript": "^5.0.4"
+    "typescript": "^5.2.2"
   },
   "customElements": "custom-elements.json"
 }

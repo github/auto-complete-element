@@ -6,7 +6,7 @@ const browser = product =>
   })
 
 export default {
-  files: ['test/*'],
+  files: ['test/*.js'],
   nodeResolve: true,
   plugins: [esbuildPlugin({ts: true, target: 'es2020'})],
   browsers: [browser('chromium')],

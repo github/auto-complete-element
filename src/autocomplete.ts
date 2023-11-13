@@ -55,7 +55,13 @@ export default class Autocomplete {
       this.input.setAttribute('aria-expanded', 'false')
     }
 
-    this.results.hidden = true
+    if (this.results.popover) {
+      if (this.results.matches(':popover-open')) {
+        this.results.hidePopover()
+      }
+    } else {
+      this.results.hidden = true
+    }
 
     // @jscholes recommends a generic "results" label as the results are already related to the combobox, which is properly labelled
     if (!this.results.getAttribute('aria-label')) {
@@ -231,14 +237,26 @@ export default class Autocomplete {
   }
 
   open(): void {
-    if (!this.results.hidden) return
-    this.combobox.start()
-    this.results.hidden = false
+    const isHidden = this.results.popover ? !this.results.matches(':popover-open') : this.results.hidden
+    if (isHidden) {
+      this.combobox.start()
+      if (this.results.popover) {
+        this.results.showPopover()
+      } else {
+        this.results.hidden = false
+      }
+    }
   }
 
   close(): void {
-    if (this.results.hidden) return
-    this.combobox.stop()
-    this.results.hidden = true
+    const isVisible = this.results.popover ? this.results.matches(':popover-open') : !this.results.hidden
+    if (isVisible) {
+      this.combobox.stop()
+      if (this.results.popover) {
+        this.results.hidePopover()
+      } else {
+        this.results.hidden = true
+      }
+    }
   }
 }
