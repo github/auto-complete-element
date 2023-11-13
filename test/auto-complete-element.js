@@ -1,6 +1,8 @@
 import {assert} from '@open-wc/testing'
 import {AutoCompleteElement} from '../src/index.ts'
 
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+
 describe('auto-complete element', function () {
   describe('element creation', function () {
     it('creates from document.createElement', function () {
@@ -159,7 +161,7 @@ describe('auto-complete element', function () {
       input.dispatchEvent(new Event('blur'))
       assert(container.open)
 
-      await new Promise(resolve => setTimeout(resolve, 100))
+      await sleep(100)
       input.dispatchEvent(new Event('blur'))
       assert.isFalse(container.open)
     })
@@ -313,7 +315,7 @@ describe('auto-complete element', function () {
       container.fetchOnEmpty = false
 
       triggerInput(input, '')
-      await new Promise(resolve => setTimeout(resolve, 100))
+      await sleep(100)
 
       assert.equal(0, popup.children.length)
       assert.equal(feedback.textContent, '')
@@ -408,6 +410,26 @@ describe('auto-complete element', function () {
       assert.equal(calls.length, 1)
       assert.equal(popup.children.length, 1)
       assert.equal(popup.innerHTML, html)
+    })
+  })
+
+  describe('popovers', () => {
+    beforeEach(function () {
+      document.querySelector('auto-complete #popup').setAttribute('popover', '')
+    })
+
+    it('opens and closes using popover', function () {
+      const container = document.querySelector('auto-complete')
+      const popup = container.querySelector('#popup')
+
+      container.open = false
+      assert.isFalse(popup.matches(':popover-open'), 'is not popover-open')
+
+      container.open = true
+      assert.isTrue(popup.matches(':popover-open'), 'is popover-open')
+
+      container.open = false
+      assert.isFalse(popup.matches(':popover-open'), 'is not popover-open')
     })
   })
 })
