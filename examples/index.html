@@ -46,10 +46,10 @@
         <input name="robot" type="text" aria-labelledby="robots-label" autofocus />
         <!-- if a clear button is passed in, recommended to be *before* UL elements to avoid conflicting with their blur logic -->
         <button id="robot-clear">x</button>
-        <ul popover id="items-popup"></ul>
+        <ul id="items-popup"></ul>
         <!-- For built-in screen-reader announcements:
           - Note the ID is the same as the <ul> with "feedback" appended
-          - Also note that aria attributes will be added programmatically if they aren't set correctly  
+          - Also note that aria attributes will be added programmatically if they aren't set correctly
         -->
         <div id="items-popup-feedback" class="sr-only"></div>
       </auto-complete>
@@ -64,10 +64,10 @@
         <input id="robot-a" name="robot-a" type="text" aria-labelledby="robots-a-label" autofocus />
         <!-- if a clear button is passed in, recommended to be *before* UL elements to avoid conflicting with their blur logic -->
         <button id="robot-a-clear">x</button>
-        <ul popover id="items-a-popup"></ul>
+        <ul id="items-a-popup"></ul>
         <!-- For built-in screen-reader announcements:
           - Note the ID is the same as the <ul> with "feedback" appended
-          - Also note that aria attributes will be added programmatically if they aren't set correctly  
+          - Also note that aria attributes will be added programmatically if they aren't set correctly
         -->
         <div id="items-a-popup-feedback" class="sr-only"></div>
       </auto-complete>
@@ -79,7 +79,7 @@
       <label id="robots-2-label" for="robot-2">Robots (without autoselect on enter)</label>
       <auto-complete src="/demo" for="items-2-popup" aria-labelledby="robots-2-label">
         <input name="robot-2" type="text" aria-labelledby="robots-2-label" autofocus />
-        <ul popover id="items-2-popup"></ul>
+        <ul id="items-2-popup"></ul>
         <div id="items-2-popup-feedback" class="sr-only"></div>
       </auto-complete>
       <button type="submit">Save</button>
@@ -96,7 +96,7 @@
         data-autoselect="true"
       >
         <input name="custom-fetching-robot" type="text" aria-labelledby="custom-fetching-robots-label" autofocus />
-        <ul popover id="custom-fetching-items-popup"></ul>
+        <ul id="custom-fetching-items-popup"></ul>
         <div id="custom-fetching-items-popup-feedback" class="sr-only"></div>
       </auto-complete>
       <button type="submit">Save</button>
@@ -113,7 +113,7 @@
       <auto-complete src="/demo" for="fetch-on-empty-items-popup" aria-labelledby="fetch-on-empty-robots-label" fetch-on-empty>
         <input name="fetch-on-empty-robot" type="text" aria-labelledby="fetch-on-empty-robots-label" autofocus />
         <button id="fetch-on-empty-robot-clear">x</button>
-        <ul popover id="fetch-on-empty-items-popup"></ul>
+        <ul id="fetch-on-empty-items-popup"></ul>
         <div id="fetch-on-empty-items-popup-feedback" class="sr-only"></div>
       </auto-complete>
       <button type="submit">Save</button>
