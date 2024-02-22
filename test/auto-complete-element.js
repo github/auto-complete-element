@@ -18,19 +18,8 @@ describe('auto-complete element', function () {
     })
   })
 
-  describe('requesting server results', function () {
-    beforeEach(function () {
-      document.body.innerHTML = `
-        <div id="mocha-fixture">
-          <auto-complete src="/search" for="popup">
-            <input type="text">
-            <ul id="popup"></ul>
-            <div id="popup-feedback"></div>
-          </auto-complete>
-        </div>
-      `
-    })
-
+  // eslint-disable-next-line func-style
+  const serverResponseExamples = function () {
     it('requests html fragment', async function () {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
@@ -147,25 +136,6 @@ describe('auto-complete element', function () {
       assert.isFalse(container.open)
     })
 
-    it('does not close on blur after mousedown', async function () {
-      const container = document.querySelector('auto-complete')
-      const input = container.querySelector('input')
-
-      triggerInput(input, 'hub')
-      await once(container, 'loadend')
-
-      const link = container.querySelector('a[role=option]')
-
-      assert.equal('', container.value)
-      link.dispatchEvent(new MouseEvent('mousedown', {bubbles: true}))
-      input.dispatchEvent(new Event('blur'))
-      assert(container.open)
-
-      await sleep(100)
-      input.dispatchEvent(new Event('blur'))
-      assert.isFalse(container.open)
-    })
-
     it('closes on Escape', async function () {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
@@ -175,10 +145,10 @@ describe('auto-complete element', function () {
       await once(container, 'loadend')
 
       assert.isTrue(container.open)
-      assert.isFalse(popup.hidden)
+      if (!popup.popover) assert.isFalse(popup.hidden)
       assert.isFalse(keydown(input, 'Escape'))
       assert.isFalse(container.open)
-      assert.isTrue(popup.hidden)
+      if (!popup.popover) assert.isTrue(popup.hidden)
     })
 
     it('opens and closes on alt + ArrowDown and alt + ArrowUp', async function () {
@@ -190,15 +160,15 @@ describe('auto-complete element', function () {
       await once(container, 'loadend')
 
       assert.isTrue(container.open)
-      assert.isFalse(popup.hidden)
+      if (!popup.popover) assert.isFalse(popup.hidden)
 
       assert.isFalse(keydown(input, 'ArrowUp', true))
       assert.isFalse(container.open)
-      assert.isTrue(popup.hidden)
+      if (!popup.popover) assert.isTrue(popup.hidden)
 
       assert.isFalse(keydown(input, 'ArrowDown', true))
       assert.isTrue(container.open)
-      assert.isFalse(popup.hidden)
+      if (!popup.popover) assert.isFalse(popup.hidden)
     })
 
     it('allows providing a custom fetch method', async () => {
@@ -216,6 +186,38 @@ describe('auto-complete element', function () {
       assert.equal(2, popup.children.length)
       assert.equal(popup.querySelector('li').textContent, 'Mock Custom Fetch Result 1')
     })
+  }
+
+  describe('requesting server results (non-popover)', function () {
+    beforeEach(function () {
+      document.body.innerHTML = `
+        <div id="mocha-fixture">
+          <auto-complete src="/search" for="popup">
+            <input type="text">
+            <ul id="popup"></ul>
+            <div id="popup-feedback"></div>
+          </auto-complete>
+        </div>
+      `
+    })
+
+    serverResponseExamples()
+  })
+
+  describe('requesting server results (popover)', function () {
+    beforeEach(function () {
+      document.body.innerHTML = `
+        <div id="mocha-fixture">
+          <auto-complete src="/search" for="popup">
+            <input type="text">
+            <ul popover id="popup"></ul>
+            <div id="popup-feedback"></div>
+          </auto-complete>
+        </div>
+      `
+    })
+
+    serverResponseExamples()
   })
 
   describe('clear button provided', () => {

@@ -112,42 +112,40 @@ export default class Autocomplete {
     this.container.value = ''
     this.input.focus()
     this.input.dispatchEvent(new Event('change'))
-    this.container.open = false
+    this.close()
   }
 
   onKeydown(event: KeyboardEvent): void {
     if (event.key === 'Escape' && this.container.open) {
-      this.container.open = false
+      this.close()
       event.stopPropagation()
       event.preventDefault()
     } else if (event.altKey && event.key === 'ArrowUp' && this.container.open) {
-      this.container.open = false
+      this.close()
       event.stopPropagation()
       event.preventDefault()
     } else if (event.altKey && event.key === 'ArrowDown' && !this.container.open) {
       if (!this.input.value.trim()) return
-      this.container.open = true
+      this.open()
       event.stopPropagation()
       event.preventDefault()
     }
   }
 
   onInputFocus(): void {
+    if (this.interactingWithList) return
     this.fetchResults()
   }
 
   onInputBlur(): void {
-    if (this.interactingWithList) {
-      this.interactingWithList = false
-      return
-    }
-    this.container.open = false
+    if (this.interactingWithList) return
+    this.close()
   }
 
   onCommit({target}: Pick<Event, 'target'>): void {
     const selected = target
     if (!(selected instanceof HTMLElement)) return
-    this.container.open = false
+    this.close()
     if (selected instanceof HTMLAnchorElement) return
     const value = selected.getAttribute('data-autocomplete-value') || selected.textContent!
     this.updateFeedbackForScreenReaders(`${selected.textContent || ''} selected.`)
@@ -189,7 +187,7 @@ export default class Autocomplete {
   fetchResults(): void {
     const query = this.input.value.trim()
     if (!query && !this.container.fetchOnEmpty) {
-      this.container.open = false
+      this.close()
       return
     }
 
@@ -225,7 +223,7 @@ export default class Autocomplete {
           this.updateFeedbackForScreenReaders(`${numOptions || 'No'} results.`)
         }
 
-        this.container.open = hasResults
+        hasResults ? this.open() : this.close()
         this.container.dispatchEvent(new CustomEvent('load'))
         this.container.dispatchEvent(new CustomEvent('loadend'))
       })
@@ -246,6 +244,8 @@ export default class Autocomplete {
         this.results.hidden = false
       }
     }
+    this.container.open = true
+    this.interactingWithList = true
   }
 
   close(): void {
@@ -258,5 +258,7 @@ export default class Autocomplete {
         this.results.hidden = true
       }
     }
+    this.container.open = false
+    this.interactingWithList = false
   }
 }
