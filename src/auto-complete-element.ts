@@ -73,6 +73,12 @@ export class AutoCompleteElement extends HTMLElement {
   connectedCallback(): void {
     if (!this.isConnected) return
     this.#reattachState()
+
+    new MutationObserver(() => {
+      if (!state.get(this)) {
+        this.#reattachState()
+      }
+    }).observe(this, {subtree: true, childList: true})
   }
 
   disconnectedCallback(): void {
