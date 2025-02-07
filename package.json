@@ -9,6 +9,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "clean": "rm -rf dist/",
+    "examples": "http-server -c-1 ./examples",
     "lint": "eslint . --ext .js,.ts && tsc --noEmit",
     "lint:fix": "npm run lint -- --fix",
     "prebuild": "npm run clean && npm run lint && mkdir dist",
@@ -30,7 +31,8 @@
     "validator.js"
   ],
   "dependencies": {
-    "@github/combobox-nav": "^2.1.7"
+    "@github/combobox-nav": "^2.1.7",
+    "http-server": "^14.1.1"
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.9.0",
