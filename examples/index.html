@@ -105,7 +105,7 @@
       window.fetch = (url) => {
         const query = url.split('?q=')[1]
         if (query === 'none') {
-          return  Promise.resolve(new Response('<li role="none" data-no-result-found="true">No results found!</li>'))
+          return  Promise.resolve(new Response('<li role="presentation" data-no-result-found="true">No results found!</li>'))
         }
         return Promise.resolve(new Response(robotsList));
       }
