@@ -434,6 +434,31 @@ describe('auto-complete element', function () {
       assert.isFalse(popup.matches(':popover-open'), 'is not popover-open')
     })
   })
+
+  describe('no results', () => {
+    beforeEach(function () {
+      document.body.innerHTML = `
+        <div id="mocha-fixture">
+          <auto-complete src="/no_results" for="popup">
+            <input type="text">
+            <ul id="popup"></ul>
+            <div id="popup-feedback"></div>
+          </auto-complete>
+        </div>
+      `
+    })
+
+    it('checks that no results is displayed', async () => {
+      const container = document.querySelector('auto-complete')
+      const input = container.querySelector('input')
+      const popup = container.querySelector('#popup')
+
+      triggerInput(input, 'hub')
+      await once(container, 'loadend')
+      assert.equal(1, popup.children.length)
+      
+    })
+  })
 })
 
 function waitForElementToChange(el) {
