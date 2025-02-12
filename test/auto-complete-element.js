@@ -4,6 +4,31 @@ import {AutoCompleteElement} from '../src/index.ts'
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 describe('auto-complete element', function () {
+  describe('no results', () => {
+    beforeEach(function () {
+      document.body.innerHTML = `
+        <div id="mocha-fixture">
+          <auto-complete src="/noresults" for="popup">
+            <input type="text">
+            <ul id="popup"></ul>
+            <div id="popup-feedback"></div>
+          </auto-complete>
+        </div>
+      `
+    })
+
+    it('checks that no results is displayed', async () => {
+      const container = document.querySelector('auto-complete')
+      const input = container.querySelector('input')
+      const popup = container.querySelector('#popup')
+
+      triggerInput(input, 'none')
+      await once(container, 'loadend')
+      assert.isTrue(container.open)
+      assert.equal(1, popup.children.length)
+    })
+  })
+
   describe('element creation', function () {
     it('creates from document.createElement', function () {
       const el = document.createElement('auto-complete')
@@ -432,31 +457,6 @@ describe('auto-complete element', function () {
 
       container.open = false
       assert.isFalse(popup.matches(':popover-open'), 'is not popover-open')
-    })
-  })
-
-  describe('no results', () => {
-    beforeEach(function () {
-      document.body.innerHTML = `
-        <div id="mocha-fixture">
-          <auto-complete src="/no_results" for="popup">
-            <input type="text">
-            <ul id="popup"></ul>
-            <div id="popup-feedback"></div>
-          </auto-complete>
-        </div>
-      `
-    })
-
-    it('checks that no results is displayed', async () => {
-      const container = document.querySelector('auto-complete')
-      const input = container.querySelector('input')
-      const popup = container.querySelector('#popup')
-
-      triggerInput(input, 'hub')
-      await once(container, 'loadend')
-      assert.equal(1, popup.children.length)
-      
     })
   })
 })
