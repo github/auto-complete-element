@@ -209,7 +209,9 @@ export default class Autocomplete {
         this.identifyOptions()
         this.combobox.indicateDefaultOption()
         const allNewOptions = this.results.querySelectorAll('[role="option"]')
-        const hasResults = !!allNewOptions.length
+
+        const hasResults =
+          !!allNewOptions.length || !!this.results.querySelectorAll('[data-no-result-found="true"]').length
         const numOptions = allNewOptions.length
 
         const [firstOption] = allNewOptions

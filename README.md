@@ -69,6 +69,14 @@ item whose display text needs to be different:
 <li role="option" data-autocomplete-value="bb8">BB-8 (astromech)</li>
 ```
 
+Use `data-no-result-found="true"` to show a no results message inside the autocomplete popover. Be sure to add `role="presentation"` 
+to this element so that screen readers do not mistake this as an auto-complete option. The auto-complete-element has built in functionality that
+handles aria-live announcing number of search results so this should be purely decorative. 
+
+```html
+<li role="presentation" aria-hidden="true" disabled data-no-result-found="true">No results found!</li>
+```
+
 ### A Note on Clear button
 While `input type="search"` comes with an `x` that clears the content of the field and refocuses it on many browsers, the implementation for this control is not keyboard accessible, and so we've opted to enable a customizable clear button so that your keyboard users will be able to interact with it.
 

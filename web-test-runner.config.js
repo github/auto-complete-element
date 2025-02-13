@@ -28,6 +28,11 @@ export default {
             <li role="option" aria-disabled="true"><span>fourth</span></li>
             <li><a role="option" href="#hash">link</a></li>
           `
+      } else if (method === 'GET' && url.startsWith('/noresults?q=none')) {
+        response.status = 200
+        response.body = `
+            <li role="presentation" aria-hidden="true" disabled data-no-result-found="true">No results found!</li>
+          `
       }
       await next()
     },
