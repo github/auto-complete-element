@@ -109,8 +109,8 @@
         }
         return Promise.resolve(new Response(robotsList));
       }
-      // fetchResult must be a function that return a Promise of string and that accepts as parameters an element and an URL
-      document.querySelector("auto-complete#custom-fetching-method").fetchResult = async (el, url) => (await fetch(url)).text();
+      // fetchResult must be a function that return a Promise of string and that accepts as parameters a URL
+      document.querySelector("auto-complete#custom-fetching-method").fetchResult = async (url) => (await fetch(url)).text();
     </script>
 
     <form>
