@@ -117,7 +117,7 @@ completer.addEventListener('error', () => container.classList.add('is-error'))
 
 ### Auto-complete events
 
-**`auto-complete-change`** is dispatched after a value is selected. In `event.detail` you can find:
+**`auto-complete-change`** is dispatched after a value is selected. In `event` you can find:
 
 - `relatedTarget`: The HTMLInputElement controlling the auto-complete result list.
 
