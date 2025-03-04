@@ -74,7 +74,7 @@ to this element so that screen readers do not mistake this as an auto-complete o
 handles aria-live announcing number of search results so this should be purely decorative. 
 
 ```html
-<li role="presentation" aria-hidden="true" disabled data-no-result-found="true">No results found!</li>
+<li role="presentation" aria-hidden="true" data-no-result-found="true">No results found!</li>
 ```
 
 ### A Note on Clear button
