@@ -229,9 +229,9 @@ axe.run(document)
 
 To confirm your usage is working as designed,
 ```js
-import {validate} from '@github/auto-complete-element/validator' 
+import { validator } from '@github/auto-complete-element/validator' 
 
-validate(document)
+const resultObject = validator(document)
 ```
 Passes and failures may be determined by the length of the `passes` and `violations` arrays on the returned object:
 ```js
