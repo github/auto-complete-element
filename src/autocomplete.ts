@@ -247,7 +247,7 @@ export default class Autocomplete {
       }
     }
     this.container.open = true
-    this.interactingWithList = true
+    this.interactingWithList = false
   }
 
   close(): void {
