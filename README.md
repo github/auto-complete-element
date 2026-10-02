@@ -128,6 +128,25 @@ completer.addEventListener('auto-complete-change', function(event) {
 })
 ```
 
+**`auto-complete-feedback`** is dispatched before a screen reader announcement. It bubbles and is cancelable. Set `event.text` synchronously to localize the announcement, or call `event.preventDefault()` to suppress it. Unhandled announcements keep their default English text. The live region is updated only once, after the event handlers finish.
+
+| `event.key` | `event.data` | Default text |
+| --- | --- | --- |
+| `results` | `{resultCount}` | `5 results.` or `No results.` |
+| `results-with-default` | `{resultCount, label}` | `5 results. first is the top result: Press Enter to activate.` |
+| `option-selected` | `{label}` | `first selected.` |
+| `results-hidden` | `{}` | `Results hidden.` |
+
+```js
+completer.addEventListener('auto-complete-feedback', event => {
+  if (event.key === 'results') {
+    event.text = event.data.resultCount === 0
+      ? 'Aucun résultat.'
+      : `${event.data.resultCount} résultats.`
+  }
+})
+```
+
 ### CSP Trusted Types
 
 You can call

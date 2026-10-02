@@ -29,6 +29,126 @@ describe('auto-complete element', function () {
     })
   })
 
+  describe('localized feedback', () => {
+    let container
+    let input
+    let feedback
+
+    beforeEach(() => {
+      document.body.innerHTML = `
+        <div id="mocha-fixture">
+          <auto-complete src="/search" for="popup">
+            <input id="query" type="text">
+            <button id="query-clear">Clear</button>
+            <ul id="popup"></ul>
+            <div id="popup-feedback"></div>
+          </auto-complete>
+        </div>
+      `
+      container = document.querySelector('auto-complete')
+      input = container.querySelector('input')
+      feedback = container.querySelector('#popup-feedback')
+    })
+
+    it('uses one localized live-region update and bubbles with result data', async () => {
+      const mutations = []
+      const observer = new MutationObserver(records => mutations.push(...records))
+      observer.observe(feedback, {childList: true})
+      container.parentElement.addEventListener(
+        'auto-complete-feedback',
+        event => {
+          assert.equal(event.key, 'results')
+          assert.deepEqual(event.data, {resultCount: 5})
+          assert.equal(event.text, '5 results.')
+          event.text = '5 résultats <test>'
+        },
+        {once: true},
+      )
+
+      triggerInput(input, 'hub')
+      await once(container, 'loadend')
+      await waitForElementToChange(feedback)
+      await sleep(150)
+      observer.disconnect()
+      assert.equal(feedback.textContent, '5 résultats <test>')
+      assert.equal(feedback.children.length, 0)
+      assert.equal(mutations.length, 1)
+    })
+
+    it('allows cancellation without updating the live region', async () => {
+      container.addEventListener('auto-complete-feedback', event => event.preventDefault())
+      triggerInput(input, 'hub')
+      await once(container, 'loadend')
+      await sleep(150)
+      assert.equal(feedback.textContent, '')
+    })
+
+    it('exposes the selected label and preserves defaults for unhandled messages', async () => {
+      let selectedData
+      container.addEventListener('auto-complete-feedback', event => {
+        if (event.key === 'option-selected') {
+          selectedData = event.data
+          event.text = `${event.data.label} sélectionné.`
+        }
+      })
+      triggerInput(input, 'hub')
+      await once(container, 'loadend')
+      await waitForElementToChange(feedback)
+      assert.equal(feedback.textContent, '5 results.')
+      keydown(input, 'ArrowDown')
+      keydown(input, 'Enter')
+      await waitForElementToChange(feedback)
+      assert.deepEqual(selectedData, {label: 'first'})
+      assert.equal(feedback.textContent, 'first sélectionné.')
+    })
+
+    it('localizes the hidden-results announcement', async () => {
+      container.addEventListener('auto-complete-feedback', event => {
+        if (event.key === 'results-hidden') {
+          assert.deepEqual(event.data, {})
+          event.text = 'Résultats masqués.'
+        }
+      })
+      triggerInput(input, 'hub')
+      await once(container, 'loadend')
+      await waitForElementToChange(feedback)
+      container.querySelector('button').click()
+      await waitForElementToChange(feedback)
+      assert.equal(feedback.textContent, 'Résultats masqués.')
+    })
+
+    it('exposes the label and count for the default option', async () => {
+      const parent = container.parentElement
+      container.remove()
+      container.setAttribute('data-autoselect', 'true')
+      parent.appendChild(container)
+      let announcement
+      container.addEventListener('auto-complete-feedback', event => {
+        announcement = event
+      })
+      triggerInput(input, 'hub')
+      await once(container, 'loadend')
+      await waitForElementToChange(feedback)
+      assert.equal(announcement.key, 'results-with-default')
+      assert.deepEqual(announcement.data, {resultCount: 5, label: 'first'})
+      assert.equal(feedback.textContent, '5 results. first is the top result: Press Enter to activate.')
+    })
+
+    it('exposes a numeric zero for no results', async () => {
+      container.src = '/noresults'
+      container.addEventListener('auto-complete-feedback', event => {
+        assert.equal(event.key, 'results')
+        assert.deepEqual(event.data, {resultCount: 0})
+        assert.equal(event.text, 'No results.')
+        event.text = 'Aucun résultat.'
+      })
+      triggerInput(input, 'none')
+      await once(container, 'loadend')
+      await waitForElementToChange(feedback)
+      assert.equal(feedback.textContent, 'Aucun résultat.')
+    })
+  })
+
   describe('element creation', function () {
     it('creates from document.createElement', function () {
       const el = document.createElement('auto-complete')

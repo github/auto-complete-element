@@ -1,6 +1,7 @@
 import type AutocompleteElement from './auto-complete-element'
 import Combobox from '@github/combobox-nav'
 import debounce from './debounce.js'
+import {AutoCompleteFeedbackEvent, type AutoCompleteFeedbackKey} from './auto-complete-feedback-event.js'
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -105,7 +106,7 @@ export default class Autocomplete {
     if (this.input.getAttribute('aria-expanded') === 'true') {
       this.input.setAttribute('aria-expanded', 'false')
       // eslint-disable-next-line i18n-text/no-en
-      this.updateFeedbackForScreenReaders('Results hidden.')
+      this.updateFeedbackForScreenReaders('results-hidden', 'Results hidden.')
     }
 
     this.input.value = ''
@@ -148,12 +149,13 @@ export default class Autocomplete {
     this.close()
     if (selected instanceof HTMLAnchorElement) return
     const value = selected.getAttribute('data-autocomplete-value') || selected.textContent!
-    this.updateFeedbackForScreenReaders(`${selected.textContent || ''} selected.`)
+    const label = selected.textContent || ''
+    this.updateFeedbackForScreenReaders('option-selected', `${label} selected.`, {label})
     this.container.value = value
 
     if (!value) {
       // eslint-disable-next-line i18n-text/no-en
-      this.updateFeedbackForScreenReaders(`Results hidden.`)
+      this.updateFeedbackForScreenReaders('results-hidden', 'Results hidden.')
     }
   }
 
@@ -176,10 +178,13 @@ export default class Autocomplete {
     }
   }
 
-  updateFeedbackForScreenReaders(inputString: string): void {
+  updateFeedbackForScreenReaders(key: AutoCompleteFeedbackKey, text: string, data: Record<string, unknown> = {}): void {
+    const event = new AutoCompleteFeedbackEvent(key, text, data)
+    if (!this.container.dispatchEvent(event)) return
+
     setTimeout(() => {
       if (this.feedback) {
-        this.feedback.textContent = inputString
+        this.feedback.textContent = event.text
       }
     }, SCREEN_READER_DELAY)
   }
@@ -219,10 +224,12 @@ export default class Autocomplete {
         if (this.autoselectEnabled && firstOptionValue) {
           // inform SR users of which element is "on-deck" so that it's clear what Enter will do
           this.updateFeedbackForScreenReaders(
+            'results-with-default',
             `${numOptions} results. ${firstOptionValue} is the top result: Press Enter to activate.`,
+            {resultCount: numOptions, label: firstOptionValue},
           )
         } else {
-          this.updateFeedbackForScreenReaders(`${numOptions || 'No'} results.`)
+          this.updateFeedbackForScreenReaders('results', `${numOptions || 'No'} results.`, {resultCount: numOptions})
         }
 
         hasResults ? this.open() : this.close()

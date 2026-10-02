@@ -1,4 +1,5 @@
 import {AutoCompleteElement} from './auto-complete-element.js'
+import type {AutoCompleteFeedbackEvent} from './auto-complete-feedback-event.js'
 
 const root = (typeof globalThis !== 'undefined' ? globalThis : window) as typeof window
 try {
@@ -17,6 +18,9 @@ type JSXBase = JSX.IntrinsicElements extends {span: unknown}
   ? JSX.IntrinsicElements
   : Record<string, Record<string, unknown>>
 declare global {
+  interface HTMLElementEventMap {
+    'auto-complete-feedback': AutoCompleteFeedbackEvent
+  }
   interface Window {
     AutoCompleteElement: typeof AutoCompleteElement
     AutocompleteElement: typeof AutoCompleteElement
