@@ -196,6 +196,57 @@ describe('auto-complete element', function () {
       if (!popup.popover) assert.isFalse(popup.hidden)
     })
 
+    it('closes when focus moves away after opening results', async function () {
+      const container = document.querySelector('auto-complete')
+      const input = container.querySelector('input')
+      const nextInput = document.createElement('input')
+      document.body.append(nextInput)
+
+      input.focus()
+      triggerInput(input, 'hub')
+      await once(container, 'loadend')
+      assert.isTrue(container.open)
+
+      nextInput.focus()
+      assert.isFalse(container.open)
+    })
+
+    it('closes when a click moves focus away after opening results', async function () {
+      const container = document.querySelector('auto-complete')
+      const input = container.querySelector('input')
+      const outsideButton = document.createElement('button')
+      outsideButton.addEventListener('click', () => outsideButton.focus())
+      document.body.append(outsideButton)
+
+      input.focus()
+      triggerInput(input, 'hub')
+      await once(container, 'loadend')
+      assert.isTrue(container.open)
+
+      outsideButton.click()
+      assert.isFalse(container.open)
+    })
+
+    it('keeps results open while an option is being selected', async function () {
+      const container = document.querySelector('auto-complete')
+      const input = container.querySelector('input')
+      const popup = container.querySelector('#popup')
+      const nextInput = document.createElement('input')
+      document.body.append(nextInput)
+
+      input.focus()
+      triggerInput(input, 'hub')
+      await once(container, 'loadend')
+      const option = popup.querySelector('[role="option"]')
+      option.dispatchEvent(new MouseEvent('mousedown', {bubbles: true}))
+      nextInput.focus()
+      assert.isTrue(container.open)
+
+      option.dispatchEvent(new CustomEvent('combobox-commit', {bubbles: true}))
+      assert.equal('first', container.value)
+      assert.isFalse(container.open)
+    })
+
     it('allows providing a custom fetch method', async () => {
       const container = document.querySelector('auto-complete')
       const input = container.querySelector('input')
