@@ -246,6 +246,32 @@ describe('auto-complete element', function () {
   })
 
   describe('clear button provided', () => {
+    it('removes clear button listeners while disconnected and restores one on reconnect', () => {
+      document.body.innerHTML = `
+        <auto-complete for="popup">
+          <input id="example" type="text">
+          <button id="example-clear">x</button>
+          <ul id="popup"></ul>
+        </auto-complete>
+      `
+      const container = document.querySelector('auto-complete')
+      const input = container.querySelector('input')
+      const clearButton = container.querySelector('button')
+      let changes = 0
+      input.addEventListener('change', () => changes++)
+
+      container.remove()
+      input.value = 'keep'
+      clearButton.click()
+      assert.equal(input.value, 'keep')
+      assert.equal(changes, 0)
+
+      document.body.append(container)
+      clearButton.click()
+      assert.equal(input.value, '')
+      assert.equal(changes, 1)
+    })
+
     it('clears the input value on click and gives focus back to the input', async () => {
       document.body.innerHTML = `
         <div id="mocha-fixture">
