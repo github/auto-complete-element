@@ -97,6 +97,7 @@ export default class Autocomplete {
     this.input.removeEventListener('input', this.onInputChange)
     this.results.removeEventListener('mousedown', this.onResultsMouseDown)
     this.results.removeEventListener('combobox-commit', this.onCommit)
+    this.clearButton?.removeEventListener('click', this.handleClear)
   }
 
   handleClear(event: Event): void {
