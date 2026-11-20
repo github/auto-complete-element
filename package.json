@@ -55,8 +55,5 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "typescript": "^5.2.2"
   },
-  "overrides": {
-    "eslint-plugin-escompat": "3.11.6"
-  },
   "customElements": "custom-elements.json"
 }
