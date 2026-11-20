@@ -4,6 +4,9 @@
   "description": "Auto-complete input values from server results",
   "repository": "github/auto-complete-element",
   "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -16,7 +19,7 @@
     "bundle": "esbuild --bundle dist/index.js --keep-names --outfile=dist/bundle.js --format=esm",
     "build": "tsc && npm run bundle && npm run manifest",
     "prepublishOnly": "npm run build",
-    "pretest": "npm run build; npx playwright install",
+    "pretest": "npm run build && npx playwright install",
     "test": "web-test-runner",
     "postpublish": "npm publish --ignore-scripts --@github:registry='https://npm.pkg.github.com'",
     "manifest": "custom-elements-manifest analyze"
@@ -38,8 +41,8 @@
     "@github/prettier-config": "^0.0.6",
     "@open-wc/testing": "^3.1.8",
     "@web/dev-server-esbuild": "^0.4.1",
-    "@web/test-runner": "^0.19.0",
-    "@web/test-runner-playwright": "^0.11.0",
+    "@web/test-runner": "^1.0.1",
+    "@web/test-runner-playwright": "^1.0.1",
     "axe-core": "^4.4.1",
     "esbuild": "^0.28.1",
     "eslint": "^8.39.0",

@@ -201,6 +201,8 @@ Browsers without native [custom element support][support] require a [polyfill][]
 
 ## Development
 
+Development requires Node.js 22.12.0 or newer. CI and publishing use Node.js 22.x.
+
 ```
 npm install
 npm test
