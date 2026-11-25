@@ -34,7 +34,7 @@
     "validator.js"
   ],
   "dependencies": {
-    "@github/combobox-nav": "^2.1.7"
+    "@github/combobox-nav": "^3.0.0"
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.9.0",

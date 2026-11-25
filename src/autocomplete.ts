@@ -28,7 +28,7 @@ export default class Autocomplete {
     this.input = input
     this.results = results
     this.combobox = new Combobox(input, results, {
-      defaultFirstOption: autoselectEnabled,
+      firstOptionSelectionMode: autoselectEnabled ? 'active' : 'none',
     })
     this.feedback = (container.getRootNode() as Document).getElementById(`${this.results.id}-feedback`)
     this.autoselectEnabled = autoselectEnabled
